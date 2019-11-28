@@ -1,4 +1,4 @@
-package com.funkyqubits.kitchentimer.ui.home;
+package com.funkyqubits.kitchentimer.ui.timers;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,17 +12,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.funkyqubits.kitchentimer.R;
 
-public class HomeFragment extends Fragment {
+public class TimersFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private TimersViewModel timersViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        timersViewModel =
+                ViewModelProviders.of(this).get(TimersViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_timers, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(this, new Observer<String>() {
+        timersViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

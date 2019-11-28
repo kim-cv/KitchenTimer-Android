@@ -1,14 +1,14 @@
-package com.funkyqubits.kitchentimer.ui.home;
+package com.funkyqubits.kitchentimer.ui.timers;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class TimersViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public TimersViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
     }
