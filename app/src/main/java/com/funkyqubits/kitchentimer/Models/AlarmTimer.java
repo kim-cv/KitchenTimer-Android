@@ -1,4 +1,4 @@
 package com.funkyqubits.kitchentimer.Models;
 
-public class Timer {
+public class AlarmTimer {
 }
