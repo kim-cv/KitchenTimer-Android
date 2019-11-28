@@ -2,9 +2,9 @@ package com.funkyqubits.kitchentimer.Repositories;
 
 import com.funkyqubits.kitchentimer.Models.AlarmTimer;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface IRepository {
-    List<AlarmTimer> LoadAlarmTimers();
-    void SaveAlarmTimers(List<AlarmTimer> alarmTimers);
+    ArrayList<AlarmTimer> LoadAlarmTimers();
+    void SaveAlarmTimers(ArrayList<AlarmTimer> alarmTimers);
 }
