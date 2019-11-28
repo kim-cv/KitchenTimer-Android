@@ -2,15 +2,19 @@ package com.funkyqubits.kitchentimer.Models;
 
 import android.text.format.DateUtils;
 
-public class AlarmTimer {
-    public int ID = 0;
-    public String ReadableTimer = "";
-    public boolean IsTimerComplete = false;
-    private int LengthInSeconds = 0;
-    private int ProgressInSeconds = 0;
+import java.util.UUID;
 
-    public AlarmTimer(int _id, int _lengthInSeconds) {
+public class AlarmTimer {
+    public UUID ID;
+    public String Title;
+    public String ReadableTimer;
+    public boolean IsTimerComplete = false;
+    public int LengthInSeconds;
+    private int ProgressInSeconds;
+
+    public AlarmTimer(UUID _id, String _title, int _lengthInSeconds) {
         this.ID = _id;
+        this.Title = _title;
         this.LengthInSeconds = _lengthInSeconds;
     }
 
