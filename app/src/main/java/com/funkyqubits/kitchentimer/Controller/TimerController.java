@@ -4,6 +4,7 @@ import com.funkyqubits.kitchentimer.Models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class TimerController {
 
@@ -15,34 +16,34 @@ public class TimerController {
         AlarmTimers = TimerRepository.LoadAlarmTimers();
     }
 
-    public void StartTimer(int id) {
+    public void StartTimer(UUID id) {
         AlarmTimer alarmTimer = FindTimerOnId(id);
         if (alarmTimer == null) {
             return;
         }
 
-        alarmTimer.Start();
+        //alarmTimer.Start();
     }
 
-    public void PauseTimer(int id) {
+    public void PauseTimer(UUID id) {
         AlarmTimer alarmTimer = FindTimerOnId(id);
         if (alarmTimer == null) {
             return;
         }
 
-        alarmTimer.Pause();
+        //alarmTimer.Pause();
     }
 
-    public void ResetTimer(int id) {
+    public void ResetTimer(UUID id) {
         AlarmTimer alarmTimer = FindTimerOnId(id);
         if (alarmTimer == null) {
             return;
         }
 
-        alarmTimer.Reset();
+        //alarmTimer.Reset();
     }
 
-    private AlarmTimer FindTimerOnId(int id) {
+    private AlarmTimer FindTimerOnId(UUID id) {
         for(AlarmTimer alarmTimer : AlarmTimers) {
             if(alarmTimer.ID == id) {
                 return alarmTimer;
