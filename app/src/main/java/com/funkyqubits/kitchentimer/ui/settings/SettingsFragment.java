@@ -1,4 +1,4 @@
-package com.funkyqubits.kitchentimer.ui.dashboard;
+package com.funkyqubits.kitchentimer.ui.settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,17 +12,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.funkyqubits.kitchentimer.R;
 
-public class DashboardFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private SettingsViewModel settingsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(this, new Observer<String>() {
+        settingsViewModel =
+                ViewModelProviders.of(this).get(SettingsViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_settings, container, false);
+        final TextView textView = root.findViewById(R.id.text_settings);
+        settingsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
