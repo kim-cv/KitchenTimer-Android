@@ -1,8 +1,11 @@
 package com.funkyqubits.kitchentimer.Models;
 
+import android.text.format.DateUtils;
+
 public class AlarmTimer {
     public int ID = 0;
     public String ReadableTimer = "";
+    public boolean IsTimerComplete = false;
     private int LengthInSeconds = 0;
     private int ProgressInSeconds = 0;
 
@@ -27,15 +30,19 @@ public class AlarmTimer {
      * Is called each second
      */
     public void Tick() {
+        if (IsTimerComplete) {
+            return;
+        }
+
         ProgressInSeconds += 1;
         this.ReadableTimer = ConvertProgressToReadableTimer();
 
         if (ProgressInSeconds >= LengthInSeconds) {
-            // TODO: Implement timer complete logic
+            IsTimerComplete = true;
         }
     }
 
-    private String ConvertProgressToReadableTimer() throws Exception {
-        throw new Exception("Method not implemented yet.");
+    private String ConvertProgressToReadableTimer() {
+        return DateUtils.formatElapsedTime(ProgressInSeconds);
     }
 }
