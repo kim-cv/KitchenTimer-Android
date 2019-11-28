@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.funkyqubits.kitchentimer.R;
+import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
+import com.funkyqubits.kitchentimer.Repositories.IRepository;
 
 public class TimersFragment extends Fragment {
 
@@ -28,6 +30,11 @@ public class TimersFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        // TODO: Figure out how to use dependency injection in Android MVVM
+        IRepository repository = new FileSystemRepository(getContext(), "SavedTimings.json");
+        timersViewModel.ProvideRepository(repository);
+
         return root;
     }
 }
