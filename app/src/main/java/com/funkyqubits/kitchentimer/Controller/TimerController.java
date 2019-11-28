@@ -8,9 +8,11 @@ import java.util.ArrayList;
 public class TimerController {
 
     private ArrayList<AlarmTimer> AlarmTimers;
+    private IRepository TimerRepository;
 
-    public TimerController(IRepository timerRepository) {
-        AlarmTimers = timerRepository.LoadAlarmTimers();
+    public TimerController(IRepository _timerRepository) {
+        this.TimerRepository = _timerRepository;
+        AlarmTimers = TimerRepository.LoadAlarmTimers();
     }
 
     public void StartTimer(int id) {
