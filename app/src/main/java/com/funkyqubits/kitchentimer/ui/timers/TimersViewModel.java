@@ -13,13 +13,15 @@ public class TimersViewModel extends ViewModel {
     private MutableLiveData<String> mText;
 
     public TimersViewModel() {
+        /*
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
+         */
     }
 
     public void ProvideRepository(IRepository _timerRepository){
         // TODO: Figure out how to use dependency injection in Android MVVM
-        TimerController = new TimerController(_timerRepository);
+        //TimerController = new TimerController(_timerRepository);
     }
 
     public LiveData<String> getText() {
