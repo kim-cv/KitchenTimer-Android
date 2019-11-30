@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 
-import com.funkyqubits.kitchentimer.Models.AlarmTimer;
+import com.funkyqubits.kitchentimer.models.AlarmTimer;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

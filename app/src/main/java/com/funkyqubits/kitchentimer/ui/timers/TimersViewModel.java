@@ -3,7 +3,7 @@ package com.funkyqubits.kitchentimer.ui.timers;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.funkyqubits.kitchentimer.Models.AlarmTimer;
+import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
 
 import java.util.ArrayList;

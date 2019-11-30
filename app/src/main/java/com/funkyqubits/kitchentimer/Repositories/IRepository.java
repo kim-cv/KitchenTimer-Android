@@ -1,6 +1,6 @@
 package com.funkyqubits.kitchentimer.Repositories;
 
-import com.funkyqubits.kitchentimer.Models.AlarmTimer;
+import com.funkyqubits.kitchentimer.models.AlarmTimer;
 
 import java.util.ArrayList;
 
