@@ -61,7 +61,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
                                          int viewType) {
         // create a new view
         final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        final View view = inflater.inflate(R.layout.my_text_view, parent, false);
+        final View view = inflater.inflate(R.layout.timer_list_item, parent, false);
         return new ViewHolder(view, ContainingFragment);
     }
 
