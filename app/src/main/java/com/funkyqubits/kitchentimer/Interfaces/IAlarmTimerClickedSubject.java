@@ -8,4 +8,8 @@ public interface IAlarmTimerClickedSubject {
     void RemoveObserver(IAlarmTimerClickObserver observer);
 
     void NotifyAlarmTimerStart(UUID alarmTimerID);
+
+    void NotifyAlarmTimerPause(UUID alarmTimerID);
+
+    void NotifyAlarmTimerReset(UUID alarmTimerID);
 }

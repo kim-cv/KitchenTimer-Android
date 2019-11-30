@@ -3,6 +3,7 @@ package com.funkyqubits.kitchentimer.ui.timers;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -73,16 +74,31 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
         // Find views
         TextView txtView_title = holder.LinearLayout.findViewById(R.id.timer_title);
         TextView txtView_progress = holder.LinearLayout.findViewById(R.id.timer_progress);
+        Button btn_timer_start = holder.LinearLayout.findViewById(R.id.btn_timer_start);
+        Button btn_timer_pause = holder.LinearLayout.findViewById(R.id.btn_timer_pause);
+        Button btn_timer_reset = holder.LinearLayout.findViewById(R.id.btn_timer_reset);
 
         // Set text values
         txtView_title.setText(alarmTimer.Title);
         txtView_progress.setText(alarmTimer.ReadableTimer);
 
         // Click listener
-        holder.LinearLayout.setOnClickListener(new LinearLayout.OnClickListener() {
+        btn_timer_start.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NotifyAlarmTimerStart(alarmTimer.ID);
+            }
+        });
+        btn_timer_pause.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotifyAlarmTimerPause(alarmTimer.ID);
+            }
+        });
+        btn_timer_reset.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotifyAlarmTimerReset(alarmTimer.ID);
             }
         });
     }
@@ -131,6 +147,20 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     public void NotifyAlarmTimerStart(UUID alarmTimerID) {
         for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
             observer.OnStart(alarmTimerID);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerPause(UUID alarmTimerID) {
+        for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
+            observer.OnPause(alarmTimerID);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerReset(UUID alarmTimerID) {
+        for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
+            observer.OnReset(alarmTimerID);
         }
     }
     //#endregion
