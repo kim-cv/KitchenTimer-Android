@@ -8,14 +8,19 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerClickObserver;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerClickedSubject;
 import com.funkyqubits.kitchentimer.Models.AlarmTimer;
 import com.funkyqubits.kitchentimer.R;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
-public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.ViewHolder> {
+public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.ViewHolder> implements IAlarmTimerClickedSubject {
+    private final List<IAlarmTimerClickObserver> ObservableItemClickedList = new ArrayList<>();
     private ArrayList<AlarmTimer> Dataset_alarmTimers;
 
     // Provide a reference to the views for each data item
@@ -24,6 +29,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public LinearLayout LinearLayout;
+        public UUID AlarmTimerID;
 
         public ViewHolder(LinearLayout v) {
             super(v);
@@ -32,10 +38,12 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AlarmTimersAdapter(ArrayList<AlarmTimer> alarmTimers) {
+    public AlarmTimersAdapter() {
+    }
+
+    public void SetData(ArrayList<AlarmTimer> alarmTimers) {
         Dataset_alarmTimers = alarmTimers;
         InitTimer();
-        Dataset_alarmTimers.get(0).Start();
     }
 
     // Create new views (invoked by the layout manager)
@@ -57,15 +65,24 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
+        final AlarmTimer alarmTimer = Dataset_alarmTimers.get(position);
+
+        // Set AlarmTimerID onto the view
+        holder.AlarmTimerID = alarmTimer.ID;
+
+        // Find views
         TextView txtView_title = holder.LinearLayout.findViewById(R.id.timer_title);
         TextView txtView_progress = holder.LinearLayout.findViewById(R.id.timer_progress);
 
-        txtView_title.setText(Dataset_alarmTimers.get(position).Title);
-        txtView_progress.setText(Dataset_alarmTimers.get(position).ReadableTimer);
+        // Set text values
+        txtView_title.setText(alarmTimer.Title);
+        txtView_progress.setText(alarmTimer.ReadableTimer);
 
-        holder.LinearLayout.setOnClickListener(new TextView.OnClickListener() {
+        // Click listener
+        holder.LinearLayout.setOnClickListener(new LinearLayout.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NotifyAlarmTimerStart(alarmTimer.ID);
             }
         });
     }
@@ -75,6 +92,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     public int getItemCount() {
         return Dataset_alarmTimers.size();
     }
+
 
     private void InitTimer() {
         Timer timer = new Timer();
@@ -92,4 +110,28 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
             }
         }, 0, 1000);//Update every second
     }
+
+
+    //#region Subject/Observer
+    @Override
+    public void RegisterObserver(IAlarmTimerClickObserver observer) {
+        if (!ObservableItemClickedList.contains(observer)) {
+            ObservableItemClickedList.add(observer);
+        }
+    }
+
+    @Override
+    public void RemoveObserver(IAlarmTimerClickObserver observer) {
+        if (ObservableItemClickedList.contains(observer)) {
+            ObservableItemClickedList.remove(observer);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerStart(UUID alarmTimerID) {
+        for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
+            observer.OnStart(alarmTimerID);
+        }
+    }
+    //#endregion
 }

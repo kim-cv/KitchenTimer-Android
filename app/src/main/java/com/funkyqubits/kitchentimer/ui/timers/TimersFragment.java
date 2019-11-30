@@ -12,17 +12,19 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerClickObserver;
 import com.funkyqubits.kitchentimer.Models.AlarmTimer;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-public class TimersFragment extends Fragment {
+public class TimersFragment extends Fragment implements IAlarmTimerClickObserver {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private AlarmTimersAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
 
@@ -48,12 +50,14 @@ public class TimersFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
+        mAdapter = new AlarmTimersAdapter();
+        mAdapter.RegisterObserver(this);
 
         // Listen for when timers are ready and then give them to the adapter
-        timersViewModel.alarmTimers.observe(this, new Observer<ArrayList<AlarmTimer>>() {
+        timersViewModel.ObservableAlarmTimers.observe(this, new Observer<ArrayList<AlarmTimer>>() {
                     @Override
                     public void onChanged(ArrayList<AlarmTimer> alarmTimers) {
-                        mAdapter = new AlarmTimersAdapter(alarmTimers);
+                        mAdapter.SetData(alarmTimers);
                         recyclerView.setAdapter(mAdapter);
                     }
                 }
@@ -61,4 +65,22 @@ public class TimersFragment extends Fragment {
 
         return root;
     }
+
+
+    //#region Timer UI events
+    @Override
+    public void OnStart(UUID alarmTimerID) {
+        timersViewModel.StartTimer(alarmTimerID);
+    }
+
+    @Override
+    public void OnPause(UUID alarmTimerID) {
+        timersViewModel.PauseTimer(alarmTimerID);
+    }
+
+    @Override
+    public void OnReset(UUID alarmTimerID) {
+        timersViewModel.ResetTimer(alarmTimerID);
+    }
+    //#endregion
 }
