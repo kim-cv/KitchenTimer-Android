@@ -6,14 +6,18 @@ import com.funkyqubits.kitchentimer.Repositories.IRepository;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class TimerController {
+public class TimerControllerOLD {
 
     private ArrayList<AlarmTimer> AlarmTimers;
     private IRepository TimerRepository;
 
-    public TimerController(IRepository _timerRepository) {
+    public TimerControllerOLD(IRepository _timerRepository) {
         this.TimerRepository = _timerRepository;
         AlarmTimers = TimerRepository.LoadAlarmTimers();
+    }
+
+    public ArrayList<AlarmTimer> GetTimers(){
+        return AlarmTimers;
     }
 
     public void StartTimer(UUID id) {
@@ -22,7 +26,7 @@ public class TimerController {
             return;
         }
 
-        //alarmTimer.Start();
+        alarmTimer.Start();
     }
 
     public void PauseTimer(UUID id) {
@@ -31,7 +35,7 @@ public class TimerController {
             return;
         }
 
-        //alarmTimer.Pause();
+        alarmTimer.Pause();
     }
 
     public void ResetTimer(UUID id) {
@@ -40,7 +44,7 @@ public class TimerController {
             return;
         }
 
-        //alarmTimer.Reset();
+        alarmTimer.Reset();
     }
 
     private AlarmTimer FindTimerOnId(UUID id) {
