@@ -31,15 +31,27 @@ public class AlarmTimer {
     }
 
     public void Start() {
+        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
+            return;
+        }
+
         WhenTimerStartedInSeconds = Calendar.getInstance().getTimeInMillis() / 1000;
         AlarmTimerState = ALARMTIMER_STATE.RUNNING;
     }
 
     public void Pause() {
+        if (AlarmTimerState == ALARMTIMER_STATE.PAUSED || AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
+            return;
+        }
+
         AlarmTimerState = ALARMTIMER_STATE.PAUSED;
     }
 
     public void Reset() {
+        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING) {
+            return;
+        }
+
         AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
         WhenTimerStartedInSeconds = -1;
     }
