@@ -50,7 +50,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerClickObserver
         LayoutManager = new LinearLayoutManager(getContext());
         RecyclerView.setLayoutManager(LayoutManager);
 
-        RecyclerViewAdapter = new AlarmTimersAdapter();
+        RecyclerViewAdapter = new AlarmTimersAdapter(this);
         RecyclerViewAdapter.RegisterObserver(this);
 
         // Listen for when timers are ready and then give them to the adapter
