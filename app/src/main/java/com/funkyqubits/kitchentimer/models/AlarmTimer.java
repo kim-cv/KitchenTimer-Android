@@ -1,6 +1,8 @@
-package com.funkyqubits.kitchentimer.Models;
+package com.funkyqubits.kitchentimer.models;
 
 import android.text.format.DateUtils;
+
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.Calendar;
 import java.util.UUID;
@@ -10,7 +12,7 @@ public class AlarmTimer {
     public ALARMTIMER_STATE AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
     public UUID ID;
     public String Title;
-    public String ReadableTimer;
+    public MutableLiveData<String> ReadableTimer = new MutableLiveData<>();
     public int LengthInSeconds;
 
     private long WhenTimerStartedInSeconds;
@@ -78,6 +80,6 @@ public class AlarmTimer {
             progress = SecondsPassedAtTimeOfTick - WhenTimerStartedInSeconds;
         }
 
-        this.ReadableTimer = DateUtils.formatElapsedTime(LengthInSeconds - progress);
+        this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds - progress));
     }
 }
