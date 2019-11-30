@@ -23,42 +23,42 @@ import java.util.UUID;
 
 public class TimersFragment extends Fragment implements IAlarmTimerClickObserver {
 
-    private RecyclerView recyclerView;
-    private AlarmTimersAdapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView RecyclerView;
+    private AlarmTimersAdapter RecyclerViewAdapter;
+    private RecyclerView.LayoutManager LayoutManager;
 
 
-    private TimersViewModel timersViewModel;
+    private TimersViewModel TimersViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        timersViewModel =
+        TimersViewModel =
                 ViewModelProviders.of(this).get(TimersViewModel.class);
         View root = inflater.inflate(R.layout.fragment_timers, container, false);
 
 
         // TODO: Figure out how to use dependency injection in Android MVVM
         IRepository repository = new FileSystemRepository(getContext(), "SavedTimings.json");
-        timersViewModel.ProvideRepository(repository);
+        TimersViewModel.ProvideRepository(repository);
 
 
-        recyclerView = root.findViewById(R.id.recyclerview_alarmTimers);
+        RecyclerView = root.findViewById(R.id.recyclerview_alarmTimers);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
+        RecyclerView.setHasFixedSize(true);
         // use a linear layout manager
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        LayoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.setLayoutManager(LayoutManager);
 
-        mAdapter = new AlarmTimersAdapter();
-        mAdapter.RegisterObserver(this);
+        RecyclerViewAdapter = new AlarmTimersAdapter();
+        RecyclerViewAdapter.RegisterObserver(this);
 
         // Listen for when timers are ready and then give them to the adapter
-        timersViewModel.ObservableAlarmTimers.observe(this, new Observer<ArrayList<AlarmTimer>>() {
+        TimersViewModel.ObservableAlarmTimers.observe(this, new Observer<ArrayList<AlarmTimer>>() {
                     @Override
                     public void onChanged(ArrayList<AlarmTimer> alarmTimers) {
-                        mAdapter.SetData(alarmTimers);
-                        recyclerView.setAdapter(mAdapter);
+                        RecyclerViewAdapter.SetData(alarmTimers);
+                        RecyclerView.setAdapter(RecyclerViewAdapter);
                     }
                 }
         );
@@ -70,17 +70,17 @@ public class TimersFragment extends Fragment implements IAlarmTimerClickObserver
     //#region Timer UI events
     @Override
     public void OnStart(UUID alarmTimerID) {
-        timersViewModel.StartTimer(alarmTimerID);
+        TimersViewModel.StartTimer(alarmTimerID);
     }
 
     @Override
     public void OnPause(UUID alarmTimerID) {
-        timersViewModel.PauseTimer(alarmTimerID);
+        TimersViewModel.PauseTimer(alarmTimerID);
     }
 
     @Override
     public void OnReset(UUID alarmTimerID) {
-        timersViewModel.ResetTimer(alarmTimerID);
+        TimersViewModel.ResetTimer(alarmTimerID);
     }
     //#endregion
 }
