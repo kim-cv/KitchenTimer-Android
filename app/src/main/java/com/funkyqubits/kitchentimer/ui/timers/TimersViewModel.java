@@ -3,6 +3,7 @@ package com.funkyqubits.kitchentimer.ui.timers;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCompleteObserver;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
 
@@ -12,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-public class TimersViewModel extends ViewModel {
+public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObserver {
 
     public MutableLiveData<ArrayList<AlarmTimer>> ObservableAlarmTimers = new MutableLiveData<>();
     private ArrayList<AlarmTimer> AlarmTimers = new ArrayList<>();
@@ -27,6 +28,12 @@ public class TimersViewModel extends ViewModel {
     public void ProvideRepository(IRepository _timerRepository) {
         this.TimerRepository = _timerRepository;
         AlarmTimers.addAll(TimerRepository.LoadAlarmTimers());
+
+        // Listen for AlarmTimer events
+        for (AlarmTimer alarmTimer : AlarmTimers) {
+            alarmTimer.RegisterObserver(this);
+        }
+
         ObservableAlarmTimers.setValue(AlarmTimers);
     }
 
@@ -108,4 +115,16 @@ public class TimersViewModel extends ViewModel {
             }
         }, 0, 1000);//Update every second
     }
+
+    //#region Events for each alarm timer
+    @Override
+    public void OnComplete(UUID alarmTimerID) {
+        AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
+        if (alarmTimer == null) {
+            return;
+        }
+
+        RunningTimers.remove(alarmTimer);
+    }
+    //#endregion
 }

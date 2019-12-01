@@ -4,10 +4,15 @@ import android.text.format.DateUtils;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCompleteObserver;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCompleteSubject;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
-public class AlarmTimer {
+public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
     public ALARMTIMER_STATE AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
     public UUID ID;
@@ -16,6 +21,7 @@ public class AlarmTimer {
     public int LengthInSeconds;
 
     public long WhenTimerStartedInSeconds;
+    private final List<IAlarmTimerCompleteObserver> ObserversAlarmTimerComplete = new ArrayList<>();
 
     public enum ALARMTIMER_STATE {
         RUNNING,
@@ -93,6 +99,7 @@ public class AlarmTimer {
 
         if (timerProgress >= LengthInSeconds) {
             AlarmTimerState = ALARMTIMER_STATE.COMPLETED;
+            NotifyAlarmTimerComplete(ID);
         }
     }
 
@@ -110,4 +117,27 @@ public class AlarmTimer {
             this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds - progress));
         }
     }
+
+    //#region Events
+    @Override
+    public void RegisterObserver(IAlarmTimerCompleteObserver observer) {
+        if (!ObserversAlarmTimerComplete.contains(observer)) {
+            ObserversAlarmTimerComplete.add(observer);
+        }
+    }
+
+    @Override
+    public void RemoveObserver(IAlarmTimerCompleteObserver observer) {
+        if (ObserversAlarmTimerComplete.contains(observer)) {
+            ObserversAlarmTimerComplete.remove(observer);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerComplete(UUID alarmTimerID) {
+        for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
+            observer.OnComplete(alarmTimerID);
+        }
+    }
+    //#endregion
 }
