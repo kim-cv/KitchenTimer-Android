@@ -118,7 +118,43 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
 
     //#region Events for each alarm timer
     @Override
-    public void OnComplete(UUID alarmTimerID) {
+    public void OnAlarmTimerStarted(UUID alarmTimerID) {
+        AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
+        if (alarmTimer == null) {
+            return;
+        }
+    }
+
+    @Override
+    public void OnAlarmTimerResumed(UUID alarmTimerID) {
+        AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
+        if (alarmTimer == null) {
+            return;
+        }
+    }
+
+    @Override
+    public void OnAlarmTimerPaused(UUID alarmTimerID) {
+        AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
+        if (alarmTimer == null) {
+            return;
+        }
+
+        RunningTimers.remove(alarmTimer);
+    }
+
+    @Override
+    public void OnAlarmTimerReset(UUID alarmTimerID) {
+        AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
+        if (alarmTimer == null) {
+            return;
+        }
+
+        RunningTimers.remove(alarmTimer);
+    }
+
+    @Override
+    public void OnAlarmTimerCompleted(UUID alarmTimerID) {
         AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
         if (alarmTimer == null) {
             return;

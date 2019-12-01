@@ -7,5 +7,13 @@ public interface IAlarmTimerCompleteSubject {
 
     void RemoveObserver(IAlarmTimerCompleteObserver observer);
 
-    void NotifyAlarmTimerComplete(UUID alarmTimerID);
+    void NotifyAlarmTimerStarted(UUID alarmTimerID);
+
+    void NotifyAlarmTimerResumed(UUID alarmTimerID);
+
+    void NotifyAlarmTimerPaused(UUID alarmTimerID);
+
+    void NotifyAlarmTimerReset(UUID alarmTimerID);
+
+    void NotifyAlarmTimerCompleted(UUID alarmTimerID);
 }

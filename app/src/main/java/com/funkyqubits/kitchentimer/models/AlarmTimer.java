@@ -59,6 +59,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
         AlarmTimerState = ALARMTIMER_STATE.RUNNING;
         CalculateIfTimerComplete();
         ConvertProgressToReadableTimer();
+        NotifyAlarmTimerStarted(ID);
     }
 
 
@@ -69,6 +70,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
         AlarmTimerState = ALARMTIMER_STATE.PAUSED;
         ConvertProgressToReadableTimer();
+        NotifyAlarmTimerPaused(ID);
     }
 
     public void Reset() {
@@ -79,6 +81,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
         AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
         WhenTimerStartedInSeconds = 0;
         ConvertProgressToReadableTimer();
+        NotifyAlarmTimerReset(ID);
     }
 
     /**
@@ -99,7 +102,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
         if (timerProgress >= LengthInSeconds) {
             AlarmTimerState = ALARMTIMER_STATE.COMPLETED;
-            NotifyAlarmTimerComplete(ID);
+            NotifyAlarmTimerCompleted(ID);
         }
     }
 
@@ -134,9 +137,37 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     }
 
     @Override
-    public void NotifyAlarmTimerComplete(UUID alarmTimerID) {
+    public void NotifyAlarmTimerStarted(UUID alarmTimerID) {
         for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
-            observer.OnComplete(alarmTimerID);
+            observer.OnAlarmTimerStarted(alarmTimerID);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerResumed(UUID alarmTimerID) {
+        for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
+            observer.OnAlarmTimerResumed(alarmTimerID);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerPaused(UUID alarmTimerID) {
+        for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
+            observer.OnAlarmTimerPaused(alarmTimerID);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerReset(UUID alarmTimerID) {
+        for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
+            observer.OnAlarmTimerReset(alarmTimerID);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerCompleted(UUID alarmTimerID) {
+        for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
+            observer.OnAlarmTimerCompleted(alarmTimerID);
         }
     }
     //#endregion
