@@ -1,5 +1,7 @@
 package com.funkyqubits.kitchentimer.ui.timers;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,8 @@ import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class TimersFragment extends Fragment implements IAlarmTimerClickObserver {
@@ -66,6 +70,52 @@ public class TimersFragment extends Fragment implements IAlarmTimerClickObserver
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Map<String, Long> runningTimersData = new HashMap<>();
+
+        // Get Context and SharedPreferences
+        Context context = getContext();
+        String filename = getString(R.string.preference_file_runningTimers);
+        SharedPreferences sharedPreferences_runningTimers = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
+
+        // Map sharedPreference data
+        Map<String, ?> allEntries = sharedPreferences_runningTimers.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            Long parseLong = Long.parseLong(entry.getValue().toString());
+            runningTimersData.put(entry.getKey(), parseLong);
+        }
+
+        TimersViewModel.SetInitialTimerValues(runningTimersData);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        //#region Save running timers to shared preferences key/value storage
+        ArrayList<AlarmTimer> runningAlarmTimers = TimersViewModel.GetRunningTimers();
+
+        // Get Context and SharedPreferences
+        Context context = getContext();
+        String filename = getString(R.string.preference_file_runningTimers);
+        SharedPreferences sharedPreferences_runningTimers = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPreferences_editor = sharedPreferences_runningTimers.edit();
+
+        // Commit timer data
+        sharedPreferences_editor.clear();
+        for (AlarmTimer alarmTimer : runningAlarmTimers) {
+            sharedPreferences_editor.putLong(alarmTimer.ID.toString(), alarmTimer.WhenTimerStartedInSeconds);
+        }
+        sharedPreferences_editor.commit();
+        //#endregion
+
+
+        // Save timers to storage
+        TimersViewModel.SaveAllTimersToStorage();
+    }
 
     //#region Timer UI events
     @Override

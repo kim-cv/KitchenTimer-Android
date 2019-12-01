@@ -7,6 +7,7 @@ import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -27,6 +28,33 @@ public class TimersViewModel extends ViewModel {
         this.TimerRepository = _timerRepository;
         AlarmTimers.addAll(TimerRepository.LoadAlarmTimers());
         ObservableAlarmTimers.setValue(AlarmTimers);
+    }
+
+    public ArrayList<AlarmTimer> GetRunningTimers(){
+        return RunningTimers;
+    }
+
+    public void SaveAllTimersToStorage() {
+        TimerRepository.SaveAlarmTimers(AlarmTimers);
+    }
+
+    public void SetInitialTimerValues(Map<String, Long> alarmTimers) {
+        for (Map.Entry<String, Long> alarmTimerEntry : alarmTimers.entrySet()) {
+            UUID id = UUID.fromString(alarmTimerEntry.getKey());
+            Long whenTimerBegun = alarmTimerEntry.getValue();
+
+            StartTimer(id, whenTimerBegun);
+        }
+    }
+
+    public void StartTimer(UUID id, long whenTimerBegun) {
+        AlarmTimer alarmTimer = FindTimerOnId(id);
+        if (alarmTimer == null) {
+            return;
+        }
+
+        alarmTimer.Start(whenTimerBegun);
+        RunningTimers.add(alarmTimer);
     }
 
     public void StartTimer(UUID id) {
@@ -61,7 +89,7 @@ public class TimersViewModel extends ViewModel {
 
     private AlarmTimer FindTimerOnId(UUID id) {
         for (AlarmTimer alarmTimer : AlarmTimers) {
-            if (alarmTimer.ID == id) {
+            if (alarmTimer.ID.equals(id)) {
                 return alarmTimer;
             }
         }

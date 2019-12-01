@@ -16,7 +16,6 @@ public class AlarmTimer {
     public int LengthInSeconds;
 
     public long WhenTimerStartedInSeconds;
-    private long SecondsPassedAtTimeOfTick = 0;
 
     public enum ALARMTIMER_STATE {
         RUNNING,
@@ -32,14 +31,30 @@ public class AlarmTimer {
         ConvertProgressToReadableTimer();
     }
 
+    public void Start(long whenTimerBegun) {
+        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
+            return;
+        }
+
+        WhenTimerStartedInSeconds = whenTimerBegun;
+        StartTimer();
+    }
+
     public void Start() {
         if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
 
         WhenTimerStartedInSeconds = Calendar.getInstance().getTimeInMillis() / 1000;
-        AlarmTimerState = ALARMTIMER_STATE.RUNNING;
+        StartTimer();
     }
+
+    private void StartTimer() {
+        AlarmTimerState = ALARMTIMER_STATE.RUNNING;
+        CalculateIfTimerComplete();
+        ConvertProgressToReadableTimer();
+    }
+
 
     public void Pause() {
         if (AlarmTimerState == ALARMTIMER_STATE.PAUSED || AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
@@ -47,6 +62,7 @@ public class AlarmTimer {
         }
 
         AlarmTimerState = ALARMTIMER_STATE.PAUSED;
+        ConvertProgressToReadableTimer();
     }
 
     public void Reset() {
@@ -55,7 +71,7 @@ public class AlarmTimer {
         }
 
         AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
-        WhenTimerStartedInSeconds = -1;
+        WhenTimerStartedInSeconds = 0;
         ConvertProgressToReadableTimer();
     }
 
@@ -63,24 +79,35 @@ public class AlarmTimer {
      * Is called each second
      */
     public void Tick() {
-        SecondsPassedAtTimeOfTick = Calendar.getInstance().getTimeInMillis() / 1000;
         if (AlarmTimerState != ALARMTIMER_STATE.RUNNING) {
             return;
         }
 
         ConvertProgressToReadableTimer();
 
-        if ((SecondsPassedAtTimeOfTick - WhenTimerStartedInSeconds) >= LengthInSeconds) {
+        CalculateIfTimerComplete();
+    }
+
+    private void CalculateIfTimerComplete() {
+        long timerProgress = CalculateTimerProgress();
+
+        if (timerProgress >= LengthInSeconds) {
             AlarmTimerState = ALARMTIMER_STATE.COMPLETED;
         }
     }
 
-    private void ConvertProgressToReadableTimer() {
-        long progress = 0;
-        if (WhenTimerStartedInSeconds > 0) {
-            progress = SecondsPassedAtTimeOfTick - WhenTimerStartedInSeconds;
-        }
+    private Long CalculateTimerProgress() {
+        long nowSeconds = Calendar.getInstance().getTimeInMillis() / 1000;
+        long timerProgress = nowSeconds - WhenTimerStartedInSeconds;
+        return  timerProgress;
+    }
 
-        this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds - progress));
+    private void ConvertProgressToReadableTimer() {
+        long progress = CalculateTimerProgress();
+        if (AlarmTimerState == ALARMTIMER_STATE.COMPLETED || AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING) {
+            this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds));
+        } else {
+            this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds - progress));
+        }
     }
 }
