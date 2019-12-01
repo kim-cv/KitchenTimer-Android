@@ -56,6 +56,7 @@ public class AlarmTimer {
 
         AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
         WhenTimerStartedInSeconds = -1;
+        ConvertProgressToReadableTimer();
     }
 
     /**
