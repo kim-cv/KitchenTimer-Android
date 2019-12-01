@@ -7,21 +7,24 @@ import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 public class TimersViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<AlarmTimer>> ObservableAlarmTimers = new MutableLiveData<>();
-    private ArrayList<AlarmTimer> AlarmTimers;
+    private ArrayList<AlarmTimer> AlarmTimers = new ArrayList<>();
     private IRepository TimerRepository;
 
     public TimersViewModel() {
+        InitTimer();
     }
 
     // TODO: Figure out how to use dependency injection in Android MVVM
     public void ProvideRepository(IRepository _timerRepository) {
         this.TimerRepository = _timerRepository;
-        AlarmTimers = TimerRepository.LoadAlarmTimers();
+        AlarmTimers.addAll(TimerRepository.LoadAlarmTimers());
         ObservableAlarmTimers.setValue(AlarmTimers);
     }
 
@@ -59,5 +62,21 @@ public class TimersViewModel extends ViewModel {
             }
         }
         return null;
+    }
+
+    private void InitTimer() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                for (int i = 0; i < AlarmTimers.size(); i++) {
+                    AlarmTimer alarmTimer = AlarmTimers.get(i);
+                    if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
+                        alarmTimer.Tick();
+                    }
+                }
+            }
+        }, 0, 1000);//Update every second
     }
 }

@@ -19,8 +19,6 @@ import com.funkyqubits.kitchentimer.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.ViewHolder> implements IAlarmTimerClickedSubject {
@@ -52,7 +50,6 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
 
     public void SetData(ArrayList<AlarmTimer> alarmTimers) {
         Dataset_alarmTimers = alarmTimers;
-        InitTimer();
     }
 
     // Create new views (invoked by the layout manager)
@@ -115,24 +112,6 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     public int getItemCount() {
         return Dataset_alarmTimers.size();
     }
-
-
-    private void InitTimer() {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                for (int i = 0; i < Dataset_alarmTimers.size(); i++) {
-                    AlarmTimer alarmTimer = Dataset_alarmTimers.get(i);
-                    if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
-                        alarmTimer.Tick();
-                    }
-                }
-            }
-        }, 0, 1000);//Update every second
-    }
-
 
     //#region Subject/Observer
     @Override
