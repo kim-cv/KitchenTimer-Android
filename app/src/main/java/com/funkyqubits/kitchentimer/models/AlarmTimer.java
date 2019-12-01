@@ -47,7 +47,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     }
 
     public void Start() {
-        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
+        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.PAUSED || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
 
