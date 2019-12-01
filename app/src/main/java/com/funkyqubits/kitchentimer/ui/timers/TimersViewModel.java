@@ -15,6 +15,7 @@ public class TimersViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<AlarmTimer>> ObservableAlarmTimers = new MutableLiveData<>();
     private ArrayList<AlarmTimer> AlarmTimers = new ArrayList<>();
+    private ArrayList<AlarmTimer> RunningTimers = new ArrayList<>();
     private IRepository TimerRepository;
 
     public TimersViewModel() {
@@ -35,6 +36,7 @@ public class TimersViewModel extends ViewModel {
         }
 
         alarmTimer.Start();
+        RunningTimers.add(alarmTimer);
     }
 
     public void PauseTimer(UUID id) {
@@ -44,6 +46,7 @@ public class TimersViewModel extends ViewModel {
         }
 
         alarmTimer.Pause();
+        RunningTimers.remove(alarmTimer);
     }
 
     public void ResetTimer(UUID id) {
@@ -53,6 +56,7 @@ public class TimersViewModel extends ViewModel {
         }
 
         alarmTimer.Reset();
+        RunningTimers.remove(alarmTimer);
     }
 
     private AlarmTimer FindTimerOnId(UUID id) {
@@ -70,11 +74,8 @@ public class TimersViewModel extends ViewModel {
 
             @Override
             public void run() {
-                for (int i = 0; i < AlarmTimers.size(); i++) {
-                    AlarmTimer alarmTimer = AlarmTimers.get(i);
-                    if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
-                        alarmTimer.Tick();
-                    }
+                for (AlarmTimer alarmTimer : RunningTimers) {
+                    alarmTimer.Tick();
                 }
             }
         }, 0, 1000);//Update every second
