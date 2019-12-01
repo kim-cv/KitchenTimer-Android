@@ -61,7 +61,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         }
 
         alarmTimer.Start(whenTimerBegun);
-        RunningTimers.add(alarmTimer);
     }
 
     public void StartTimer(UUID id) {
@@ -71,7 +70,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         }
 
         alarmTimer.Start();
-        RunningTimers.add(alarmTimer);
     }
 
     public void PauseTimer(UUID id) {
@@ -123,6 +121,8 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         if (alarmTimer == null) {
             return;
         }
+
+        RunningTimers.add(alarmTimer);
     }
 
     @Override
@@ -131,6 +131,8 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         if (alarmTimer == null) {
             return;
         }
+
+        RunningTimers.add(alarmTimer);
     }
 
     @Override
