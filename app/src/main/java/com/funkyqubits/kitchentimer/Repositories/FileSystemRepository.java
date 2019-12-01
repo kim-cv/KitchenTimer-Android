@@ -29,6 +29,16 @@ public class FileSystemRepository implements IRepository {
 
     @Override
     public ArrayList<AlarmTimer> LoadAlarmTimers() {
+        /*
+        return new ArrayList<AlarmTimer>() {
+            {
+                add(new AlarmTimer(UUID.randomUUID(), "Title 1", 5));
+                add(new AlarmTimer(UUID.randomUUID(), "Title 2", 10));
+                add(new AlarmTimer(UUID.randomUUID(), "Title 3", 20));
+            }
+        };
+        */
+
         InputStreamReader inputStreamReader = RetrieveTimersStreamReader();
         if (inputStreamReader == null) {
             // TODO handle
@@ -83,6 +93,7 @@ public class FileSystemRepository implements IRepository {
 
     /**
      * Write AlarmTimer to JSON
+     *
      * @param jsonWriter
      * @param alarmTimer
      */
@@ -103,11 +114,13 @@ public class FileSystemRepository implements IRepository {
 
     /**
      * Returns input stream reader from file
+     *
      * @return InputStreamReader
      */
     private InputStreamReader RetrieveTimersStreamReader() {
         // Get file stream and construct input stream reader
-        try (FileInputStream fileInputStream = Context.openFileInput(Filename)) {
+        try {
+            FileInputStream fileInputStream = Context.openFileInput(Filename);
             return new InputStreamReader(fileInputStream, FileEncoding);
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,6 +130,7 @@ public class FileSystemRepository implements IRepository {
 
     /**
      * Reads all data in input stream reader and maps to alarm timer object
+     *
      * @param inputStreamReader
      * @return ArrayList<AlarmTimer>
      */
@@ -148,6 +162,7 @@ public class FileSystemRepository implements IRepository {
 
     /**
      * Reads JSON Object name and value and creates an AlarmTimer
+     *
      * @param jsonReader
      * @return AlarmTimer or null
      */
@@ -199,6 +214,7 @@ public class FileSystemRepository implements IRepository {
 
     /**
      * If next json property name matches parameter then returns json value otherwise null
+     *
      * @param jsonReader
      * @param propertyName
      * @return
