@@ -15,7 +15,7 @@ public class AlarmTimer {
     public MutableLiveData<String> ReadableTimer = new MutableLiveData<>();
     public int LengthInSeconds;
 
-    private long WhenTimerStartedInSeconds;
+    public long WhenTimerStartedInSeconds;
     private long SecondsPassedAtTimeOfTick = 0;
 
     public enum ALARMTIMER_STATE {
