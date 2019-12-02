@@ -32,7 +32,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public View View;
-        public UUID AlarmTimerID;
+        public int AlarmTimerID;
         public ViewDataBinding binding;
 
         public ViewHolder(View view, Fragment fragment) {
@@ -129,21 +129,21 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     }
 
     @Override
-    public void NotifyAlarmTimerStart(UUID alarmTimerID) {
+    public void NotifyAlarmTimerStart(int alarmTimerID) {
         for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
             observer.OnStart(alarmTimerID);
         }
     }
 
     @Override
-    public void NotifyAlarmTimerPause(UUID alarmTimerID) {
+    public void NotifyAlarmTimerPause(int alarmTimerID) {
         for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
             observer.OnPause(alarmTimerID);
         }
     }
 
     @Override
-    public void NotifyAlarmTimerReset(UUID alarmTimerID) {
+    public void NotifyAlarmTimerReset(int alarmTimerID) {
         for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
             observer.OnReset(alarmTimerID);
         }

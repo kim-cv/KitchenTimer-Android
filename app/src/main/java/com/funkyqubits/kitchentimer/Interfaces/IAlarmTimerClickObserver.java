@@ -1,11 +1,9 @@
 package com.funkyqubits.kitchentimer.Interfaces;
 
-import java.util.UUID;
-
 public interface IAlarmTimerClickObserver {
-    void OnStart(UUID alarmTimerID);
+    void OnStart(int alarmTimerID);
 
-    void OnPause(UUID alarmTimerID);
+    void OnPause(int alarmTimerID);
 
-    void OnReset(UUID alarmTimerID);
+    void OnReset(int alarmTimerID);
 }

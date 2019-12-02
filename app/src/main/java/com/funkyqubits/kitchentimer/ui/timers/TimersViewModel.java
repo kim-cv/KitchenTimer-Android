@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObserver {
 
@@ -31,7 +30,19 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         this.TimerRepository = _timerRepository;
         AlarmManagerController = alarmManagerController;
 
-        AlarmTimers.addAll(TimerRepository.LoadAlarmTimers());
+        /*
+            Old app didn't use unique ID's so for backward compatibility loading old timers from storage receive -1 as id
+            When timers are loaded this piece of code check for timers with -1 as id and assign a new unique id
+        */
+        ArrayList<AlarmTimer> tmpAlarmTimers = TimerRepository.LoadAlarmTimers();
+        for (AlarmTimer tmpAlarmTimer : tmpAlarmTimers) {
+            if (tmpAlarmTimer.ID == -1) {
+                int newRandomId = GenerateUniqueIntId();
+                tmpAlarmTimer.ID = newRandomId;
+            }
+        }
+
+        AlarmTimers.addAll(tmpAlarmTimers);
 
         // Listen for AlarmTimer events
         for (AlarmTimer alarmTimer : AlarmTimers) {
@@ -41,7 +52,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         ObservableAlarmTimers.setValue(AlarmTimers);
     }
 
-    public ArrayList<AlarmTimer> GetRunningTimers(){
+    public ArrayList<AlarmTimer> GetRunningTimers() {
         return RunningTimers;
     }
 
@@ -51,14 +62,14 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
 
     public void SetInitialTimerValues(Map<String, Long> alarmTimers) {
         for (Map.Entry<String, Long> alarmTimerEntry : alarmTimers.entrySet()) {
-            UUID id = UUID.fromString(alarmTimerEntry.getKey());
+            int id = Integer.parseInt(alarmTimerEntry.getKey());
             Long whenTimerBegun = alarmTimerEntry.getValue();
 
             StartTimer(id, whenTimerBegun);
         }
     }
 
-    public void StartTimer(UUID id, long whenTimerBegun) {
+    public void StartTimer(int id, long whenTimerBegun) {
         AlarmTimer alarmTimer = FindTimerOnId(id);
         if (alarmTimer == null) {
             return;
@@ -67,7 +78,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         alarmTimer.Start(whenTimerBegun);
     }
 
-    public void StartTimer(UUID id) {
+    public void StartTimer(int id) {
         AlarmTimer alarmTimer = FindTimerOnId(id);
         if (alarmTimer == null) {
             return;
@@ -76,7 +87,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         alarmTimer.Start();
     }
 
-    public void PauseTimer(UUID id) {
+    public void PauseTimer(int id) {
         AlarmTimer alarmTimer = FindTimerOnId(id);
         if (alarmTimer == null) {
             return;
@@ -86,7 +97,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         RunningTimers.remove(alarmTimer);
     }
 
-    public void ResetTimer(UUID id) {
+    public void ResetTimer(int id) {
         AlarmTimer alarmTimer = FindTimerOnId(id);
         if (alarmTimer == null) {
             return;
@@ -96,13 +107,24 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         RunningTimers.remove(alarmTimer);
     }
 
-    private AlarmTimer FindTimerOnId(UUID id) {
+    private AlarmTimer FindTimerOnId(int id) {
         for (AlarmTimer alarmTimer : AlarmTimers) {
-            if (alarmTimer.ID.equals(id)) {
+            if (alarmTimer.ID == id) {
                 return alarmTimer;
             }
         }
         return null;
+    }
+
+    private int GenerateUniqueIntId() {
+        int randomId = (int) (Math.random() * ((99999999 - 1) + 1)) + 1;
+        AlarmTimer tmpAlarmTimer = FindTimerOnId(randomId);
+
+        if (tmpAlarmTimer == null) {
+            return randomId;
+        } else {
+            return GenerateUniqueIntId();
+        }
     }
 
     private void InitTimer() {
@@ -120,7 +142,18 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
 
     //#region Events for each alarm timer
     @Override
-    public void OnAlarmTimerStarted(UUID alarmTimerID) {
+    public void OnAlarmTimerStarted(int alarmTimerID) {
+        AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
+        if (alarmTimer == null) {
+            return;
+        }
+
+        AlarmManagerController.ScheduleAlarm(alarmTimer.ID, alarmTimer.LengthInSeconds);
+        RunningTimers.add(alarmTimer);
+    }
+
+    @Override
+    public void OnAlarmTimerResumed(int alarmTimerID) {
         AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
         if (alarmTimer == null) {
             return;
@@ -130,42 +163,35 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
     }
 
     @Override
-    public void OnAlarmTimerResumed(UUID alarmTimerID) {
+    public void OnAlarmTimerPaused(int alarmTimerID) {
         AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
         if (alarmTimer == null) {
             return;
         }
 
-        RunningTimers.add(alarmTimer);
-    }
-
-    @Override
-    public void OnAlarmTimerPaused(UUID alarmTimerID) {
-        AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
-        if (alarmTimer == null) {
-            return;
-        }
-
+        AlarmManagerController.CancelAlarm(alarmTimer.ID);
         RunningTimers.remove(alarmTimer);
     }
 
     @Override
-    public void OnAlarmTimerReset(UUID alarmTimerID) {
+    public void OnAlarmTimerReset(int alarmTimerID) {
         AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
         if (alarmTimer == null) {
             return;
         }
 
+        AlarmManagerController.CancelAlarm(alarmTimer.ID);
         RunningTimers.remove(alarmTimer);
     }
 
     @Override
-    public void OnAlarmTimerCompleted(UUID alarmTimerID) {
+    public void OnAlarmTimerCompleted(int alarmTimerID) {
         AlarmTimer alarmTimer = FindTimerOnId(alarmTimerID);
         if (alarmTimer == null) {
             return;
         }
 
+        //AlarmManagerController.CancelAlarm(alarmTimer.ID);
         RunningTimers.remove(alarmTimer);
     }
     //#endregion

@@ -1,15 +1,13 @@
 package com.funkyqubits.kitchentimer.Interfaces;
 
-import java.util.UUID;
-
 public interface IAlarmTimerClickedSubject {
     void RegisterObserver(IAlarmTimerClickObserver observer);
 
     void RemoveObserver(IAlarmTimerClickObserver observer);
 
-    void NotifyAlarmTimerStart(UUID alarmTimerID);
+    void NotifyAlarmTimerStart(int alarmTimerID);
 
-    void NotifyAlarmTimerPause(UUID alarmTimerID);
+    void NotifyAlarmTimerPause(int alarmTimerID);
 
-    void NotifyAlarmTimerReset(UUID alarmTimerID);
+    void NotifyAlarmTimerReset(int alarmTimerID);
 }

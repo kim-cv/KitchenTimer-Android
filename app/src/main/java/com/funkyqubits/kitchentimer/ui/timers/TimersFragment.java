@@ -24,7 +24,6 @@ import com.funkyqubits.kitchentimer.Repositories.IRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class TimersFragment extends Fragment implements IAlarmTimerClickObserver {
 
@@ -109,7 +108,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerClickObserver
         // Commit timer data
         sharedPreferences_editor.clear();
         for (AlarmTimer alarmTimer : runningAlarmTimers) {
-            sharedPreferences_editor.putLong(alarmTimer.ID.toString(), alarmTimer.WhenTimerStartedInSeconds);
+            sharedPreferences_editor.putLong(Integer.toString(alarmTimer.ID), alarmTimer.WhenTimerStartedInSeconds);
         }
         sharedPreferences_editor.commit();
         //#endregion
@@ -121,17 +120,17 @@ public class TimersFragment extends Fragment implements IAlarmTimerClickObserver
 
     //#region Timer UI events
     @Override
-    public void OnStart(UUID alarmTimerID) {
+    public void OnStart(int alarmTimerID) {
         TimersViewModel.StartTimer(alarmTimerID);
     }
 
     @Override
-    public void OnPause(UUID alarmTimerID) {
+    public void OnPause(int alarmTimerID) {
         TimersViewModel.PauseTimer(alarmTimerID);
     }
 
     @Override
-    public void OnReset(UUID alarmTimerID) {
+    public void OnReset(int alarmTimerID) {
         TimersViewModel.ResetTimer(alarmTimerID);
     }
     //#endregion

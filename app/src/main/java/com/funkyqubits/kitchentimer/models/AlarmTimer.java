@@ -10,12 +10,11 @@ import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCompleteSubject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.UUID;
 
 public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
     public ALARMTIMER_STATE AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
-    public UUID ID;
+    public int ID;
     public String Title;
     public MutableLiveData<String> ReadableTimer = new MutableLiveData<>();
     public int LengthInSeconds;
@@ -30,7 +29,15 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
         COMPLETED
     }
 
-    public AlarmTimer(UUID _id, String _title, int _lengthInSeconds) {
+    public AlarmTimer(int _id, String _title, int _lengthInSeconds) {
+        ctor(_id, _title, _lengthInSeconds);
+    }
+
+    public AlarmTimer(String _title, int _lengthInSeconds) {
+        ctor(-1, _title, _lengthInSeconds);
+    }
+
+    private void ctor(int _id, String _title, int _lengthInSeconds) {
         this.ID = _id;
         this.Title = _title;
         this.LengthInSeconds = _lengthInSeconds;
@@ -109,7 +116,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     private Long CalculateTimerProgress() {
         long nowSeconds = Calendar.getInstance().getTimeInMillis() / 1000;
         long timerProgress = nowSeconds - WhenTimerStartedInSeconds;
-        return  timerProgress;
+        return timerProgress;
     }
 
     private void ConvertProgressToReadableTimer() {
@@ -137,35 +144,35 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     }
 
     @Override
-    public void NotifyAlarmTimerStarted(UUID alarmTimerID) {
+    public void NotifyAlarmTimerStarted(int alarmTimerID) {
         for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
             observer.OnAlarmTimerStarted(alarmTimerID);
         }
     }
 
     @Override
-    public void NotifyAlarmTimerResumed(UUID alarmTimerID) {
+    public void NotifyAlarmTimerResumed(int alarmTimerID) {
         for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
             observer.OnAlarmTimerResumed(alarmTimerID);
         }
     }
 
     @Override
-    public void NotifyAlarmTimerPaused(UUID alarmTimerID) {
+    public void NotifyAlarmTimerPaused(int alarmTimerID) {
         for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
             observer.OnAlarmTimerPaused(alarmTimerID);
         }
     }
 
     @Override
-    public void NotifyAlarmTimerReset(UUID alarmTimerID) {
+    public void NotifyAlarmTimerReset(int alarmTimerID) {
         for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
             observer.OnAlarmTimerReset(alarmTimerID);
         }
     }
 
     @Override
-    public void NotifyAlarmTimerCompleted(UUID alarmTimerID) {
+    public void NotifyAlarmTimerCompleted(int alarmTimerID) {
         for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
             observer.OnAlarmTimerCompleted(alarmTimerID);
         }

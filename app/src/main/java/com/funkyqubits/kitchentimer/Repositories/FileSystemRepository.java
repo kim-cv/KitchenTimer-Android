@@ -100,7 +100,7 @@ public class FileSystemRepository implements IRepository {
     private void WriteAlarmTimerToJsonWriter(JsonWriter jsonWriter, AlarmTimer alarmTimer) {
         try {
             jsonWriter.beginObject();
-            jsonWriter.name("id").value(alarmTimer.ID.toString());
+            jsonWriter.name("id").value(Integer.toString(alarmTimer.ID));
             jsonWriter.name("title").value(alarmTimer.Title);
             jsonWriter.name("time").value(Integer.toString(alarmTimer.LengthInSeconds));
             jsonWriter.endObject();
@@ -177,15 +177,15 @@ public class FileSystemRepository implements IRepository {
                 String tmpTitle = ReadJsonProperty(jsonReader, "title");
                 String tmpTime = ReadJsonProperty(jsonReader, "time");
 
-                UUID id;
+                int id;
                 String title;
                 int time;
 
                 // Make sure we got ID
                 if (tmpId == null) {
-                    id = UUID.randomUUID();
+                    id = -1;
                 } else {
-                    id = UUID.fromString(tmpId);
+                    id = Integer.parseInt(tmpId);
                 }
 
                 // Make sure we got title
