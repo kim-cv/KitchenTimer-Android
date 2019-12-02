@@ -3,6 +3,7 @@ package com.funkyqubits.kitchentimer.ui.timers;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.funkyqubits.kitchentimer.Controller.AlarmManagerController;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCompleteObserver;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
@@ -19,14 +20,17 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
     private ArrayList<AlarmTimer> AlarmTimers = new ArrayList<>();
     private ArrayList<AlarmTimer> RunningTimers = new ArrayList<>();
     private IRepository TimerRepository;
+    private AlarmManagerController AlarmManagerController;
 
     public TimersViewModel() {
         InitTimer();
     }
 
     // TODO: Figure out how to use dependency injection in Android MVVM
-    public void ProvideRepository(IRepository _timerRepository) {
+    public void ProvideExtra(IRepository _timerRepository, AlarmManagerController alarmManagerController) {
         this.TimerRepository = _timerRepository;
+        AlarmManagerController = alarmManagerController;
+
         AlarmTimers.addAll(TimerRepository.LoadAlarmTimers());
 
         // Listen for AlarmTimer events
