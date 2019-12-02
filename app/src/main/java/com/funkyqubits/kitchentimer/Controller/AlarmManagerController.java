@@ -31,4 +31,16 @@ public class AlarmManagerController {
 
         AlarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
+
+    public void CancelAlarm(int uniqueId) {
+        /*
+        With FLAG_NO_CREATE it will return null if the PendingIntent doesn't already exist. If it already exists it returns
+        reference to the existing PendingIntent
+        */
+        Intent intent = new Intent(Context, TimerCompleteReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(Context, uniqueId, intent, PendingIntent.FLAG_NO_CREATE);
+        if (pendingIntent != null) {
+            AlarmManager.cancel(pendingIntent);
+        }
+    }
 }
