@@ -64,9 +64,9 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
     private void StartTimer() {
         AlarmTimerState = ALARMTIMER_STATE.RUNNING;
+        NotifyAlarmTimerStarted(ID);
         CalculateIfTimerComplete();
         ConvertProgressToReadableTimer();
-        NotifyAlarmTimerStarted(ID);
     }
 
 
@@ -121,7 +121,9 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
     private void ConvertProgressToReadableTimer() {
         long progress = CalculateTimerProgress();
-        if (AlarmTimerState == ALARMTIMER_STATE.COMPLETED || AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING) {
+        if (AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
+            this.ReadableTimer.postValue(DateUtils.formatElapsedTime(0));
+        } else if (AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING) {
             this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds));
         } else {
             this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds - progress));
