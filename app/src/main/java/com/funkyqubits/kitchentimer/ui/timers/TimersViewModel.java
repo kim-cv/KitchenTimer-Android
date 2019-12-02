@@ -17,7 +17,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
 
     public MutableLiveData<ArrayList<AlarmTimer>> ObservableAlarmTimers = new MutableLiveData<>();
     private ArrayList<AlarmTimer> AlarmTimers = new ArrayList<>();
-    private ArrayList<AlarmTimer> RunningTimers = new ArrayList<>();
     private IRepository TimerRepository;
     private AlarmManagerController AlarmManagerController;
 
@@ -53,7 +52,13 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
     }
 
     public ArrayList<AlarmTimer> GetRunningTimers() {
-        return RunningTimers;
+        ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
+        for (AlarmTimer alarmTimer : AlarmTimers) {
+            if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
+                tmpAlarmTimers.add(alarmTimer);
+            }
+        }
+        return tmpAlarmTimers;
     }
 
     public void SaveAllTimersToStorage() {
@@ -94,7 +99,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         }
 
         alarmTimer.Pause();
-        RunningTimers.remove(alarmTimer);
     }
 
     public void ResetTimer(int id) {
@@ -104,7 +108,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         }
 
         alarmTimer.Reset();
-        RunningTimers.remove(alarmTimer);
     }
 
     private AlarmTimer FindTimerOnId(int id) {
@@ -133,8 +136,10 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
 
             @Override
             public void run() {
-                for (AlarmTimer alarmTimer : RunningTimers) {
-                    alarmTimer.Tick();
+                for (AlarmTimer alarmTimer : AlarmTimers) {
+                    if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
+                        alarmTimer.Tick();
+                    }
                 }
             }
         }, 0, 1000);//Update every second
@@ -149,7 +154,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         }
 
         AlarmManagerController.ScheduleAlarm(alarmTimer.ID, alarmTimer.LengthInSeconds);
-        RunningTimers.add(alarmTimer);
     }
 
     @Override
@@ -158,8 +162,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         if (alarmTimer == null) {
             return;
         }
-
-        RunningTimers.add(alarmTimer);
     }
 
     @Override
@@ -170,7 +172,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         }
 
         AlarmManagerController.CancelAlarm(alarmTimer.ID);
-        RunningTimers.remove(alarmTimer);
     }
 
     @Override
@@ -181,7 +182,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         }
 
         AlarmManagerController.CancelAlarm(alarmTimer.ID);
-        RunningTimers.remove(alarmTimer);
     }
 
     @Override
@@ -190,9 +190,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         if (alarmTimer == null) {
             return;
         }
-
-        //AlarmManagerController.CancelAlarm(alarmTimer.ID);
-        RunningTimers.remove(alarmTimer);
     }
     //#endregion
 }
