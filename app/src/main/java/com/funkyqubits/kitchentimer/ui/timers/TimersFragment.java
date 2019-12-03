@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,12 +20,13 @@ import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TimersFragment extends Fragment implements IAlarmTimerClickObserver {
+public class TimersFragment extends NavHostFragment implements IAlarmTimerClickObserver {
 
     private RecyclerView RecyclerView;
     private AlarmTimersAdapter RecyclerViewAdapter;
@@ -67,6 +68,14 @@ public class TimersFragment extends Fragment implements IAlarmTimerClickObserver
                     }
                 }
         );
+
+        FloatingActionButton fab = root.findViewById(R.id.fab_add_timer);
+        fab.setOnClickListener(new FloatingActionButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findNavController(getParentFragment()).navigate(R.id.action_navigation_timers_to_addTimerFragment);
+            }
+        });
 
         return root;
     }
