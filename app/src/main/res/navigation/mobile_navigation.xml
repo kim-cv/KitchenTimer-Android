@@ -10,9 +10,6 @@
         android:name="com.funkyqubits.kitchentimer.ui.timers.TimersFragment"
         android:label="@string/title_timers"
         tools:layout="@layout/fragment_timers" >
-        <action
-            android:id="@+id/action_navigation_timers_to_addTimerFragment"
-            app:destination="@id/addTimerFragment" />
     </fragment>
 
     <fragment
@@ -26,9 +23,10 @@
         android:name="com.funkyqubits.kitchentimer.ui.about.AboutFragment"
         android:label="@string/title_about"
         tools:layout="@layout/fragment_about" />
+
     <fragment
-        android:id="@+id/addTimerFragment"
+        android:id="@+id/navigation_add_timer"
         android:name="com.funkyqubits.kitchentimer.ui.add_timer.AddTimerFragment"
-        android:label="fragment_add_timer"
+        android:label="Add new timer"
         tools:layout="@layout/fragment_add_timer" />
 </navigation>
