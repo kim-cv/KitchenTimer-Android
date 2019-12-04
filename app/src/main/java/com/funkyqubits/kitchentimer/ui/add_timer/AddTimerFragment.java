@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.funkyqubits.kitchentimer.R;
@@ -82,6 +83,14 @@ public class AddTimerFragment extends Fragment {
         int numberPicker_seconds_value = numberPicker_seconds.getValue();
         if (numberPicker_seconds_value < 0 || numberPicker_seconds_value > 59) {
             return false;
+        }
+
+        int selected_radioButton_id = radioGroup.getCheckedRadioButtonId();
+        switch (selected_radioButton_id) {
+            case -1: {
+                // Nothing selected
+                return false;
+            }
         }
 
         return true;
