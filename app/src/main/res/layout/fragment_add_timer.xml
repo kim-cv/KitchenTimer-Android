@@ -124,16 +124,19 @@
                 android:textSize="@dimen/txt_title" />
 
             <RadioGroup
+                android:id="@+id/radioGroup_saveOrSingle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:id="@+id/saveOrSingle_save"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Save"
                     android:textSize="@dimen/txt_second" />
 
                 <RadioButton
+                    android:id="@+id/saveOrSingle_single"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Single use timer"
