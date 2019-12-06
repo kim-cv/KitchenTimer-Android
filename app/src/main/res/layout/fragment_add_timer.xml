@@ -130,11 +130,16 @@
             android:layout_weight=".2"
             android:orientation="vertical">
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textView_radioGroup_saveOrSingle_textLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Save timer or Single use timer"
                 android:textSize="@dimen/txt_title" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <RadioGroup
                 android:id="@+id/radioGroup_saveOrSingle"

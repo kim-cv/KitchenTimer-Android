@@ -30,6 +30,7 @@ public class AddTimerFragment extends Fragment {
     private NumberPicker numberPicker_hours;
     private NumberPicker numberPicker_minutes;
     private NumberPicker numberPicker_seconds;
+    private TextInputLayout textView_radioGroup_saveOrSingle_textLayout;
     private RadioGroup radioGroup;
     private Button btn_create;
 
@@ -46,6 +47,7 @@ public class AddTimerFragment extends Fragment {
         numberPicker_hours = root.findViewById(R.id.numberPicker_hours);
         numberPicker_minutes = root.findViewById(R.id.numberPicker_minutes);
         numberPicker_seconds = root.findViewById(R.id.numberPicker_seconds);
+        textView_radioGroup_saveOrSingle_textLayout = root.findViewById(R.id.textView_radioGroup_saveOrSingle_textLayout);
         radioGroup = root.findViewById(R.id.radioGroup_saveOrSingle);
         btn_create = root.findViewById(R.id.btn_addTimer_create);
 
@@ -110,6 +112,14 @@ public class AddTimerFragment extends Fragment {
             }
         });
 
+        // Timer type change listener
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                ValidateRadiogroup(checkedId);
+            }
+        });
+
         return root;
     }
 
@@ -129,11 +139,8 @@ public class AddTimerFragment extends Fragment {
         }
 
         int selected_radioButton_id = radioGroup.getCheckedRadioButtonId();
-        switch (selected_radioButton_id) {
-            case -1: {
-                // Nothing selected
-                return false;
-            }
+        if (!ValidateRadiogroup(selected_radioButton_id)) {
+            numErrors += 1;
         }
 
         if (numErrors > 0) {
@@ -179,6 +186,23 @@ public class AddTimerFragment extends Fragment {
                 textView_timer_length_textLayout.setError(null);
             }
             return true;
+        }
+    }
+
+    private boolean ValidateRadiogroup(int selected_radioButton_id) {
+        switch (selected_radioButton_id) {
+            case -1: {
+                // Nothing selected
+                textView_radioGroup_saveOrSingle_textLayout.setError("Must choose timer type.");
+                return false;
+            }
+            default: {
+                // Remove err
+                if (textView_radioGroup_saveOrSingle_textLayout.getError() != null) {
+                    textView_radioGroup_saveOrSingle_textLayout.setError(null);
+                }
+                return true;
+            }
         }
     }
 
