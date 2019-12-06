@@ -26,6 +26,7 @@ public class AddTimerFragment extends Fragment {
 
     private EditText editText_title;
     private TextInputLayout editText_title_textLayout;
+    private TextInputLayout textView_timer_length_textLayout;
     private NumberPicker numberPicker_hours;
     private NumberPicker numberPicker_minutes;
     private NumberPicker numberPicker_seconds;
@@ -41,6 +42,7 @@ public class AddTimerFragment extends Fragment {
         // Find views
         editText_title = root.findViewById(R.id.editText_title);
         editText_title_textLayout = root.findViewById(R.id.editText_title_textLayout);
+        textView_timer_length_textLayout = root.findViewById(R.id.textView_timer_length_textLayout);
         numberPicker_hours = root.findViewById(R.id.numberPicker_hours);
         numberPicker_minutes = root.findViewById(R.id.numberPicker_minutes);
         numberPicker_seconds = root.findViewById(R.id.numberPicker_seconds);
@@ -82,28 +84,48 @@ public class AddTimerFragment extends Fragment {
             }
         });
 
+        // Timer length change listener
+        numberPicker_hours.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                int minutes_value = numberPicker_minutes.getValue();
+                int seconds_value = numberPicker_seconds.getValue();
+                ValidateNumberpickers(newVal, minutes_value, seconds_value);
+            }
+        });
+        numberPicker_minutes.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                int hours_value = numberPicker_hours.getValue();
+                int seconds_value = numberPicker_seconds.getValue();
+                ValidateNumberpickers(hours_value, newVal, seconds_value);
+            }
+        });
+        numberPicker_seconds.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                int hours_value = numberPicker_hours.getValue();
+                int minutes_value = numberPicker_minutes.getValue();
+                ValidateNumberpickers(hours_value, minutes_value, newVal);
+            }
+        });
+
         return root;
     }
 
     private boolean ValidateViewData() {
+        int numErrors = 0;
+
         String editText_title_value = editText_title.getText().toString();
         if (ValidateTitle(editText_title_value) == false) {
-            return false;
+            numErrors += 1;
         }
 
         int numberPicker_hours_value = numberPicker_hours.getValue();
-        if (numberPicker_hours_value < 0 || numberPicker_hours_value > 23) {
-            return false;
-        }
-
         int numberPicker_minutes_value = numberPicker_minutes.getValue();
-        if (numberPicker_minutes_value < 0 || numberPicker_minutes_value > 59) {
-            return false;
-        }
-
         int numberPicker_seconds_value = numberPicker_seconds.getValue();
-        if (numberPicker_seconds_value < 0 || numberPicker_seconds_value > 59) {
-            return false;
+        if (ValidateNumberpickers(numberPicker_hours_value, numberPicker_minutes_value, numberPicker_seconds_value) == false) {
+            numErrors += 1;
         }
 
         int selected_radioButton_id = radioGroup.getCheckedRadioButtonId();
@@ -114,7 +136,11 @@ public class AddTimerFragment extends Fragment {
             }
         }
 
-        return true;
+        if (numErrors > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private boolean ValidateTitle(String value) {
@@ -124,6 +150,33 @@ public class AddTimerFragment extends Fragment {
         } else {
             if (editText_title_textLayout.getError() != null) {
                 editText_title_textLayout.setError(null);
+            }
+            return true;
+        }
+    }
+
+    private boolean ValidateNumberpickers(int hours, int minutes, int seconds) {
+        boolean hours_range = (hours < 0 || hours > 23);
+        boolean minutes_range = (minutes < 0 || minutes > 59);
+        boolean seconds_range = (seconds < 0 || seconds > 59);
+        boolean no_value = (hours <= 0 && minutes <= 0 && seconds <= 0);
+
+        if (no_value) {
+            textView_timer_length_textLayout.setError("Must choose timer length.");
+            return false;
+        } else if (hours_range) {
+            textView_timer_length_textLayout.setError("Hours must be between 0 and 23.");
+            return false;
+        } else if (minutes_range) {
+            textView_timer_length_textLayout.setError("Minutes must be between 0 and 59.");
+            return false;
+        } else if (seconds_range) {
+            textView_timer_length_textLayout.setError("Seconds must be between 0 and 59.");
+            return false;
+        } else {
+            // Remove err
+            if (textView_timer_length_textLayout.getError() != null) {
+                textView_timer_length_textLayout.setError(null);
             }
             return true;
         }
