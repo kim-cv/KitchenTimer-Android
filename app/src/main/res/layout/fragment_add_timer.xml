@@ -27,14 +27,20 @@
                 android:text="Title"
                 android:textSize="@dimen/txt_title" />
 
-            <EditText
-                android:id="@+id/editText_title"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editText_title_textLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:inputType="text"
-                android:text=""
-                android:textSize="@dimen/txt_second" />
+                android:layout_weight="0.3">
+
+                <EditText
+                    android:id="@+id/editText_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text=""
+                    android:textSize="@dimen/txt_second" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 

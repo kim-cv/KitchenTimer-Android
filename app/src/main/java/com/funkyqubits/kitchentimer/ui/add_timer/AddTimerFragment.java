@@ -7,22 +7,25 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.funkyqubits.kitchentimer.R;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class AddTimerFragment extends Fragment {
 
     private AddTimerViewModel addTimerViewModel;
 
     private EditText editText_title;
+    private TextInputLayout editText_title_textLayout;
     private NumberPicker numberPicker_hours;
     private NumberPicker numberPicker_minutes;
     private NumberPicker numberPicker_seconds;
@@ -37,6 +40,7 @@ public class AddTimerFragment extends Fragment {
 
         // Find views
         editText_title = root.findViewById(R.id.editText_title);
+        editText_title_textLayout = root.findViewById(R.id.editText_title_textLayout);
         numberPicker_hours = root.findViewById(R.id.numberPicker_hours);
         numberPicker_minutes = root.findViewById(R.id.numberPicker_minutes);
         numberPicker_seconds = root.findViewById(R.id.numberPicker_seconds);
@@ -61,12 +65,29 @@ public class AddTimerFragment extends Fragment {
             }
         });
 
+        // Title text change listener
+        editText_title.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String value = s.toString();
+                ValidateTitle(value);
+            }
+        });
+
         return root;
     }
 
     private boolean ValidateViewData() {
         String editText_title_value = editText_title.getText().toString();
-        if (editText_title_value.length() <= 0) {
+        if (ValidateTitle(editText_title_value) == false) {
             return false;
         }
 
@@ -94,6 +115,18 @@ public class AddTimerFragment extends Fragment {
         }
 
         return true;
+    }
+
+    private boolean ValidateTitle(String value) {
+        if (value.length() <= 0) {
+            editText_title_textLayout.setError("Must provide title.");
+            return false;
+        } else {
+            if (editText_title_textLayout.getError() != null) {
+                editText_title_textLayout.setError(null);
+            }
+            return true;
+        }
     }
 
     private void CreateTimer() {
