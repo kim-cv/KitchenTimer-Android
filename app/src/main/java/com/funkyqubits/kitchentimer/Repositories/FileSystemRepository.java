@@ -202,7 +202,7 @@ public class FileSystemRepository implements IRepository {
                     time = Integer.parseInt(tmpTime);
                 }
 
-                tmpAlarmTimer = new AlarmTimer(id, title, time);
+                tmpAlarmTimer = new AlarmTimer(id, title, time, AlarmTimer.ALARMTIMER_SAVE_TYPE.SAVE);
             }
             jsonReader.endObject();
         } catch (IOException e) {

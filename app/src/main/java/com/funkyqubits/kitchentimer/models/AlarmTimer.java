@@ -18,6 +18,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     public String Title;
     public MutableLiveData<String> ReadableTimer = new MutableLiveData<>();
     public int LengthInSeconds;
+    public ALARMTIMER_SAVE_TYPE SaveType;
 
     public long WhenTimerStartedInSeconds;
     private final List<IAlarmTimerCompleteObserver> ObserversAlarmTimerComplete = new ArrayList<>();
@@ -29,18 +30,24 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
         COMPLETED
     }
 
-    public AlarmTimer(int _id, String _title, int _lengthInSeconds) {
-        ctor(_id, _title, _lengthInSeconds);
+    public enum ALARMTIMER_SAVE_TYPE {
+        SAVE,
+        SINGLE_USE
     }
 
-    public AlarmTimer(String _title, int _lengthInSeconds) {
-        ctor(-1, _title, _lengthInSeconds);
+    public AlarmTimer(int _id, String _title, int _lengthInSeconds, ALARMTIMER_SAVE_TYPE _saveType) {
+        ctor(_id, _title, _lengthInSeconds, _saveType);
     }
 
-    private void ctor(int _id, String _title, int _lengthInSeconds) {
+    public AlarmTimer(String _title, int _lengthInSeconds, ALARMTIMER_SAVE_TYPE _saveType) {
+        ctor(-1, _title, _lengthInSeconds, _saveType);
+    }
+
+    private void ctor(int _id, String _title, int _lengthInSeconds, ALARMTIMER_SAVE_TYPE _saveType) {
         this.ID = _id;
         this.Title = _title;
         this.LengthInSeconds = _lengthInSeconds;
+        this.SaveType = _saveType;
         ConvertProgressToReadableTimer();
     }
 
