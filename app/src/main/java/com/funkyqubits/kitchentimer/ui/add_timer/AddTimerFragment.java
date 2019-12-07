@@ -2,6 +2,8 @@ package com.funkyqubits.kitchentimer.ui.add_timer;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,8 +19,14 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 
+import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.R;
+import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
+import com.funkyqubits.kitchentimer.Repositories.IRepository;
+import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.ArrayList;
 
 public class AddTimerFragment extends Fragment {
 
@@ -39,6 +47,11 @@ public class AddTimerFragment extends Fragment {
         addTimerViewModel =
                 ViewModelProviders.of(this).get(AddTimerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_add_timer, container, false);
+
+        // TODO: Figure out how to use dependency injection in Android MVVM
+        IRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
+        TimerController timerController = new TimerController(repository);
+        addTimerViewModel.ProvideExtra(timerController);
 
         // Find views
         editText_title = root.findViewById(R.id.editText_title);
@@ -123,6 +136,32 @@ public class AddTimerFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        //#region Save running timers to shared preferences key/value storage
+        ArrayList<AlarmTimer> runningAlarmTimers = addTimerViewModel.GetRunningTimers();
+
+        // Get Context and SharedPreferences
+        Context context = getContext();
+        String filename = getString(R.string.preference_file_runningTimers);
+        SharedPreferences sharedPreferences_runningTimers = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPreferences_editor = sharedPreferences_runningTimers.edit();
+
+        // Commit timer data
+        sharedPreferences_editor.clear();
+        for (AlarmTimer alarmTimer : runningAlarmTimers) {
+            sharedPreferences_editor.putLong(Integer.toString(alarmTimer.ID), alarmTimer.WhenTimerStartedInSeconds);
+        }
+        sharedPreferences_editor.commit();
+        //#endregion
+
+
+        // Save timers to storage
+        addTimerViewModel.SaveAllTimersToStorage();
+    }
+
     private boolean ValidateViewData() {
         int numErrors = 0;
 
@@ -143,11 +182,7 @@ public class AddTimerFragment extends Fragment {
             numErrors += 1;
         }
 
-        if (numErrors > 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return numErrors <= 0;
     }
 
     private boolean ValidateTitle(String value) {
@@ -207,7 +242,29 @@ public class AddTimerFragment extends Fragment {
     }
 
     private void CreateTimer() {
+        String editText_title_value = editText_title.getText().toString();
+        int numberPicker_hours_value = numberPicker_hours.getValue();
+        int numberPicker_minutes_value = numberPicker_minutes.getValue();
+        int numberPicker_seconds_value = numberPicker_seconds.getValue();
+        int selected_radioButton_id = radioGroup.getCheckedRadioButtonId();
 
+        boolean shouldSaveTimer;
+        switch (selected_radioButton_id) {
+            case R.id.radioButton_saveOrSingle_save: {
+                shouldSaveTimer = true;
+                break;
+            }
+            case R.id.radioButton_saveOrSingle_single: {
+                shouldSaveTimer = false;
+                break;
+            }
+            default: {
+                shouldSaveTimer = true;
+                break;
+            }
+        }
+
+        addTimerViewModel.CreateTimer(editText_title_value, numberPicker_hours_value, numberPicker_minutes_value, numberPicker_seconds_value, shouldSaveTimer);
     }
 
 }
