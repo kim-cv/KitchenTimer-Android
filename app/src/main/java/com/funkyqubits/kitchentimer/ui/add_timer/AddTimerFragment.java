@@ -136,32 +136,6 @@ public class AddTimerFragment extends Fragment {
         return root;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        //#region Save running timers to shared preferences key/value storage
-        ArrayList<AlarmTimer> runningAlarmTimers = addTimerViewModel.GetRunningTimers();
-
-        // Get Context and SharedPreferences
-        Context context = getContext();
-        String filename = getString(R.string.preference_file_runningTimers);
-        SharedPreferences sharedPreferences_runningTimers = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
-        SharedPreferences.Editor sharedPreferences_editor = sharedPreferences_runningTimers.edit();
-
-        // Commit timer data
-        sharedPreferences_editor.clear();
-        for (AlarmTimer alarmTimer : runningAlarmTimers) {
-            sharedPreferences_editor.putLong(Integer.toString(alarmTimer.ID), alarmTimer.WhenTimerStartedInSeconds);
-        }
-        sharedPreferences_editor.commit();
-        //#endregion
-
-
-        // Save timers to storage
-        addTimerViewModel.SaveAllTimersToStorage();
-    }
-
     private boolean ValidateViewData() {
         int numErrors = 0;
 
@@ -265,6 +239,9 @@ public class AddTimerFragment extends Fragment {
         }
 
         addTimerViewModel.CreateTimer(editText_title_value, numberPicker_hours_value, numberPicker_minutes_value, numberPicker_seconds_value, shouldSaveTimer);
+
+        // Save timers to storage
+        addTimerViewModel.SaveAllTimersToStorage();
     }
 
 }
