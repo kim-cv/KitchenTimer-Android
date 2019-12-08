@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 
-import java.util.ArrayList;
-
 public class AddTimerViewModel extends ViewModel {
 
     private TimerController TimerController;
@@ -17,10 +15,6 @@ public class AddTimerViewModel extends ViewModel {
     // TODO: Figure out how to use dependency injection in Android MVVM
     public void ProvideExtra(TimerController _timerController) {
         this.TimerController = _timerController;
-    }
-
-    public ArrayList<AlarmTimer> GetRunningTimers() {
-        return TimerController.GetRunningTimers();
     }
 
     public void SaveAllTimersToStorage() {
