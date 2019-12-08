@@ -62,7 +62,7 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
         RecyclerViewAdapter.RegisterObserver(this);
 
         // Listen for when timers are ready and then give them to the adapter
-        TimersViewModel.ObservableAlarmTimers.observe(this, new Observer<ArrayList<AlarmTimer>>() {
+        TimersViewModel.ObservableAlarmTimers.observe(getViewLifecycleOwner(), new Observer<ArrayList<AlarmTimer>>() {
                     @Override
                     public void onChanged(ArrayList<AlarmTimer> alarmTimers) {
                         RecyclerViewAdapter.SetData(alarmTimers);
