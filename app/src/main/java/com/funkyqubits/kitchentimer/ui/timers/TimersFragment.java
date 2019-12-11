@@ -71,14 +71,6 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
                 }
         );
 
-        FloatingActionButton fab = root.findViewById(R.id.fab_add_timer);
-        fab.setOnClickListener(new FloatingActionButton.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                findNavController(getParentFragment()).navigate(R.id.navigation_add_timer);
-            }
-        });
-
         return root;
     }
 

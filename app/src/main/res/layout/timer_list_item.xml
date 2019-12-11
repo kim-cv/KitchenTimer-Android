@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginBottom="0px">
 
     <data>
         <variable
@@ -10,39 +15,106 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:orientation="horizontal">
+        android:background="@drawable/shape_timer_list_item"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:paddingRight="15dp"
+        app:timerState="@{alarmTimer.AlarmTimerState}">
 
+        <!-- Text -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/timer_title"
-            android:layout_width="50dp"
-            android:layout_height="100dp" />
+            <TextView
+                android:id="@+id/timer_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorMainText"
+                android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/timer_progress"
-            android:layout_width="50dp"
-            android:layout_height="100dp"
-            android:text="@{alarmTimer.ReadableTimer}"/>
+            <TextView
+                android:id="@+id/timer_progress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:gravity="right|center_vertical"
+                android:text="@{alarmTimer.ReadableTimer}"
+                android:textColor="@color/colorMainText"
+                android:textSize="16dp" />
 
-        <Button
-            android:id="@+id/btn_timer_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Start" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_timer_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Pause" />
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".5"
+            android:gravity="bottom"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_timer_reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Reset" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_timer_start"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="0dp"
+                app:icon="@drawable/ic_play_circle_outline_white_24dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:strokeWidth="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_timer_pause"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="0dp"
+                app:icon="@drawable/ic_pause_circle_outline_white_24dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:strokeWidth="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_timer_reset"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="0dp"
+                app:icon="@drawable/ic_replay_white_24dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:strokeWidth="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_timer_delete"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="0dp"
+                app:icon="@drawable/ic_delete_white_24dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:strokeWidth="0dp" />
+
+        </LinearLayout>
     </LinearLayout>
 </layout>

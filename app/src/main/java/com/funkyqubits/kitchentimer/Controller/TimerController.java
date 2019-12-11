@@ -45,7 +45,7 @@ public class TimerController {
     public ArrayList<AlarmTimer> GetRunningTimers() {
         ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
         for (AlarmTimer alarmTimer : AlarmTimers) {
-            if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
+            if (alarmTimer.AlarmTimerState.getValue() == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
                 tmpAlarmTimers.add(alarmTimer);
             }
         }

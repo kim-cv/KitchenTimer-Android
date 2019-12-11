@@ -3,17 +3,16 @@
 
     <item
         android:id="@+id/navigation_timers"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_timers"/>
-
-    <item
-        android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_settings"/>
+        android:icon="@drawable/ic_timelapse_white_24dp"
+        android:title="@string/title_timers" />
 
     <item
         android:id="@+id/navigation_about"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_about"/>
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="@string/title_add_timer" />
 
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="@string/title_settings" />
 </menu>

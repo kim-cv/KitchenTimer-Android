@@ -68,7 +68,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
             @Override
             public void run() {
                 for (AlarmTimer alarmTimer : TimerController.AlarmTimers) {
-                    if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
+                    if (alarmTimer.AlarmTimerState.getValue() == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
                         alarmTimer.Tick();
                     }
                 }

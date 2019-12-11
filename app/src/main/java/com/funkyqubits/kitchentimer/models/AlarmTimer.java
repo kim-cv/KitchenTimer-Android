@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
-    public ALARMTIMER_STATE AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
+    public MutableLiveData<ALARMTIMER_STATE> AlarmTimerState = new MutableLiveData<>();
     public int ID;
     public String Title;
     public MutableLiveData<String> ReadableTimer = new MutableLiveData<>();
@@ -44,6 +44,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     }
 
     private void ctor(int _id, String _title, int _lengthInSeconds, ALARMTIMER_SAVE_TYPE _saveType) {
+        this.AlarmTimerState.setValue(ALARMTIMER_STATE.NOT_RUNNING);
         this.ID = _id;
         this.Title = _title;
         this.LengthInSeconds = _lengthInSeconds;
@@ -52,7 +53,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     }
 
     public void Start(long whenTimerBegun) {
-        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
+        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
 
@@ -61,7 +62,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     }
 
     public void Start() {
-        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.PAUSED || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
+        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.PAUSED || AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
 
@@ -70,7 +71,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     }
 
     private void StartTimer() {
-        AlarmTimerState = ALARMTIMER_STATE.RUNNING;
+        AlarmTimerState.setValue(ALARMTIMER_STATE.RUNNING);
         NotifyAlarmTimerStarted(ID);
         CalculateIfTimerComplete();
         ConvertProgressToReadableTimer();
@@ -78,21 +79,21 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
 
     public void Pause() {
-        if (AlarmTimerState == ALARMTIMER_STATE.PAUSED || AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
+        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.PAUSED || AlarmTimerState.getValue() == ALARMTIMER_STATE.NOT_RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
 
-        AlarmTimerState = ALARMTIMER_STATE.PAUSED;
+        AlarmTimerState.setValue(ALARMTIMER_STATE.PAUSED);
         ConvertProgressToReadableTimer();
         NotifyAlarmTimerPaused(ID);
     }
 
     public void Reset() {
-        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING) {
+        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.NOT_RUNNING) {
             return;
         }
 
-        AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
+        AlarmTimerState.setValue(ALARMTIMER_STATE.NOT_RUNNING);
         WhenTimerStartedInSeconds = 0;
         ConvertProgressToReadableTimer();
         NotifyAlarmTimerReset(ID);
@@ -102,7 +103,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
      * Is called each second
      */
     public void Tick() {
-        if (AlarmTimerState != ALARMTIMER_STATE.RUNNING) {
+        if (AlarmTimerState.getValue() != ALARMTIMER_STATE.RUNNING) {
             return;
         }
 
@@ -115,7 +116,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
         long timerProgress = CalculateTimerProgress();
 
         if (timerProgress >= LengthInSeconds) {
-            AlarmTimerState = ALARMTIMER_STATE.COMPLETED;
+            AlarmTimerState.postValue(ALARMTIMER_STATE.COMPLETED);
             NotifyAlarmTimerCompleted(ID);
         }
     }
@@ -128,9 +129,9 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
     private void ConvertProgressToReadableTimer() {
         long progress = CalculateTimerProgress();
-        if (AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
+        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
             this.ReadableTimer.postValue(DateUtils.formatElapsedTime(0));
-        } else if (AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING) {
+        } else if (AlarmTimerState.getValue() == ALARMTIMER_STATE.NOT_RUNNING) {
             this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds));
         } else {
             this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds - progress));
