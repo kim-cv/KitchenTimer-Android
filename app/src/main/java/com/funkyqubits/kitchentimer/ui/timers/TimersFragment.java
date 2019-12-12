@@ -135,5 +135,9 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
     public void OnReset(int alarmTimerID) {
         TimersViewModel.ResetTimer(alarmTimerID);
     }
+
+    @Override
+    public void OnDelete(int alarmTimerID) {
+    }
     //#endregion
 }

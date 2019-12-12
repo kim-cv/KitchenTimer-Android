@@ -10,4 +10,6 @@ public interface IAlarmTimerClickedSubject {
     void NotifyAlarmTimerPause(int alarmTimerID);
 
     void NotifyAlarmTimerReset(int alarmTimerID);
+
+    void NotifyAlarmTimerDelete(int alarmTimerID);
 }
