@@ -5,4 +5,15 @@
     <string name="title_add_timer">Create Timer</string>
     <string name="preference_file_runningTimers">preferences_runningTimers</string>
     <string name="file_timers">SavedTimings.json</string>
+
+    <!-- Add Timer -->
+    <string name="addTimer_title">Title</string>
+    <string name="addTimer_timerLength_title">Timer length</string>
+    <string name="addTimer_timerLength_hours">Hours</string>
+    <string name="addTimer_timerLength_minutes">Minutes</string>
+    <string name="addTimer_timerLength_seconds">Seconds</string>
+    <string name="addTimer_saveType_title">Save timer or Single use timer</string>
+    <string name="addTimer_saveType_radioButton_save">Save</string>
+    <string name="addTimer_saveType_radioButton_single">Single use timer</string>
+    <string name="addTimer_btn_txt">Create</string>
 </resources>
