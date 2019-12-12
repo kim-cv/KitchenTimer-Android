@@ -112,6 +112,15 @@ public final class TimerController {
         alarmTimer.Reset();
     }
 
+    public void DeleteTimer(int id) {
+        AlarmTimer alarmTimer = FindTimerOnId(id);
+        if (alarmTimer == null) {
+            return;
+        }
+
+        AlarmTimers.remove(alarmTimer);
+    }
+
     public AlarmTimer FindTimerOnId(int id) {
         for (AlarmTimer alarmTimer : AlarmTimers) {
             if (alarmTimer.ID == id) {

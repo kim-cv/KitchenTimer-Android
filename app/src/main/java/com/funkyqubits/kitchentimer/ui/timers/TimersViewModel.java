@@ -61,6 +61,22 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         TimerController.ResetTimer(id);
     }
 
+    public void DeleteTimer(int id) {
+        AlarmTimer alarmTimer = TimerController.FindTimerOnId(id);
+
+        if (alarmTimer == null) {
+            return;
+        }
+        
+        alarmTimer.RemoveObserver(this);
+        alarmTimer.Pause();
+        alarmTimer.Reset();
+        TimerController.DeleteTimer(id);
+
+        // Update UI with new list
+        ObservableAlarmTimers.setValue(TimerController.AlarmTimers);
+    }
+
     private void InitTimer() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
