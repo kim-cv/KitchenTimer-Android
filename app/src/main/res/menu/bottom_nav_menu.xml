@@ -7,7 +7,7 @@
         android:title="@string/title_timers" />
 
     <item
-        android:id="@+id/navigation_about"
+        android:id="@+id/navigation_add_timer"
         android:icon="@drawable/ic_add_black_24dp"
         android:title="@string/title_add_timer" />
 

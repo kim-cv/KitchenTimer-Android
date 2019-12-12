@@ -9,8 +9,13 @@
         android:id="@+id/navigation_timers"
         android:name="com.funkyqubits.kitchentimer.ui.timers.TimersFragment"
         android:label="@string/title_timers"
-        tools:layout="@layout/fragment_timers" >
-    </fragment>
+        tools:layout="@layout/fragment_timers" />
+
+    <fragment
+        android:id="@+id/navigation_add_timer"
+        android:name="com.funkyqubits.kitchentimer.ui.add_timer.AddTimerFragment"
+        android:label="Add new timer"
+        tools:layout="@layout/fragment_add_timer" />
 
     <fragment
         android:id="@+id/navigation_settings"
@@ -18,15 +23,4 @@
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 
-    <fragment
-        android:id="@+id/navigation_about"
-        android:name="com.funkyqubits.kitchentimer.ui.about.AboutFragment"
-        android:label="@string/title_add_timer"
-        tools:layout="@layout/fragment_about" />
-
-    <fragment
-        android:id="@+id/navigation_add_timer"
-        android:name="com.funkyqubits.kitchentimer.ui.add_timer.AddTimerFragment"
-        android:label="Add new timer"
-        tools:layout="@layout/fragment_add_timer" />
 </navigation>
