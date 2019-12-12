@@ -2,8 +2,6 @@ package com.funkyqubits.kitchentimer.ui.add_timer;
 
 import androidx.lifecycle.ViewModelProviders;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,10 +21,7 @@ import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
-import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.ArrayList;
 
 public class AddTimerFragment extends Fragment {
 
@@ -50,7 +45,7 @@ public class AddTimerFragment extends Fragment {
 
         // TODO: Figure out how to use dependency injection in Android MVVM
         IRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
-        TimerController timerController = new TimerController(repository);
+        TimerController timerController = TimerController.Instance(repository);
         addTimerViewModel.ProvideExtra(timerController);
 
         // Find views

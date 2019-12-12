@@ -6,12 +6,20 @@ import com.funkyqubits.kitchentimer.Repositories.IRepository;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class TimerController {
+public final class TimerController {
+
+    private static TimerController _instance;
+    public static TimerController Instance(IRepository _timerRepository) {
+        if (_instance == null) {
+            _instance = new TimerController(_timerRepository);
+        }
+        return _instance;
+    }
 
     public ArrayList<AlarmTimer> AlarmTimers = new ArrayList<>();
     private IRepository TimerRepository;
 
-    public TimerController(IRepository _timerRepository) {
+    private TimerController(IRepository _timerRepository) {
         this.TimerRepository = _timerRepository;
 
         /*
