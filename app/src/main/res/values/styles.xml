@@ -1,6 +1,7 @@
 <resources>
 
     <style name="AppDarkTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="android:textColorPrimary">@color/colorMainText</item>
         <item name="colorPrimary">@color/colorMainBackground</item>
         <item name="colorPrimaryDark">@color/colorSecondBackground</item>
         <item name="colorAccent">@color/colorSecondBackground</item>
