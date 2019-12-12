@@ -1,6 +1,7 @@
 package com.funkyqubits.kitchentimer.ui.timers;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
@@ -137,7 +139,24 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
     }
 
     @Override
-    public void OnDelete(int alarmTimerID) {
+    public void OnDelete(final int alarmTimerID) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Are you sure?");
+        builder.setMessage("Are you sure you want to delete this timer?");
+
+        builder.setPositiveButton("Yes Remove", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                TimersViewModel.DeleteTimer(alarmTimerID);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
     //#endregion
 }
