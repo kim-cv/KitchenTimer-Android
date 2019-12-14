@@ -8,6 +8,7 @@
     <color name="colorSecondary">#6c757d</color>
     <color name="colorDanger">#dc3545</color>
     <color name="colorSuccess">#28a745</color>
+    <color name="colorInactive">#37FFFFFF</color>
 
     <color name="colorMainBackground">#1A1A1F</color>
     <color name="colorSecondBackground">#252529</color>
