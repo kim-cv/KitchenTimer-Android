@@ -1,7 +1,9 @@
 package com.funkyqubits.kitchentimer.ui.add_timer;
 
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +24,9 @@ import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IRepository;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 public class AddTimerFragment extends Fragment {
 
@@ -71,7 +76,7 @@ public class AddTimerFragment extends Fragment {
         btn_create.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ValidateViewData()) {
+                if (ValidateViewData(true)) {
                     CreateTimer();
                 }
             }
@@ -89,8 +94,9 @@ public class AddTimerFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String value = s.toString();
-                ValidateTitle(value);
+                boolean result = IsTitleValid();
+                ToggleTitleError(result);
+                ToggleButtonEnabled(ValidateViewData(false));
             }
         });
 
@@ -98,25 +104,25 @@ public class AddTimerFragment extends Fragment {
         numberPicker_hours.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                int minutes_value = numberPicker_minutes.getValue();
-                int seconds_value = numberPicker_seconds.getValue();
-                ValidateNumberpickers(newVal, minutes_value, seconds_value);
+                Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
+                ToggleNumberpickerErrors(resultNumberpickers);
+                ToggleButtonEnabled(ValidateViewData(false));
             }
         });
         numberPicker_minutes.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                int hours_value = numberPicker_hours.getValue();
-                int seconds_value = numberPicker_seconds.getValue();
-                ValidateNumberpickers(hours_value, newVal, seconds_value);
+                Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
+                ToggleNumberpickerErrors(resultNumberpickers);
+                ToggleButtonEnabled(ValidateViewData(false));
             }
         });
         numberPicker_seconds.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                int hours_value = numberPicker_hours.getValue();
-                int minutes_value = numberPicker_minutes.getValue();
-                ValidateNumberpickers(hours_value, minutes_value, newVal);
+                Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
+                ToggleNumberpickerErrors(resultNumberpickers);
+                ToggleButtonEnabled(ValidateViewData(false));
             }
         });
 
@@ -124,88 +130,139 @@ public class AddTimerFragment extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                ValidateRadiogroup(checkedId);
+                boolean result = IsRadiogroupValid();
+                ToggleRadiogroupError(result);
+                ToggleButtonEnabled(ValidateViewData(false));
             }
         });
 
         return root;
     }
 
-    private boolean ValidateViewData() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        boolean result = ValidateViewData(false);
+        ToggleButtonEnabled(result);
+    }
+
+    private boolean ValidateViewData(boolean toggleErrors) {
         int numErrors = 0;
 
-        String editText_title_value = editText_title.getText().toString();
-        if (ValidateTitle(editText_title_value) == false) {
+        boolean resultTitle = IsTitleValid();
+        if (!resultTitle) {
             numErrors += 1;
         }
 
-        int numberPicker_hours_value = numberPicker_hours.getValue();
-        int numberPicker_minutes_value = numberPicker_minutes.getValue();
-        int numberPicker_seconds_value = numberPicker_seconds.getValue();
-        if (ValidateNumberpickers(numberPicker_hours_value, numberPicker_minutes_value, numberPicker_seconds_value) == false) {
+        Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
+        if (!resultNumberpickers.get("no_value") || !resultNumberpickers.get("hours") || !resultNumberpickers.get("minutes") || !resultNumberpickers.get("seconds")) {
             numErrors += 1;
         }
 
-        int selected_radioButton_id = radioGroup.getCheckedRadioButtonId();
-        if (!ValidateRadiogroup(selected_radioButton_id)) {
+        boolean resultRadiogroup = IsRadiogroupValid();
+        if (!resultRadiogroup) {
             numErrors += 1;
+        }
+
+        if (toggleErrors) {
+            ToggleTitleError(resultTitle);
+            ToggleNumberpickerErrors(resultNumberpickers);
+            ToggleRadiogroupError(resultRadiogroup);
         }
 
         return numErrors <= 0;
     }
 
-    private boolean ValidateTitle(String value) {
+    private void ToggleButtonEnabled(boolean enable) {
+        int color;
+        if (enable) {
+            color = getResources().getColor(R.color.colorMain);
+        } else {
+            color = getResources().getColor(R.color.colorSecondary);
+        }
+
+        Drawable buttonDrawable = btn_create.getBackground();
+        buttonDrawable = DrawableCompat.wrap(buttonDrawable);
+        DrawableCompat.setTint(buttonDrawable, color);
+        btn_create.setBackground(buttonDrawable);
+    }
+
+    private boolean IsTitleValid() {
+        String value = editText_title.getText().toString();
         if (value.length() <= 0) {
-            editText_title_textLayout.setError("Must provide title.");
             return false;
         } else {
-            if (editText_title_textLayout.getError() != null) {
-                editText_title_textLayout.setError(null);
-            }
             return true;
         }
     }
 
-    private boolean ValidateNumberpickers(int hours, int minutes, int seconds) {
+    private void ToggleTitleError(boolean isValid) {
+        if (!isValid) {
+            editText_title_textLayout.setError("Must provide title.");
+        } else {
+            if (editText_title_textLayout.getError() != null) {
+                editText_title_textLayout.setError(null);
+            }
+        }
+    }
+
+    private Dictionary<String, Boolean> IsNumberpickersValid() {
+        Hashtable errors = new Hashtable();
+
+        int hours = numberPicker_hours.getValue();
+        int minutes = numberPicker_minutes.getValue();
+        int seconds = numberPicker_seconds.getValue();
+
         boolean hours_range = (hours < 0 || hours > 23);
         boolean minutes_range = (minutes < 0 || minutes > 59);
         boolean seconds_range = (seconds < 0 || seconds > 59);
         boolean no_value = (hours <= 0 && minutes <= 0 && seconds <= 0);
 
-        if (no_value) {
+        errors.put("no_value", !no_value);
+        errors.put("hours", !hours_range);
+        errors.put("minutes", !minutes_range);
+        errors.put("seconds", !seconds_range);
+
+        return errors;
+    }
+
+    private void ToggleNumberpickerErrors(Dictionary<String, Boolean> errors) {
+        if (!errors.get("no_value")) {
             textView_timer_length_textLayout.setError("Must choose timer length.");
-            return false;
-        } else if (hours_range) {
+        } else if (!errors.get("hours")) {
             textView_timer_length_textLayout.setError("Hours must be between 0 and 23.");
-            return false;
-        } else if (minutes_range) {
+        } else if (!errors.get("minutes")) {
             textView_timer_length_textLayout.setError("Minutes must be between 0 and 59.");
-            return false;
-        } else if (seconds_range) {
+        } else if (!errors.get("seconds")) {
             textView_timer_length_textLayout.setError("Seconds must be between 0 and 59.");
-            return false;
         } else {
             // Remove err
             if (textView_timer_length_textLayout.getError() != null) {
                 textView_timer_length_textLayout.setError(null);
             }
-            return true;
         }
     }
 
-    private boolean ValidateRadiogroup(int selected_radioButton_id) {
+    private boolean IsRadiogroupValid() {
+        int selected_radioButton_id = radioGroup.getCheckedRadioButtonId();
         switch (selected_radioButton_id) {
             case -1: {
                 // Nothing selected
-                textView_radioGroup_saveOrSingle_textLayout.setError("Must choose timer type.");
                 return false;
             }
             default: {
-                // Remove err
-                if (textView_radioGroup_saveOrSingle_textLayout.getError() != null) {
-                    textView_radioGroup_saveOrSingle_textLayout.setError(null);
-                }
                 return true;
+            }
+        }
+    }
+
+    private void ToggleRadiogroupError(boolean isValid) {
+        if (!isValid) {
+            textView_radioGroup_saveOrSingle_textLayout.setError("Must choose timer type.");
+        } else {
+            // Remove err
+            if (textView_radioGroup_saveOrSingle_textLayout.getError() != null) {
+                textView_radioGroup_saveOrSingle_textLayout.setError(null);
             }
         }
     }
