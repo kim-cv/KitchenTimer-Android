@@ -91,7 +91,11 @@ public final class TimerController {
             return;
         }
 
-        alarmTimer.Start();
+        if (alarmTimer.AlarmTimerState.getValue() == AlarmTimer.ALARMTIMER_STATE.NOT_RUNNING) {
+            alarmTimer.Start();
+        } else {
+            alarmTimer.Resume();
+        }
     }
 
     public void PauseTimer(int id) {

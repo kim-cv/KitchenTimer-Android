@@ -100,7 +100,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
             return;
         }
 
-        AlarmManagerController.ScheduleAlarm(alarmTimer.ID, alarmTimer.LengthInSeconds);
+        AlarmManagerController.ScheduleAlarm(alarmTimer.ID, (int) alarmTimer.CalculateRemainingSeconds());
     }
 
     @Override
@@ -109,6 +109,8 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         if (alarmTimer == null) {
             return;
         }
+
+        AlarmManagerController.ScheduleAlarm(alarmTimer.ID, (int) alarmTimer.CalculateRemainingSeconds());
     }
 
     @Override

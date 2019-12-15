@@ -23,6 +23,10 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     public long WhenTimerStartedInSeconds;
     private final List<IAlarmTimerCompleteObserver> ObserversAlarmTimerComplete = new ArrayList<>();
 
+    // Used for calculating time spent "PAUSED" as an offset for the timer progress
+    private long resumeSecondsOffset;
+    private long startedPause;
+
     public enum ALARMTIMER_STATE {
         RUNNING,
         NOT_RUNNING,
@@ -66,7 +70,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
             return;
         }
 
-        WhenTimerStartedInSeconds = Calendar.getInstance().getTimeInMillis() / 1000;
+        WhenTimerStartedInSeconds = GetNowSeconds();
         StartTimer();
     }
 
@@ -85,7 +89,21 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
         AlarmTimerState.setValue(ALARMTIMER_STATE.PAUSED);
         ConvertProgressToReadableTimer();
+        startedPause = GetNowSeconds();
         NotifyAlarmTimerPaused(ID);
+    }
+
+    public void Resume() {
+        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.NOT_RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
+            return;
+        }
+        long now = GetNowSeconds();
+        resumeSecondsOffset += now - startedPause;
+        startedPause = 0;
+
+        AlarmTimerState.setValue(ALARMTIMER_STATE.RUNNING);
+        ConvertProgressToReadableTimer();
+        NotifyAlarmTimerResumed(ID);
     }
 
     public void Reset() {
@@ -95,8 +113,14 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
         AlarmTimerState.setValue(ALARMTIMER_STATE.NOT_RUNNING);
         WhenTimerStartedInSeconds = 0;
+        resumeSecondsOffset = 0;
+        startedPause = 0;
         ConvertProgressToReadableTimer();
         NotifyAlarmTimerReset(ID);
+    }
+
+    public int GetNowSeconds() {
+        return (int) Math.floor(Calendar.getInstance().getTimeInMillis() / 1000);
     }
 
     /**
@@ -121,20 +145,24 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
         }
     }
 
-    private Long CalculateTimerProgress() {
-        long nowSeconds = Calendar.getInstance().getTimeInMillis() / 1000;
-        long timerProgress = nowSeconds - WhenTimerStartedInSeconds;
+    public long CalculateTimerProgress() {
+        long nowSeconds = GetNowSeconds();
+        long timerProgress = nowSeconds - WhenTimerStartedInSeconds - resumeSecondsOffset;
         return timerProgress;
     }
 
+    public long CalculateRemainingSeconds() {
+        return LengthInSeconds - CalculateTimerProgress();
+    }
+
     private void ConvertProgressToReadableTimer() {
-        long progress = CalculateTimerProgress();
         if (AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
             this.ReadableTimer.postValue(DateUtils.formatElapsedTime(0));
         } else if (AlarmTimerState.getValue() == ALARMTIMER_STATE.NOT_RUNNING) {
             this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds));
         } else {
-            this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds - progress));
+            long remainingSeconds = CalculateRemainingSeconds();
+            this.ReadableTimer.postValue(DateUtils.formatElapsedTime(remainingSeconds));
         }
     }
 

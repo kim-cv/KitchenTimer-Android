@@ -48,7 +48,7 @@ public class BindingAdapters {
                     return button.getResources().getColor(R.color.colorSuccess);
                 }
                 case PAUSED: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return button.getResources().getColor(R.color.colorSuccess);
                 }
                 case RUNNING: {
                     return button.getResources().getColor(R.color.colorInactive);
