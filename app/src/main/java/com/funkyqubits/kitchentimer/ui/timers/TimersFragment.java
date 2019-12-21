@@ -1,8 +1,6 @@
 package com.funkyqubits.kitchentimer.ui.timers;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.funkyqubits.kitchentimer.Controller.AlarmManagerController;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerClickObserver;
+import com.funkyqubits.kitchentimer.Repositories.ISharedPreferencesRepository;
+import com.funkyqubits.kitchentimer.Repositories.SharedPreferencesRepository;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class TimersFragment extends NavHostFragment implements IAlarmTimerClickObserver {
@@ -36,6 +35,7 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
 
 
     private TimersViewModel TimersViewModel;
+    private ISharedPreferencesRepository SharedPreferencesRepository;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -79,20 +79,9 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
     public void onResume() {
         super.onResume();
 
-        Map<String, Long> runningTimersData = new HashMap<>();
-
-        // Get Context and SharedPreferences
-        Context context = getContext();
-        String filename = getString(R.string.preference_file_runningTimers);
-        SharedPreferences sharedPreferences_runningTimers = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
-
-        // Map sharedPreference data
-        Map<String, ?> allEntries = sharedPreferences_runningTimers.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            Long parseLong = Long.parseLong(entry.getValue().toString());
-            runningTimersData.put(entry.getKey(), parseLong);
-        }
-
+        // Load timer data from shared preferences
+        SharedPreferencesRepository = new SharedPreferencesRepository(getContext());
+        Map<String, Long> runningTimersData = SharedPreferencesRepository.LoadRunningTimersStartOffset();
         TimersViewModel.SetInitialTimerValues(runningTimersData);
     }
 
@@ -100,23 +89,9 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
     public void onPause() {
         super.onPause();
 
-        //#region Save running timers to shared preferences key/value storage
+        //Save running timers to shared preferences key/value storage
         ArrayList<AlarmTimer> runningAlarmTimers = TimersViewModel.GetRunningTimers();
-
-        // Get Context and SharedPreferences
-        Context context = getContext();
-        String filename_runningTimers = getString(R.string.preference_file_runningTimers);
-        SharedPreferences sharedPreferences_runningTimers = context.getSharedPreferences(filename_runningTimers, Context.MODE_PRIVATE);
-        SharedPreferences.Editor sharedPreferences_editor_runningTimers = sharedPreferences_runningTimers.edit();
-
-        // Commit timer data
-        sharedPreferences_editor_runningTimers.clear();
-        for (AlarmTimer alarmTimer : runningAlarmTimers) {
-            sharedPreferences_editor_runningTimers.putLong(Integer.toString(alarmTimer.ID), alarmTimer.WhenTimerStartedInSeconds);
-        }
-        sharedPreferences_editor_runningTimers.commit();
-        //#endregion
-
+        SharedPreferencesRepository.SaveRunningTimersStartOffset(runningAlarmTimers);
 
         // Save timers to storage
         TimersViewModel.SaveAllTimersToStorage();
