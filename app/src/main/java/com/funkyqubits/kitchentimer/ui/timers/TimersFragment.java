@@ -27,6 +27,7 @@ import com.funkyqubits.kitchentimer.Repositories.IRepository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class TimersFragment extends NavHostFragment implements IAlarmTimerClickObserver {
 
@@ -105,16 +106,16 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
 
         // Get Context and SharedPreferences
         Context context = getContext();
-        String filename = getString(R.string.preference_file_runningTimers);
-        SharedPreferences sharedPreferences_runningTimers = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
-        SharedPreferences.Editor sharedPreferences_editor = sharedPreferences_runningTimers.edit();
+        String filename_runningTimers = getString(R.string.preference_file_runningTimers);
+        SharedPreferences sharedPreferences_runningTimers = context.getSharedPreferences(filename_runningTimers, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPreferences_editor_runningTimers = sharedPreferences_runningTimers.edit();
 
         // Commit timer data
-        sharedPreferences_editor.clear();
+        sharedPreferences_editor_runningTimers.clear();
         for (AlarmTimer alarmTimer : runningAlarmTimers) {
-            sharedPreferences_editor.putLong(Integer.toString(alarmTimer.ID), alarmTimer.WhenTimerStartedInSeconds);
+            sharedPreferences_editor_runningTimers.putLong(Integer.toString(alarmTimer.ID), alarmTimer.WhenTimerStartedInSeconds);
         }
-        sharedPreferences_editor.commit();
+        sharedPreferences_editor_runningTimers.commit();
         //#endregion
 
 
