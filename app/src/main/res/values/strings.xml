@@ -4,6 +4,7 @@
     <string name="title_settings">Settings</string>
     <string name="title_add_timer">Create Timer</string>
     <string name="preference_file_runningTimers">preferences_runningTimers</string>
+    <string name="preference_file_runningTimers_offsets">preferences_runningTimers_offsets</string>
     <string name="file_timers">SavedTimings.json</string>
 
     <!-- Add Timer -->
