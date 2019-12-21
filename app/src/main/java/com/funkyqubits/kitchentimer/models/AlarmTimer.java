@@ -24,8 +24,8 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     private final List<IAlarmTimerCompleteObserver> ObserversAlarmTimerComplete = new ArrayList<>();
 
     // Used for calculating time spent "PAUSED" as an offset for the timer progress
-    private long resumeSecondsOffset;
-    private long startedPause;
+    public long ResumeSecondsOffset;
+    private long StartedPause;
 
     public enum ALARMTIMER_STATE {
         RUNNING,
@@ -89,7 +89,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
         AlarmTimerState.setValue(ALARMTIMER_STATE.PAUSED);
         ConvertProgressToReadableTimer();
-        startedPause = GetNowSeconds();
+        StartedPause = GetNowSeconds();
         NotifyAlarmTimerPaused(ID);
     }
 
@@ -98,8 +98,8 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
             return;
         }
         long now = GetNowSeconds();
-        resumeSecondsOffset += now - startedPause;
-        startedPause = 0;
+        ResumeSecondsOffset += now - StartedPause;
+        StartedPause = 0;
 
         AlarmTimerState.setValue(ALARMTIMER_STATE.RUNNING);
         ConvertProgressToReadableTimer();
@@ -113,8 +113,8 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
         AlarmTimerState.setValue(ALARMTIMER_STATE.NOT_RUNNING);
         WhenTimerStartedInSeconds = 0;
-        resumeSecondsOffset = 0;
-        startedPause = 0;
+        ResumeSecondsOffset = 0;
+        StartedPause = 0;
         ConvertProgressToReadableTimer();
         NotifyAlarmTimerReset(ID);
     }
@@ -147,7 +147,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
     public long CalculateTimerProgress() {
         long nowSeconds = GetNowSeconds();
-        long timerProgress = nowSeconds - WhenTimerStartedInSeconds - resumeSecondsOffset;
+        long timerProgress = nowSeconds - WhenTimerStartedInSeconds - ResumeSecondsOffset;
         return timerProgress;
     }
 
