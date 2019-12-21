@@ -1,7 +1,7 @@
 package com.funkyqubits.kitchentimer.Controller;
 
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
-import com.funkyqubits.kitchentimer.Repositories.IRepository;
+import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Map;
 public final class TimerController {
 
     private static TimerController _instance;
-    public static TimerController Instance(IRepository _timerRepository) {
+    public static TimerController Instance(IFileSystemRepository _timerRepository) {
         if (_instance == null) {
             _instance = new TimerController(_timerRepository);
         }
@@ -17,9 +17,9 @@ public final class TimerController {
     }
 
     public ArrayList<AlarmTimer> AlarmTimers = new ArrayList<>();
-    private IRepository TimerRepository;
+    private IFileSystemRepository TimerRepository;
 
-    private TimerController(IRepository _timerRepository) {
+    private TimerController(IFileSystemRepository _timerRepository) {
         this.TimerRepository = _timerRepository;
 
         /*

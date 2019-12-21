@@ -13,9 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.UUID;
 
-public class FileSystemRepository implements IRepository {
+public class FileSystemRepository implements IFileSystemRepository {
     private Context Context;
     private String Filename;
     private String FileEncoding = "UTF-8";
@@ -29,22 +28,11 @@ public class FileSystemRepository implements IRepository {
 
     @Override
     public ArrayList<AlarmTimer> LoadAlarmTimers() {
-        /*
-        return new ArrayList<AlarmTimer>() {
-            {
-                add(new AlarmTimer(UUID.randomUUID(), "Title 1", 5));
-                add(new AlarmTimer(UUID.randomUUID(), "Title 2", 10));
-                add(new AlarmTimer(UUID.randomUUID(), "Title 3", 20));
-            }
-        };
-        */
-
         InputStreamReader inputStreamReader = RetrieveTimersStreamReader();
         if (inputStreamReader == null) {
             // TODO handle
             return new ArrayList<>();
         }
-
         return MapJsonToAlarmTimers(inputStreamReader);
     }
 

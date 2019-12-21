@@ -22,12 +22,11 @@ import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerClickObserver;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
-import com.funkyqubits.kitchentimer.Repositories.IRepository;
+import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class TimersFragment extends NavHostFragment implements IAlarmTimerClickObserver {
 
@@ -46,7 +45,7 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
 
 
         // TODO: Figure out how to use dependency injection in Android MVVM
-        IRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
+        IFileSystemRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
         AlarmManagerController alarmManagerController = new AlarmManagerController(getContext());
         TimerController timerController = TimerController.Instance(repository);
         TimersViewModel.ProvideExtra(timerController, alarmManagerController);

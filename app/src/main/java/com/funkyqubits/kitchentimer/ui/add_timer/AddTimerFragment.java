@@ -22,7 +22,7 @@ import android.widget.RadioGroup;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
-import com.funkyqubits.kitchentimer.Repositories.IRepository;
+import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Dictionary;
@@ -49,7 +49,7 @@ public class AddTimerFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_add_timer, container, false);
 
         // TODO: Figure out how to use dependency injection in Android MVVM
-        IRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
+        IFileSystemRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
         TimerController timerController = TimerController.Instance(repository);
         addTimerViewModel.ProvideExtra(timerController);
 
