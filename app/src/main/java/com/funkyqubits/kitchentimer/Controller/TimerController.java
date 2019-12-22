@@ -2,6 +2,7 @@ package com.funkyqubits.kitchentimer.Controller;
 
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
+import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -41,12 +42,9 @@ public final class TimerController {
         TimerRepository.SaveAlarmTimers(GetTimersThatShouldBeSaved());
     }
 
-    public void SetInitialTimerValues(Map<String, Long> alarmTimers) {
-        for (Map.Entry<String, Long> alarmTimerEntry : alarmTimers.entrySet()) {
-            int id = Integer.parseInt(alarmTimerEntry.getKey());
-            Long whenTimerBegun = alarmTimerEntry.getValue();
-
-            StartTimer(id, whenTimerBegun);
+    public void SetInitialTimerValues(ArrayList<AlarmTimerOffset> timerOffsets) {
+        for (AlarmTimerOffset offset : timerOffsets) {
+            StartTimerWithOffset(offset);
         }
     }
 
@@ -76,13 +74,13 @@ public final class TimerController {
         return alarmTimer;
     }
 
-    public void StartTimer(int id, long whenTimerBegun) {
-        AlarmTimer alarmTimer = FindTimerOnId(id);
+    public void StartTimerWithOffset(AlarmTimerOffset offset) {
+        AlarmTimer alarmTimer = FindTimerOnId(offset.ID);
         if (alarmTimer == null) {
             return;
         }
 
-        alarmTimer.Start(whenTimerBegun);
+        alarmTimer.Start(offset);
     }
 
     public void StartTimer(int id) {

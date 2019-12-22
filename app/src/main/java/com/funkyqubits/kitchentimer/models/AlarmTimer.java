@@ -56,12 +56,13 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
         ConvertProgressToReadableTimer();
     }
 
-    public void Start(long whenTimerBegun) {
+    public void Start(AlarmTimerOffset offset) {
         if (AlarmTimerState.getValue() == ALARMTIMER_STATE.RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
 
-        WhenTimerStartedInSeconds = whenTimerBegun;
+        WhenTimerStartedInSeconds = offset.SecondsStartOffset;
+        ResumeSecondsOffset = offset.SecondsPauseOffset;
         StartTimer();
     }
 

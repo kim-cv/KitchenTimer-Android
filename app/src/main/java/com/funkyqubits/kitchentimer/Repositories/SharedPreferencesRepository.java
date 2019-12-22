@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
+import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,33 @@ public class SharedPreferencesRepository implements ISharedPreferencesRepository
         Filename_RunningTimersOffsets = Context.getString(R.string.preference_file_runningTimers_offsets);
     }
 
+    public ArrayList<AlarmTimerOffset> GetOffsets() {
+        ArrayList<AlarmTimerOffset> timerOffsets = new ArrayList<>();
+
+        Map<String, Long> startOffsets = LoadRunningTimersStartOffset();
+        Map<String, Long> pauseOffsets = LoadRunningTimersPauseOffsets();
+
+        for (Map.Entry<String, Long> alarmTimerEntry : startOffsets.entrySet()) {
+            int id = Integer.parseInt(alarmTimerEntry.getKey());
+
+            AlarmTimerOffset tmpTimerOffset = new AlarmTimerOffset();
+            tmpTimerOffset.ID = id;
+            tmpTimerOffset.SecondsStartOffset = alarmTimerEntry.getValue();
+            timerOffsets.add(tmpTimerOffset);
+        }
+
+        for(AlarmTimerOffset alarmTimerOffset : timerOffsets) {
+            String timerIdAsString = Integer.toString(alarmTimerOffset.ID);
+            if (!pauseOffsets.containsKey(timerIdAsString)) {
+                continue;
+            }
+
+            Long pauseOffset = pauseOffsets.get(timerIdAsString);
+            alarmTimerOffset.SecondsPauseOffset = pauseOffset;
+        }
+
+        return timerOffsets;
+    }
 
     @Override
     public Map<String, Long> LoadRunningTimersStartOffset() {
@@ -87,6 +115,7 @@ public class SharedPreferencesRepository implements ISharedPreferencesRepository
     private SharedPreferences GetSharedPreferences(String filename) {
         return Context.getSharedPreferences(filename, Context.MODE_PRIVATE);
     }
+
     private SharedPreferences.Editor GetSharedPreferencesEditor(String filename) {
         return GetSharedPreferences(filename).edit();
     }

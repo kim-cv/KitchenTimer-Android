@@ -23,9 +23,9 @@ import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
+import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class TimersFragment extends NavHostFragment implements IAlarmTimerClickObserver {
 
@@ -78,11 +78,10 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
     @Override
     public void onResume() {
         super.onResume();
-
         // Load timer data from shared preferences
         SharedPreferencesRepository = new SharedPreferencesRepository(getContext());
-        Map<String, Long> runningTimersData = SharedPreferencesRepository.LoadRunningTimersStartOffset();
-        TimersViewModel.SetInitialTimerValues(runningTimersData);
+        ArrayList<AlarmTimerOffset> timerOffsets = SharedPreferencesRepository.GetOffsets();
+        TimersViewModel.SetInitialTimerValues(timerOffsets);
     }
 
     @Override

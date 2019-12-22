@@ -7,9 +7,9 @@ import com.funkyqubits.kitchentimer.Controller.AlarmManagerController;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCompleteObserver;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
+import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,8 +45,8 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         TimerController.SaveAllTimersToStorage();
     }
 
-    public void SetInitialTimerValues(Map<String, Long> alarmTimers) {
-        TimerController.SetInitialTimerValues(alarmTimers);
+    public void SetInitialTimerValues(ArrayList<AlarmTimerOffset> timerOffsets) {
+        TimerController.SetInitialTimerValues(timerOffsets);
     }
 
     public void StartTimer(int id) {
