@@ -91,6 +91,7 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
         //Save running timers to shared preferences key/value storage
         ArrayList<AlarmTimer> runningAlarmTimers = TimersViewModel.GetRunningTimers();
         SharedPreferencesRepository.SaveRunningTimersStartOffset(runningAlarmTimers);
+        SharedPreferencesRepository.SaveRunningTimersPauseOffsets(runningAlarmTimers);
 
         // Save timers to storage
         TimersViewModel.SaveAllTimersToStorage();
