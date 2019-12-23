@@ -13,7 +13,8 @@ import java.util.List;
 
 public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
-    public MutableLiveData<ALARMTIMER_STATE> AlarmTimerState = new MutableLiveData<>();
+    public MutableLiveData<ALARMTIMER_STATE> ObservableAlarmTimerState = new MutableLiveData<>();
+    public ALARMTIMER_STATE AlarmTimerState;
     public int ID;
     public String Title;
     public MutableLiveData<String> ReadableTimer = new MutableLiveData<>();
@@ -48,7 +49,9 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     }
 
     private void ctor(int _id, String _title, int _lengthInSeconds, ALARMTIMER_SAVE_TYPE _saveType) {
-        this.AlarmTimerState.setValue(ALARMTIMER_STATE.NOT_RUNNING);
+        this.ObservableAlarmTimerState.setValue(ALARMTIMER_STATE.NOT_RUNNING);
+        this.AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
+
         this.ID = _id;
         this.Title = _title;
         this.LengthInSeconds = _lengthInSeconds;
@@ -56,18 +59,21 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
         ConvertProgressToReadableTimer();
     }
 
-    public void Start(AlarmTimerOffset offset) {
-        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
+    public void SetOffset(AlarmTimerOffset offset) {
+        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
 
         WhenTimerStartedInSeconds = offset.SecondsStartOffset;
         ResumeSecondsOffset = offset.SecondsPauseOffset;
-        StartTimer();
+        if (!CalculateIfTimerComplete()) {
+            StartTimer();
+        }
+        ConvertProgressToReadableTimer();
     }
 
     public void Start() {
-        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.PAUSED || AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
+        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.PAUSED || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
 
@@ -76,43 +82,48 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     }
 
     private void StartTimer() {
-        AlarmTimerState.setValue(ALARMTIMER_STATE.RUNNING);
-        NotifyAlarmTimerStarted(ID);
-        CalculateIfTimerComplete();
+        if (!CalculateIfTimerComplete()) {
+            ObservableAlarmTimerState.setValue(ALARMTIMER_STATE.RUNNING);
+            AlarmTimerState = ALARMTIMER_STATE.RUNNING;
+            NotifyAlarmTimerStarted(ID);
+        }
         ConvertProgressToReadableTimer();
     }
 
 
     public void Pause() {
-        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.PAUSED || AlarmTimerState.getValue() == ALARMTIMER_STATE.NOT_RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
+        if (AlarmTimerState == ALARMTIMER_STATE.PAUSED || AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
 
-        AlarmTimerState.setValue(ALARMTIMER_STATE.PAUSED);
+        ObservableAlarmTimerState.setValue(ALARMTIMER_STATE.PAUSED);
+        AlarmTimerState = ALARMTIMER_STATE.PAUSED;
         ConvertProgressToReadableTimer();
         StartedPause = GetNowSeconds();
         NotifyAlarmTimerPaused(ID);
     }
 
     public void Resume() {
-        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.NOT_RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
+        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
         long now = GetNowSeconds();
         ResumeSecondsOffset += now - StartedPause;
         StartedPause = 0;
 
-        AlarmTimerState.setValue(ALARMTIMER_STATE.RUNNING);
+        ObservableAlarmTimerState.setValue(ALARMTIMER_STATE.RUNNING);
+        AlarmTimerState = ALARMTIMER_STATE.RUNNING;
         ConvertProgressToReadableTimer();
         NotifyAlarmTimerResumed(ID);
     }
 
     public void Reset() {
-        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.RUNNING || AlarmTimerState.getValue() == ALARMTIMER_STATE.NOT_RUNNING) {
+        if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING) {
             return;
         }
 
-        AlarmTimerState.setValue(ALARMTIMER_STATE.NOT_RUNNING);
+        ObservableAlarmTimerState.setValue(ALARMTIMER_STATE.NOT_RUNNING);
+        AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
         WhenTimerStartedInSeconds = 0;
         ResumeSecondsOffset = 0;
         StartedPause = 0;
@@ -128,7 +139,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
      * Is called each second
      */
     public void Tick() {
-        if (AlarmTimerState.getValue() != ALARMTIMER_STATE.RUNNING) {
+        if (AlarmTimerState != ALARMTIMER_STATE.RUNNING) {
             return;
         }
 
@@ -137,13 +148,16 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
         CalculateIfTimerComplete();
     }
 
-    private void CalculateIfTimerComplete() {
+    private boolean CalculateIfTimerComplete() {
         long timerProgress = CalculateTimerProgress();
 
         if (timerProgress >= LengthInSeconds) {
-            AlarmTimerState.postValue(ALARMTIMER_STATE.COMPLETED);
+            ObservableAlarmTimerState.postValue(ALARMTIMER_STATE.COMPLETED);
+            AlarmTimerState = ALARMTIMER_STATE.COMPLETED;
             NotifyAlarmTimerCompleted(ID);
         }
+
+        return timerProgress >= LengthInSeconds;
     }
 
     public long CalculateTimerProgress() {
@@ -157,9 +171,9 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     }
 
     private void ConvertProgressToReadableTimer() {
-        if (AlarmTimerState.getValue() == ALARMTIMER_STATE.COMPLETED) {
+        if (AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
             this.ReadableTimer.postValue(DateUtils.formatElapsedTime(0));
-        } else if (AlarmTimerState.getValue() == ALARMTIMER_STATE.NOT_RUNNING) {
+        } else if (AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING) {
             this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds));
         } else {
             long remainingSeconds = CalculateRemainingSeconds();

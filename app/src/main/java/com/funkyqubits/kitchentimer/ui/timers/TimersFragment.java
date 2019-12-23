@@ -81,7 +81,7 @@ public class TimersFragment extends NavHostFragment implements IAlarmTimerClickO
         // Load timer data from shared preferences
         SharedPreferencesRepository = new SharedPreferencesRepository(getContext());
         ArrayList<AlarmTimerOffset> timerOffsets = SharedPreferencesRepository.GetOffsets();
-        TimersViewModel.SetInitialTimerValues(timerOffsets);
+        TimersViewModel.SetTimerOffsets(timerOffsets);
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public final class TimerController {
 
@@ -42,16 +41,16 @@ public final class TimerController {
         TimerRepository.SaveAlarmTimers(GetTimersThatShouldBeSaved());
     }
 
-    public void SetInitialTimerValues(ArrayList<AlarmTimerOffset> timerOffsets) {
+    public void SetTimerOffsets(ArrayList<AlarmTimerOffset> timerOffsets) {
         for (AlarmTimerOffset offset : timerOffsets) {
-            StartTimerWithOffset(offset);
+            SetTimerOffset(offset);
         }
     }
 
     public ArrayList<AlarmTimer> GetRunningTimers() {
         ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
         for (AlarmTimer alarmTimer : AlarmTimers) {
-            if (alarmTimer.AlarmTimerState.getValue() == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
+            if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
                 tmpAlarmTimers.add(alarmTimer);
             }
         }
@@ -74,13 +73,13 @@ public final class TimerController {
         return alarmTimer;
     }
 
-    public void StartTimerWithOffset(AlarmTimerOffset offset) {
+    public void SetTimerOffset(AlarmTimerOffset offset) {
         AlarmTimer alarmTimer = FindTimerOnId(offset.ID);
         if (alarmTimer == null) {
             return;
         }
 
-        alarmTimer.Start(offset);
+        alarmTimer.SetOffset(offset);
     }
 
     public void StartTimer(int id) {
@@ -89,7 +88,7 @@ public final class TimerController {
             return;
         }
 
-        if (alarmTimer.AlarmTimerState.getValue() == AlarmTimer.ALARMTIMER_STATE.NOT_RUNNING) {
+        if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.NOT_RUNNING) {
             alarmTimer.Start();
         } else {
             alarmTimer.Resume();

@@ -45,8 +45,8 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
         TimerController.SaveAllTimersToStorage();
     }
 
-    public void SetInitialTimerValues(ArrayList<AlarmTimerOffset> timerOffsets) {
-        TimerController.SetInitialTimerValues(timerOffsets);
+    public void SetTimerOffsets(ArrayList<AlarmTimerOffset> timerOffsets) {
+        TimerController.SetTimerOffsets(timerOffsets);
     }
 
     public void StartTimer(int id) {
@@ -84,7 +84,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObs
             @Override
             public void run() {
                 for (AlarmTimer alarmTimer : TimerController.AlarmTimers) {
-                    if (alarmTimer.AlarmTimerState.getValue() == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
+                    if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
                         alarmTimer.Tick();
                     }
                 }
