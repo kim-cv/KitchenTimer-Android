@@ -3,6 +3,7 @@ package com.funkyqubits.kitchentimer.ui.util;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.databinding.BindingAdapter;
@@ -30,6 +31,10 @@ public class BindingAdapters {
                 color = btn_reset_state(button, alarmtimerState);
                 break;
             }
+            case R.id.btn_timer_edit: {
+                color = btn_edit_state(button, alarmtimerState);
+                break;
+            }
             case R.id.btn_timer_delete: {
                 color = btn_delete_state(button, alarmtimerState);
                 break;
@@ -45,44 +50,56 @@ public class BindingAdapters {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {
+                    button.setVisibility(View.VISIBLE);
                     return button.getResources().getColor(R.color.colorSuccess);
                 }
                 case PAUSED: {
+                    button.setVisibility(View.VISIBLE);
                     return button.getResources().getColor(R.color.colorSuccess);
                 }
                 case RUNNING: {
+                    button.setVisibility(View.GONE);
                     return button.getResources().getColor(R.color.colorInactive);
                 }
                 case COMPLETED: {
+                    button.setVisibility(View.VISIBLE);
                     return button.getResources().getColor(R.color.colorInactive);
                 }
                 default: {
+                    button.setVisibility(View.GONE);
                     return button.getResources().getColor(R.color.colorInactive);
                 }
             }
         }
+        button.setVisibility(View.GONE);
         return button.getResources().getColor(R.color.colorInactive);
     }
     private static int btn_pause_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {
+                    button.setVisibility(View.GONE);
                     return button.getResources().getColor(R.color.colorInactive);
                 }
                 case PAUSED: {
+                    button.setVisibility(View.GONE);
                     return button.getResources().getColor(R.color.colorInactive);
                 }
                 case RUNNING: {
+                    button.setVisibility(View.VISIBLE);
                     return button.getResources().getColor(R.color.colorPrimary);
                 }
                 case COMPLETED: {
+                    button.setVisibility(View.GONE);
                     return button.getResources().getColor(R.color.colorInactive);
                 }
                 default: {
+                    button.setVisibility(View.GONE);
                     return button.getResources().getColor(R.color.colorInactive);
                 }
             }
         }
+        button.setVisibility(View.GONE);
         return button.getResources().getColor(R.color.colorInactive);
     }
     private static int btn_reset_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
@@ -99,6 +116,28 @@ public class BindingAdapters {
                 }
                 case COMPLETED: {
                     return button.getResources().getColor(R.color.colorPrimary);
+                }
+                default: {
+                    return button.getResources().getColor(R.color.colorInactive);
+                }
+            }
+        }
+        return button.getResources().getColor(R.color.colorInactive);
+    }
+    private static int btn_edit_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
+        if (alarmtimerState != null) {
+            switch (alarmtimerState) {
+                case NOT_RUNNING: {
+                    return button.getResources().getColor(R.color.colorPrimary);
+                }
+                case PAUSED: {
+                    return button.getResources().getColor(R.color.colorPrimary);
+                }
+                case RUNNING: {
+                    return button.getResources().getColor(R.color.colorInactive);
+                }
+                case COMPLETED: {
+                    return button.getResources().getColor(R.color.colorInactive);
                 }
                 default: {
                     return button.getResources().getColor(R.color.colorInactive);
