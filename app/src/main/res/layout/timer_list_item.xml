@@ -105,6 +105,21 @@
                 app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_timer_edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="0dp"
+                app:icon="@drawable/ic_edit_white_24dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:strokeWidth="0dp"
+                app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_timer_delete"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
