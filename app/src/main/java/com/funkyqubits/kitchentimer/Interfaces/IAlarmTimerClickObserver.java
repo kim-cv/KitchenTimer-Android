@@ -7,5 +7,7 @@ public interface IAlarmTimerClickObserver {
 
     void OnReset(int alarmTimerID);
 
+    void OnEdit(int alarmTimerID);
+
     void OnDelete(int alarmTimerID);
 }
