@@ -82,6 +82,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
         Button btn_timer_start = holder.View.findViewById(R.id.btn_timer_start);
         Button btn_timer_pause = holder.View.findViewById(R.id.btn_timer_pause);
         Button btn_timer_reset = holder.View.findViewById(R.id.btn_timer_reset);
+        Button btn_timer_edit = holder.View.findViewById(R.id.btn_timer_edit);
         Button btn_timer_delete = holder.View.findViewById(R.id.btn_timer_delete);
 
         // Set title value
@@ -104,6 +105,12 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
             @Override
             public void onClick(View v) {
                 NotifyAlarmTimerReset(alarmTimer.ID);
+            }
+        });
+        btn_timer_edit.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotifyAlarmTimerEdit(alarmTimer.ID);
             }
         });
         btn_timer_delete.setOnClickListener(new Button.OnClickListener() {
@@ -153,6 +160,13 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     public void NotifyAlarmTimerReset(int alarmTimerID) {
         for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
             observer.OnReset(alarmTimerID);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerEdit(int alarmTimerID) {
+        for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
+            observer.OnEdit(alarmTimerID);
         }
     }
 
