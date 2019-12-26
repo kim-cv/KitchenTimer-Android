@@ -11,6 +11,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -111,6 +113,14 @@ public class TimersFragment extends Fragment implements IAlarmTimerClickObserver
     @Override
     public void OnReset(int alarmTimerID) {
         TimersViewModel.ResetTimer(alarmTimerID);
+    }
+
+    @Override
+    public void OnEdit(int alarmTimerID) {
+        NavController navController = Navigation.findNavController(this.getView());
+        Bundle bundle = new Bundle();
+        bundle.putInt(getString(R.string.parameter_timerId), alarmTimerID);
+        navController.navigate(R.id.navigation_add_timer, bundle);
     }
 
     @Override
