@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:text=""
+                    android:text="@={viewmodel.Title}"
                     android:textColor="@color/colorSecondText"
                     android:textSize="@dimen/txt_second" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -120,19 +120,28 @@
                     android:id="@+id/numberPicker_hours"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:layout_weight=".3" />
+                    android:layout_weight=".3"
+                    android:value="@={viewmodel.NumberPicker_hours}"
+                    app:numberPickerMinValue="@{0}"
+                    app:numberPickerMaxValue="@{23}" />
 
                 <NumberPicker
                     android:id="@+id/numberPicker_minutes"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:layout_weight=".3" />
+                    android:layout_weight=".3"
+                    android:value="@={viewmodel.NumberPicker_minutes}"
+                    app:numberPickerMinValue="@{0}"
+                    app:numberPickerMaxValue="@{59}" />
 
                 <NumberPicker
                     android:id="@+id/numberPicker_seconds"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:layout_weight=".3" />
+                    android:layout_weight=".3"
+                    android:value="@={viewmodel.NumberPicker_seconds}"
+                    app:numberPickerMinValue="@{0}"
+                    app:numberPickerMaxValue="@{59}" />
 
             </LinearLayout>
         </LinearLayout>

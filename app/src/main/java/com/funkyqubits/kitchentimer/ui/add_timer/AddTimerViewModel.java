@@ -1,5 +1,6 @@
 package com.funkyqubits.kitchentimer.ui.add_timer;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
@@ -9,12 +10,20 @@ public class AddTimerViewModel extends ViewModel {
 
     private TimerController TimerController;
 
+    public MutableLiveData<String> Title = new MutableLiveData<>();
+    public MutableLiveData<Integer> NumberPicker_hours = new MutableLiveData<>();
+    public MutableLiveData<Integer> NumberPicker_minutes = new MutableLiveData<>();
+    public MutableLiveData<Integer> NumberPicker_seconds = new MutableLiveData<>();
+
     public AddTimerViewModel() {
     }
 
     // TODO: Figure out how to use dependency injection in Android MVVM
     public void ProvideExtra(TimerController _timerController) {
         this.TimerController = _timerController;
+        NumberPicker_hours.setValue(0);
+        NumberPicker_minutes.setValue(0);
+        NumberPicker_seconds.setValue(0);
     }
 
     public void SaveAllTimersToStorage() {
