@@ -2,6 +2,7 @@ package com.funkyqubits.kitchentimer.ui.add_timer;
 
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.graphics.drawable.Drawable;
@@ -17,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 
 import com.funkyqubits.kitchentimer.Controller.TimerController;
@@ -39,9 +39,6 @@ public class AddTimerFragment extends Fragment {
     private EditText editText_title;
     private TextInputLayout editText_title_textLayout;
     private TextInputLayout textView_timer_length_textLayout;
-    private NumberPicker numberPicker_hours;
-    private NumberPicker numberPicker_minutes;
-    private NumberPicker numberPicker_seconds;
     private TextInputLayout textView_radioGroup_saveOrSingle_textLayout;
     private RadioGroup radioGroup;
     private Button btn_create;
@@ -59,7 +56,7 @@ public class AddTimerFragment extends Fragment {
         FragmentAddTimerBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_timer, container, false);
         binding.setViewmodel(addTimerViewModel);
         // Specify the current fragment as the lifecycle owner.
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.executePendingBindings();
         View root = binding.getRoot();
 
@@ -72,20 +69,9 @@ public class AddTimerFragment extends Fragment {
         editText_title = root.findViewById(R.id.editText_title);
         editText_title_textLayout = root.findViewById(R.id.editText_title_textLayout);
         textView_timer_length_textLayout = root.findViewById(R.id.textView_timer_length_textLayout);
-        numberPicker_hours = root.findViewById(R.id.numberPicker_hours);
-        numberPicker_minutes = root.findViewById(R.id.numberPicker_minutes);
-        numberPicker_seconds = root.findViewById(R.id.numberPicker_seconds);
         textView_radioGroup_saveOrSingle_textLayout = root.findViewById(R.id.textView_radioGroup_saveOrSingle_textLayout);
         radioGroup = root.findViewById(R.id.radioGroup_saveOrSingle);
         btn_create = root.findViewById(R.id.btn_addTimer_create);
-
-        // Set number pickers min/max values
-        numberPicker_hours.setMinValue(0);
-        numberPicker_hours.setMaxValue(23);
-        numberPicker_minutes.setMinValue(0);
-        numberPicker_minutes.setMaxValue(59);
-        numberPicker_seconds.setMinValue(0);
-        numberPicker_seconds.setMaxValue(59);
 
         // Button create listener
         btn_create.setOnClickListener(new Button.OnClickListener() {
@@ -116,25 +102,25 @@ public class AddTimerFragment extends Fragment {
         });
 
         // Timer length change listener
-        numberPicker_hours.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        addTimerViewModel.NumberPicker_hours.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+            public void onChanged(Integer number) {
                 Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
                 ToggleNumberpickerErrors(resultNumberpickers);
                 ToggleButtonEnabled(ValidateViewData(false));
             }
         });
-        numberPicker_minutes.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        addTimerViewModel.NumberPicker_minutes.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+            public void onChanged(Integer number) {
                 Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
                 ToggleNumberpickerErrors(resultNumberpickers);
                 ToggleButtonEnabled(ValidateViewData(false));
             }
         });
-        numberPicker_seconds.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        addTimerViewModel.NumberPicker_seconds.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+            public void onChanged(Integer number) {
                 Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
                 ToggleNumberpickerErrors(resultNumberpickers);
                 ToggleButtonEnabled(ValidateViewData(false));
@@ -224,9 +210,9 @@ public class AddTimerFragment extends Fragment {
     private Dictionary<String, Boolean> IsNumberpickersValid() {
         Hashtable errors = new Hashtable();
 
-        int hours = numberPicker_hours.getValue();
-        int minutes = numberPicker_minutes.getValue();
-        int seconds = numberPicker_seconds.getValue();
+        int hours = addTimerViewModel.NumberPicker_hours.getValue();
+        int minutes = addTimerViewModel.NumberPicker_minutes.getValue();
+        int seconds = addTimerViewModel.NumberPicker_seconds.getValue();
 
         boolean hours_range = (hours < 0 || hours > 23);
         boolean minutes_range = (minutes < 0 || minutes > 59);
@@ -284,9 +270,9 @@ public class AddTimerFragment extends Fragment {
 
     private void CreateTimer() {
         String editText_title_value = editText_title.getText().toString();
-        int numberPicker_hours_value = numberPicker_hours.getValue();
-        int numberPicker_minutes_value = numberPicker_minutes.getValue();
-        int numberPicker_seconds_value = numberPicker_seconds.getValue();
+        int numberPicker_hours_value = addTimerViewModel.NumberPicker_hours.getValue();
+        int numberPicker_minutes_value = addTimerViewModel.NumberPicker_minutes.getValue();
+        int numberPicker_seconds_value = addTimerViewModel.NumberPicker_seconds.getValue();
         int selected_radioButton_id = radioGroup.getCheckedRadioButtonId();
 
         boolean shouldSaveTimer;
@@ -304,7 +290,6 @@ public class AddTimerFragment extends Fragment {
                 break;
             }
         }
-
         addTimerViewModel.CreateTimer(editText_title_value, numberPicker_hours_value, numberPicker_minutes_value, numberPicker_seconds_value, shouldSaveTimer);
 
         // Save timers to storage
