@@ -12,8 +12,14 @@ import androidx.databinding.BindingAdapter;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class BindingAdapters {
+
+    @BindingAdapter("errorText")
+    public static void setErrorMessage(TextInputLayout textInputLayout, String error) {
+        textInputLayout.setError(error);
+    }
 
     @BindingAdapter(value = {"numberPickerMinValue", "numberPickerMaxValue"}, requireAll = true)
     public static void numberPickerMinMaxValue(NumberPicker numberPicker, int min, int max) {
