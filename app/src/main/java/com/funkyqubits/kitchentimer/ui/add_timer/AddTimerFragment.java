@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioGroup;
 
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.R;
@@ -36,7 +35,6 @@ public class AddTimerFragment extends Fragment {
     private TextInputLayout editText_title_textLayout;
     private TextInputLayout textView_timer_length_textLayout;
     private TextInputLayout textView_radioGroup_saveOrSingle_textLayout;
-    private RadioGroup radioGroup;
     private Button btn_create;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -65,7 +63,6 @@ public class AddTimerFragment extends Fragment {
         editText_title_textLayout = root.findViewById(R.id.editText_title_textLayout);
         textView_timer_length_textLayout = root.findViewById(R.id.textView_timer_length_textLayout);
         textView_radioGroup_saveOrSingle_textLayout = root.findViewById(R.id.textView_radioGroup_saveOrSingle_textLayout);
-        radioGroup = root.findViewById(R.id.radioGroup_saveOrSingle);
         btn_create = root.findViewById(R.id.btn_addTimer_create);
 
         // Button create listener
@@ -115,9 +112,9 @@ public class AddTimerFragment extends Fragment {
         });
 
         // Timer type change listener
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        addTimerViewModel.RadioGroup_saveType.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
+            public void onChanged(Integer number) {
                 boolean result = IsRadiogroupValid();
                 ToggleRadiogroupError(result);
                 ToggleButtonEnabled(ValidateViewData(false));
@@ -232,7 +229,7 @@ public class AddTimerFragment extends Fragment {
     }
 
     private boolean IsRadiogroupValid() {
-        int selected_radioButton_id = radioGroup.getCheckedRadioButtonId();
+        int selected_radioButton_id = addTimerViewModel.RadioGroup_saveType.getValue();
         switch (selected_radioButton_id) {
             case -1: {
                 // Nothing selected
@@ -260,7 +257,7 @@ public class AddTimerFragment extends Fragment {
         int numberPicker_hours_value = addTimerViewModel.NumberPicker_hours.getValue();
         int numberPicker_minutes_value = addTimerViewModel.NumberPicker_minutes.getValue();
         int numberPicker_seconds_value = addTimerViewModel.NumberPicker_seconds.getValue();
-        int selected_radioButton_id = radioGroup.getCheckedRadioButtonId();
+        int selected_radioButton_id = addTimerViewModel.RadioGroup_saveType.getValue();
 
         boolean shouldSaveTimer;
         switch (selected_radioButton_id) {

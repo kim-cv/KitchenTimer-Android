@@ -3,6 +3,7 @@ package com.funkyqubits.kitchentimer.ui.add_timer;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 
@@ -14,6 +15,7 @@ public class AddTimerViewModel extends ViewModel {
     public MutableLiveData<Integer> NumberPicker_hours = new MutableLiveData<>();
     public MutableLiveData<Integer> NumberPicker_minutes = new MutableLiveData<>();
     public MutableLiveData<Integer> NumberPicker_seconds = new MutableLiveData<>();
+    public MutableLiveData<Integer> RadioGroup_saveType = new MutableLiveData<>();
 
     public AddTimerViewModel() {
     }
@@ -25,6 +27,7 @@ public class AddTimerViewModel extends ViewModel {
         NumberPicker_hours.setValue(0);
         NumberPicker_minutes.setValue(0);
         NumberPicker_seconds.setValue(0);
+        RadioGroup_saveType.setValue(R.id.radioButton_saveOrSingle_save);
     }
 
     public void SaveAllTimersToStorage() {
