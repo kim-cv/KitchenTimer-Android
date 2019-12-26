@@ -5,6 +5,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 
 import androidx.databinding.BindingAdapter;
 
@@ -13,6 +14,13 @@ import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.google.android.material.button.MaterialButton;
 
 public class BindingAdapters {
+
+    @BindingAdapter(value = {"numberPickerMinValue", "numberPickerMaxValue"}, requireAll = true)
+    public static void numberPickerMinMaxValue(NumberPicker numberPicker, int min, int max) {
+        numberPicker.setMinValue(min);
+        numberPicker.setMaxValue(max);
+    }
+
     @BindingAdapter("timerStateButton")
     public static void timerStateButton(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         int color;
@@ -46,6 +54,7 @@ public class BindingAdapters {
         colorState = ColorStateList.valueOf(color);
         button.setIconTint(colorState);
     }
+
     private static int btn_start_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
@@ -74,6 +83,7 @@ public class BindingAdapters {
         button.setVisibility(View.GONE);
         return button.getResources().getColor(R.color.colorInactive);
     }
+
     private static int btn_pause_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
@@ -102,6 +112,7 @@ public class BindingAdapters {
         button.setVisibility(View.GONE);
         return button.getResources().getColor(R.color.colorInactive);
     }
+
     private static int btn_reset_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
@@ -124,6 +135,7 @@ public class BindingAdapters {
         }
         return button.getResources().getColor(R.color.colorInactive);
     }
+
     private static int btn_edit_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
@@ -146,6 +158,7 @@ public class BindingAdapters {
         }
         return button.getResources().getColor(R.color.colorInactive);
     }
+
     private static int btn_delete_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
