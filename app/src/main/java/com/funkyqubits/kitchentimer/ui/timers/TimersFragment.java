@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +27,7 @@ import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
 
 import java.util.ArrayList;
 
-public class TimersFragment extends NavHostFragment implements IAlarmTimerClickObserver {
+public class TimersFragment extends Fragment implements IAlarmTimerClickObserver {
 
     private RecyclerView RecyclerView;
     private AlarmTimersAdapter RecyclerViewAdapter;
