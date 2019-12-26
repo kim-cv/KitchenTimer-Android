@@ -1,6 +1,7 @@
 package com.funkyqubits.kitchentimer.ui.add_timer;
 
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.graphics.drawable.Drawable;
@@ -23,12 +24,15 @@ import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
+import com.funkyqubits.kitchentimer.databinding.FragmentAddTimerBinding;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 public class AddTimerFragment extends Fragment {
+
+    private int parameter_timerId;
 
     private AddTimerViewModel addTimerViewModel;
 
@@ -44,9 +48,20 @@ public class AddTimerFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        addTimerViewModel =
-                ViewModelProviders.of(this).get(AddTimerViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_add_timer, container, false);
+        // Get parameter
+        if (getArguments() != null && getArguments().getInt(getString(R.string.parameter_timerId)) > 0) {
+            parameter_timerId = getArguments().getInt(getString(R.string.parameter_timerId));
+        }
+
+        addTimerViewModel = ViewModelProviders.of(this).get(AddTimerViewModel.class);
+
+        // Inflate view and obtain an instance of the binding class.
+        FragmentAddTimerBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_timer, container, false);
+        binding.setViewmodel(addTimerViewModel);
+        // Specify the current fragment as the lifecycle owner.
+        binding.setLifecycleOwner(this);
+        binding.executePendingBindings();
+        View root = binding.getRoot();
 
         // TODO: Figure out how to use dependency injection in Android MVVM
         IFileSystemRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
