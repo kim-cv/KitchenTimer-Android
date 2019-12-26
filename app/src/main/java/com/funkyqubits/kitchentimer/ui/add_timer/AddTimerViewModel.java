@@ -21,6 +21,7 @@ public class AddTimerViewModel extends ViewModel {
     // TODO: Figure out how to use dependency injection in Android MVVM
     public void ProvideExtra(TimerController _timerController) {
         this.TimerController = _timerController;
+        Title.setValue("");
         NumberPicker_hours.setValue(0);
         NumberPicker_minutes.setValue(0);
         NumberPicker_seconds.setValue(0);

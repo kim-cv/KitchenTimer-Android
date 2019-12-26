@@ -11,13 +11,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.funkyqubits.kitchentimer.Controller.TimerController;
@@ -36,7 +33,6 @@ public class AddTimerFragment extends Fragment {
 
     private AddTimerViewModel addTimerViewModel;
 
-    private EditText editText_title;
     private TextInputLayout editText_title_textLayout;
     private TextInputLayout textView_timer_length_textLayout;
     private TextInputLayout textView_radioGroup_saveOrSingle_textLayout;
@@ -66,7 +62,6 @@ public class AddTimerFragment extends Fragment {
         addTimerViewModel.ProvideExtra(timerController);
 
         // Find views
-        editText_title = root.findViewById(R.id.editText_title);
         editText_title_textLayout = root.findViewById(R.id.editText_title_textLayout);
         textView_timer_length_textLayout = root.findViewById(R.id.textView_timer_length_textLayout);
         textView_radioGroup_saveOrSingle_textLayout = root.findViewById(R.id.textView_radioGroup_saveOrSingle_textLayout);
@@ -84,17 +79,9 @@ public class AddTimerFragment extends Fragment {
         });
 
         // Title text change listener
-        editText_title.addTextChangedListener(new TextWatcher() {
+        addTimerViewModel.Title.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+            public void onChanged(String title) {
                 boolean result = IsTitleValid();
                 ToggleTitleError(result);
                 ToggleButtonEnabled(ValidateViewData(false));
@@ -189,7 +176,7 @@ public class AddTimerFragment extends Fragment {
     }
 
     private boolean IsTitleValid() {
-        String value = editText_title.getText().toString();
+        String value = addTimerViewModel.Title.getValue();
         if (value.length() <= 0) {
             return false;
         } else {
@@ -269,7 +256,7 @@ public class AddTimerFragment extends Fragment {
     }
 
     private void CreateTimer() {
-        String editText_title_value = editText_title.getText().toString();
+        String editText_title_value = addTimerViewModel.Title.getValue();
         int numberPicker_hours_value = addTimerViewModel.NumberPicker_hours.getValue();
         int numberPicker_minutes_value = addTimerViewModel.NumberPicker_minutes.getValue();
         int numberPicker_seconds_value = addTimerViewModel.NumberPicker_seconds.getValue();
