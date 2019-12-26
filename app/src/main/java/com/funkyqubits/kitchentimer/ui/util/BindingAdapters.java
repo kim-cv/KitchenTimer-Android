@@ -1,12 +1,15 @@
 package com.funkyqubits.kitchentimer.ui.util;
 
 import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.BindingAdapter;
 
 import com.funkyqubits.kitchentimer.R;
@@ -15,6 +18,21 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class BindingAdapters {
+
+    @BindingAdapter("btnClickable")
+    public static void btnClickable(Button button, boolean enable) {
+        int color;
+        if (enable) {
+            color = button.getResources().getColor(R.color.colorMain);
+        } else {
+            color = button.getResources().getColor(R.color.colorSecondary);
+        }
+
+        Drawable buttonDrawable = button.getBackground();
+        buttonDrawable = DrawableCompat.wrap(buttonDrawable);
+        DrawableCompat.setTint(buttonDrawable, color);
+        button.setBackground(buttonDrawable);
+    }
 
     @BindingAdapter("errorText")
     public static void setErrorMessage(TextInputLayout textInputLayout, String error) {

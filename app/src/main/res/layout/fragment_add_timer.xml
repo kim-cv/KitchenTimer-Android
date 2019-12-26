@@ -39,7 +39,8 @@
                 android:id="@+id/editText_title_textLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3">
+                android:layout_weight="0.3"
+                app:errorText="@{viewmodel.title_error}">
 
                 <EditText
                     android:id="@+id/editText_title"
@@ -66,7 +67,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textView_timer_length_textLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:errorText="@{viewmodel.timer_length_error}">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -159,7 +161,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textView_radioGroup_saveOrSingle_textLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:errorText="@{viewmodel.saveOrSingle_error}">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -205,7 +208,9 @@
             android:text="@string/addTimer_btn_txt"
             android:textSize="@dimen/txt_title"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addTimer_linearLayout_saveType" />
+            app:layout_constraintTop_toBottomOf="@+id/addTimer_linearLayout_saveType"
+            android:onClick="@{() -> viewmodel.CreateTimer()}"
+            btnClickable="@{viewmodel.btn_clickable}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

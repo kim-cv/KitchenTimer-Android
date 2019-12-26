@@ -21,20 +21,14 @@ import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 import com.funkyqubits.kitchentimer.databinding.FragmentAddTimerBinding;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Dictionary;
-import java.util.Hashtable;
 
 public class AddTimerFragment extends Fragment {
 
     private int parameter_timerId;
 
     private AddTimerViewModel addTimerViewModel;
-
-    private TextInputLayout editText_title_textLayout;
-    private TextInputLayout textView_timer_length_textLayout;
-    private TextInputLayout textView_radioGroup_saveOrSingle_textLayout;
     private Button btn_create;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -60,12 +54,10 @@ public class AddTimerFragment extends Fragment {
         addTimerViewModel.ProvideExtra(timerController);
 
         // Find views
-        editText_title_textLayout = root.findViewById(R.id.editText_title_textLayout);
-        textView_timer_length_textLayout = root.findViewById(R.id.textView_timer_length_textLayout);
-        textView_radioGroup_saveOrSingle_textLayout = root.findViewById(R.id.textView_radioGroup_saveOrSingle_textLayout);
         btn_create = root.findViewById(R.id.btn_addTimer_create);
 
         // Button create listener
+        /*
         btn_create.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,15 +65,15 @@ public class AddTimerFragment extends Fragment {
                     CreateTimer();
                 }
             }
-        });
+        });*/
 
         // Title text change listener
         addTimerViewModel.Title.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String title) {
-                boolean result = IsTitleValid();
-                ToggleTitleError(result);
-                ToggleButtonEnabled(ValidateViewData(false));
+                boolean result = addTimerViewModel.IsTitleValid();
+                addTimerViewModel.ToggleTitleError(result);
+                addTimerViewModel.ToggleButtonEnabled(addTimerViewModel.ValidateViewData(false));
             }
         });
 
@@ -89,25 +81,25 @@ public class AddTimerFragment extends Fragment {
         addTimerViewModel.NumberPicker_hours.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer number) {
-                Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
-                ToggleNumberpickerErrors(resultNumberpickers);
-                ToggleButtonEnabled(ValidateViewData(false));
+                Dictionary<String, Boolean> resultNumberpickers = addTimerViewModel.IsNumberpickersValid();
+                addTimerViewModel.ToggleNumberpickerErrors(resultNumberpickers);
+                addTimerViewModel.ToggleButtonEnabled(addTimerViewModel.ValidateViewData(false));
             }
         });
         addTimerViewModel.NumberPicker_minutes.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer number) {
-                Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
-                ToggleNumberpickerErrors(resultNumberpickers);
-                ToggleButtonEnabled(ValidateViewData(false));
+                Dictionary<String, Boolean> resultNumberpickers = addTimerViewModel.IsNumberpickersValid();
+                addTimerViewModel.ToggleNumberpickerErrors(resultNumberpickers);
+                addTimerViewModel.ToggleButtonEnabled(addTimerViewModel.ValidateViewData(false));
             }
         });
         addTimerViewModel.NumberPicker_seconds.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer number) {
-                Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
-                ToggleNumberpickerErrors(resultNumberpickers);
-                ToggleButtonEnabled(ValidateViewData(false));
+                Dictionary<String, Boolean> resultNumberpickers = addTimerViewModel.IsNumberpickersValid();
+                addTimerViewModel.ToggleNumberpickerErrors(resultNumberpickers);
+                addTimerViewModel.ToggleButtonEnabled(addTimerViewModel.ValidateViewData(false));
             }
         });
 
@@ -115,9 +107,9 @@ public class AddTimerFragment extends Fragment {
         addTimerViewModel.RadioGroup_saveType.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer number) {
-                boolean result = IsRadiogroupValid();
-                ToggleRadiogroupError(result);
-                ToggleButtonEnabled(ValidateViewData(false));
+                boolean result = addTimerViewModel.IsRadiogroupValid();
+                addTimerViewModel.ToggleRadiogroupError(result);
+                addTimerViewModel.ToggleButtonEnabled(addTimerViewModel.ValidateViewData(false));
             }
         });
 
@@ -127,130 +119,10 @@ public class AddTimerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        boolean result = ValidateViewData(false);
-        ToggleButtonEnabled(result);
+        boolean result = addTimerViewModel.ValidateViewData(false);
+        addTimerViewModel.ToggleButtonEnabled(result);
     }
 
-    private boolean ValidateViewData(boolean toggleErrors) {
-        int numErrors = 0;
-
-        boolean resultTitle = IsTitleValid();
-        if (!resultTitle) {
-            numErrors += 1;
-        }
-
-        Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
-        if (!resultNumberpickers.get("no_value") || !resultNumberpickers.get("hours") || !resultNumberpickers.get("minutes") || !resultNumberpickers.get("seconds")) {
-            numErrors += 1;
-        }
-
-        boolean resultRadiogroup = IsRadiogroupValid();
-        if (!resultRadiogroup) {
-            numErrors += 1;
-        }
-
-        if (toggleErrors) {
-            ToggleTitleError(resultTitle);
-            ToggleNumberpickerErrors(resultNumberpickers);
-            ToggleRadiogroupError(resultRadiogroup);
-        }
-
-        return numErrors <= 0;
-    }
-
-    private void ToggleButtonEnabled(boolean enable) {
-        int color;
-        if (enable) {
-            color = getResources().getColor(R.color.colorMain);
-        } else {
-            color = getResources().getColor(R.color.colorSecondary);
-        }
-
-        Drawable buttonDrawable = btn_create.getBackground();
-        buttonDrawable = DrawableCompat.wrap(buttonDrawable);
-        DrawableCompat.setTint(buttonDrawable, color);
-        btn_create.setBackground(buttonDrawable);
-    }
-
-    private boolean IsTitleValid() {
-        String value = addTimerViewModel.Title.getValue();
-        if (value.length() <= 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private void ToggleTitleError(boolean isValid) {
-        if (!isValid) {
-            editText_title_textLayout.setError("Must provide title.");
-        } else {
-            if (editText_title_textLayout.getError() != null) {
-                editText_title_textLayout.setError(null);
-            }
-        }
-    }
-
-    private Dictionary<String, Boolean> IsNumberpickersValid() {
-        Hashtable errors = new Hashtable();
-
-        int hours = addTimerViewModel.NumberPicker_hours.getValue();
-        int minutes = addTimerViewModel.NumberPicker_minutes.getValue();
-        int seconds = addTimerViewModel.NumberPicker_seconds.getValue();
-
-        boolean hours_range = (hours < 0 || hours > 23);
-        boolean minutes_range = (minutes < 0 || minutes > 59);
-        boolean seconds_range = (seconds < 0 || seconds > 59);
-        boolean no_value = (hours <= 0 && minutes <= 0 && seconds <= 0);
-
-        errors.put("no_value", !no_value);
-        errors.put("hours", !hours_range);
-        errors.put("minutes", !minutes_range);
-        errors.put("seconds", !seconds_range);
-
-        return errors;
-    }
-
-    private void ToggleNumberpickerErrors(Dictionary<String, Boolean> errors) {
-        if (!errors.get("no_value")) {
-            textView_timer_length_textLayout.setError("Must choose timer length.");
-        } else if (!errors.get("hours")) {
-            textView_timer_length_textLayout.setError("Hours must be between 0 and 23.");
-        } else if (!errors.get("minutes")) {
-            textView_timer_length_textLayout.setError("Minutes must be between 0 and 59.");
-        } else if (!errors.get("seconds")) {
-            textView_timer_length_textLayout.setError("Seconds must be between 0 and 59.");
-        } else {
-            // Remove err
-            if (textView_timer_length_textLayout.getError() != null) {
-                textView_timer_length_textLayout.setError(null);
-            }
-        }
-    }
-
-    private boolean IsRadiogroupValid() {
-        int selected_radioButton_id = addTimerViewModel.RadioGroup_saveType.getValue();
-        switch (selected_radioButton_id) {
-            case -1: {
-                // Nothing selected
-                return false;
-            }
-            default: {
-                return true;
-            }
-        }
-    }
-
-    private void ToggleRadiogroupError(boolean isValid) {
-        if (!isValid) {
-            textView_radioGroup_saveOrSingle_textLayout.setError("Must choose timer type.");
-        } else {
-            // Remove err
-            if (textView_radioGroup_saveOrSingle_textLayout.getError() != null) {
-                textView_radioGroup_saveOrSingle_textLayout.setError(null);
-            }
-        }
-    }
 
     private void CreateTimer() {
         String editText_title_value = addTimerViewModel.Title.getValue();
@@ -274,7 +146,7 @@ public class AddTimerFragment extends Fragment {
                 break;
             }
         }
-        addTimerViewModel.CreateTimer(editText_title_value, numberPicker_hours_value, numberPicker_minutes_value, numberPicker_seconds_value, shouldSaveTimer);
+        //addTimerViewModel.CreateTimer(editText_title_value, numberPicker_hours_value, numberPicker_minutes_value, numberPicker_seconds_value, shouldSaveTimer);
 
         // Save timers to storage
         addTimerViewModel.SaveAllTimersToStorage();
