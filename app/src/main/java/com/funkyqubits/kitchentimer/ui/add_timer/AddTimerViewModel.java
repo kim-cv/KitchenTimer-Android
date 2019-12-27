@@ -90,10 +90,7 @@ public class AddTimerViewModel extends ViewModel {
         return numErrors <= 0;
     }
 
-    public void ToggleButtonEnabled(boolean enable) {
-        this.btn_clickable.setValue(enable);
-    }
-
+    //#region Title
     public boolean IsTitleValid() {
         String value = Title.getValue();
         if (value.length() <= 0) {
@@ -112,7 +109,9 @@ public class AddTimerViewModel extends ViewModel {
             }
         }
     }
+    //#endregion
 
+    //#region Timer length
     public Dictionary<String, Boolean> IsNumberpickersValid() {
         Hashtable errors = new Hashtable();
 
@@ -149,7 +148,9 @@ public class AddTimerViewModel extends ViewModel {
             }
         }
     }
+    //#endregion
 
+    //#region Save or Single
     public boolean IsRadiogroupValid() {
         int selected_radioButton_id = RadioGroup_saveType.getValue();
         switch (selected_radioButton_id) {
@@ -162,7 +163,6 @@ public class AddTimerViewModel extends ViewModel {
             }
         }
     }
-
     public void ToggleRadiogroupError(boolean isValid) {
         if (!isValid) {
             saveOrSingle_error.setValue("Must choose timer type.");
@@ -173,4 +173,11 @@ public class AddTimerViewModel extends ViewModel {
             }
         }
     }
+    //#endregion
+
+    //#region Create button
+    public void ToggleButtonEnabled(boolean enable) {
+        this.btn_clickable.setValue(enable);
+    }
+    //#endregion
 }
