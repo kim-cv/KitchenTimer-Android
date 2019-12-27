@@ -1,11 +1,9 @@
 package com.funkyqubits.kitchentimer.ui.add_timer;
 
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,8 +19,6 @@ import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 import com.funkyqubits.kitchentimer.databinding.FragmentAddTimerBinding;
-
-import java.util.Dictionary;
 
 public class AddTimerFragment extends Fragment {
 
@@ -61,7 +57,7 @@ public class AddTimerFragment extends Fragment {
         btn_create.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ValidateViewData(true)) {
+                if (ValidateData(true)) {
                     CreateTimer();
                 }
             }
@@ -71,9 +67,7 @@ public class AddTimerFragment extends Fragment {
         addTimerViewModel.Title.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String title) {
-                boolean result = addTimerViewModel.IsTitleValid();
-                addTimerViewModel.ToggleTitleError(result);
-                addTimerViewModel.ToggleButtonEnabled(addTimerViewModel.ValidateViewData(false));
+                addTimerViewModel.TitleChanged();
             }
         });
 
@@ -81,25 +75,19 @@ public class AddTimerFragment extends Fragment {
         addTimerViewModel.NumberPicker_hours.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer number) {
-                Dictionary<String, Boolean> resultNumberpickers = addTimerViewModel.IsNumberpickersValid();
-                addTimerViewModel.ToggleNumberpickerErrors(resultNumberpickers);
-                addTimerViewModel.ToggleButtonEnabled(addTimerViewModel.ValidateViewData(false));
+                addTimerViewModel.TimerLengthChanged();
             }
         });
         addTimerViewModel.NumberPicker_minutes.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer number) {
-                Dictionary<String, Boolean> resultNumberpickers = addTimerViewModel.IsNumberpickersValid();
-                addTimerViewModel.ToggleNumberpickerErrors(resultNumberpickers);
-                addTimerViewModel.ToggleButtonEnabled(addTimerViewModel.ValidateViewData(false));
+                addTimerViewModel.TimerLengthChanged();
             }
         });
         addTimerViewModel.NumberPicker_seconds.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer number) {
-                Dictionary<String, Boolean> resultNumberpickers = addTimerViewModel.IsNumberpickersValid();
-                addTimerViewModel.ToggleNumberpickerErrors(resultNumberpickers);
-                addTimerViewModel.ToggleButtonEnabled(addTimerViewModel.ValidateViewData(false));
+                addTimerViewModel.TimerLengthChanged();
             }
         });
 
@@ -107,9 +95,7 @@ public class AddTimerFragment extends Fragment {
         addTimerViewModel.RadioGroup_saveType.observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer number) {
-                boolean result = addTimerViewModel.IsRadiogroupValid();
-                addTimerViewModel.ToggleRadiogroupError(result);
-                addTimerViewModel.ToggleButtonEnabled(addTimerViewModel.ValidateViewData(false));
+                addTimerViewModel.SaveOrSingleChanged();
             }
         });
 
@@ -119,7 +105,7 @@ public class AddTimerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        boolean result = addTimerViewModel.ValidateViewData(false);
+        boolean result = addTimerViewModel.ValidateData(false);
         addTimerViewModel.ToggleButtonEnabled(result);
     }
 

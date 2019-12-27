@@ -1,14 +1,9 @@
 package com.funkyqubits.kitchentimer.ui.add_timer;
 
-import android.graphics.drawable.Drawable;
-import android.view.View;
-
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.funkyqubits.kitchentimer.R;
-import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 
 import java.util.Dictionary;
@@ -63,7 +58,7 @@ public class AddTimerViewModel extends ViewModel {
 
     }
 
-    public boolean ValidateViewData(boolean toggleErrors) {
+    public boolean ValidateData(boolean toggleErrors) {
         int numErrors = 0;
 
         boolean resultTitle = IsTitleValid();
@@ -91,7 +86,13 @@ public class AddTimerViewModel extends ViewModel {
     }
 
     //#region Title
-    public boolean IsTitleValid() {
+    public void TitleChanged() {
+        boolean result = IsTitleValid();
+        ToggleTitleError(result);
+        ToggleButtonEnabled(ValidateData(false));
+    }
+
+    private boolean IsTitleValid() {
         String value = Title.getValue();
         if (value.length() <= 0) {
             return false;
@@ -100,7 +101,7 @@ public class AddTimerViewModel extends ViewModel {
         }
     }
 
-    public void ToggleTitleError(boolean isValid) {
+    private void ToggleTitleError(boolean isValid) {
         if (!isValid) {
             title_error.setValue("Must provide title.");
         } else {
@@ -112,7 +113,13 @@ public class AddTimerViewModel extends ViewModel {
     //#endregion
 
     //#region Timer length
-    public Dictionary<String, Boolean> IsNumberpickersValid() {
+    public void TimerLengthChanged() {
+        Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
+        ToggleNumberpickerErrors(resultNumberpickers);
+        ToggleButtonEnabled(ValidateData(false));
+    }
+
+    private Dictionary<String, Boolean> IsNumberpickersValid() {
         Hashtable errors = new Hashtable();
 
         int hours = NumberPicker_hours.getValue();
@@ -132,7 +139,7 @@ public class AddTimerViewModel extends ViewModel {
         return errors;
     }
 
-    public void ToggleNumberpickerErrors(Dictionary<String, Boolean> errors) {
+    private void ToggleNumberpickerErrors(Dictionary<String, Boolean> errors) {
         if (!errors.get("no_value")) {
             timer_length_error.setValue("Must choose timer length.");
         } else if (!errors.get("hours")) {
@@ -151,7 +158,13 @@ public class AddTimerViewModel extends ViewModel {
     //#endregion
 
     //#region Save or Single
-    public boolean IsRadiogroupValid() {
+    public void SaveOrSingleChanged() {
+        boolean result = IsRadiogroupValid();
+        ToggleRadiogroupError(result);
+        ToggleButtonEnabled(ValidateData(false));
+    }
+
+    private boolean IsRadiogroupValid() {
         int selected_radioButton_id = RadioGroup_saveType.getValue();
         switch (selected_radioButton_id) {
             case -1: {
@@ -163,7 +176,8 @@ public class AddTimerViewModel extends ViewModel {
             }
         }
     }
-    public void ToggleRadiogroupError(boolean isValid) {
+
+    private void ToggleRadiogroupError(boolean isValid) {
         if (!isValid) {
             saveOrSingle_error.setValue("Must choose timer type.");
         } else {
