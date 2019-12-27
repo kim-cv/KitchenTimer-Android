@@ -25,6 +25,8 @@ public class AddTimerViewModel extends ViewModel {
     public MutableLiveData<String> saveOrSingle_error = new MutableLiveData<>("");
     public MutableLiveData<Boolean> btn_clickable = new MutableLiveData<>(false);
 
+    private boolean useLiveValidation = false;
+
     public AddTimerViewModel() {
     }
 
@@ -39,26 +41,33 @@ public class AddTimerViewModel extends ViewModel {
 
 
     public void CreateTimer() {
-        String title_value = Title.getValue();
-        int hours = NumberPicker_hours.getValue();
-        int minutes = NumberPicker_minutes.getValue();
-        int seconds = NumberPicker_seconds.getValue();
-        int selected_radioButton_id = RadioGroup_saveType.getValue();
+        useLiveValidation = true;
 
-        AlarmTimer.ALARMTIMER_SAVE_TYPE saveTimerType = (selected_radioButton_id == R.id.radioButton_saveOrSingle_save) ? AlarmTimer.ALARMTIMER_SAVE_TYPE.SAVE : AlarmTimer.ALARMTIMER_SAVE_TYPE.SINGLE_USE;
+        boolean validationResult = IsDataValid(true);
+        ToggleButtonEnabled(validationResult);
 
-        int lengthInSeconds = 0;
-        lengthInSeconds += ((hours * 60) * 60);
-        lengthInSeconds += (minutes * 60);
-        lengthInSeconds += seconds;
+        if (validationResult) {
+            String title_value = Title.getValue();
+            int hours = NumberPicker_hours.getValue();
+            int minutes = NumberPicker_minutes.getValue();
+            int seconds = NumberPicker_seconds.getValue();
+            int selected_radioButton_id = RadioGroup_saveType.getValue();
 
-        AlarmTimer alarmTimer = TimerController.CreateTimer(title_value, lengthInSeconds, saveTimerType);
+            AlarmTimer.ALARMTIMER_SAVE_TYPE saveTimerType = (selected_radioButton_id == R.id.radioButton_saveOrSingle_save) ? AlarmTimer.ALARMTIMER_SAVE_TYPE.SAVE : AlarmTimer.ALARMTIMER_SAVE_TYPE.SINGLE_USE;
 
-        // Save timers to storage
-        SaveAllTimersToStorage();
+            int lengthInSeconds = 0;
+            lengthInSeconds += ((hours * 60) * 60);
+            lengthInSeconds += (minutes * 60);
+            lengthInSeconds += seconds;
+
+            AlarmTimer alarmTimer = TimerController.CreateTimer(title_value, lengthInSeconds, saveTimerType);
+
+            // Save timers to storage
+            SaveAllTimersToStorage();
+        }
     }
 
-    public boolean ValidateData(boolean toggleErrors) {
+    public boolean IsDataValid(boolean toggleErrors) {
         int numErrors = 0;
 
         boolean resultTitle = IsTitleValid();
@@ -87,9 +96,11 @@ public class AddTimerViewModel extends ViewModel {
 
     //#region Title
     public void TitleChanged() {
-        boolean result = IsTitleValid();
-        ToggleTitleError(result);
-        ToggleButtonEnabled(ValidateData(false));
+        if (useLiveValidation) {
+            boolean result = IsTitleValid();
+            ToggleTitleError(result);
+        }
+        ToggleButtonEnabled(IsDataValid(false));
     }
 
     private boolean IsTitleValid() {
@@ -114,9 +125,11 @@ public class AddTimerViewModel extends ViewModel {
 
     //#region Timer length
     public void TimerLengthChanged() {
-        Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
-        ToggleNumberpickerErrors(resultNumberpickers);
-        ToggleButtonEnabled(ValidateData(false));
+        if (useLiveValidation) {
+            Dictionary<String, Boolean> resultNumberpickers = IsNumberpickersValid();
+            ToggleNumberpickerErrors(resultNumberpickers);
+        }
+        ToggleButtonEnabled(IsDataValid(false));
     }
 
     private Dictionary<String, Boolean> IsNumberpickersValid() {
@@ -159,9 +172,11 @@ public class AddTimerViewModel extends ViewModel {
 
     //#region Save or Single
     public void SaveOrSingleChanged() {
-        boolean result = IsRadiogroupValid();
-        ToggleRadiogroupError(result);
-        ToggleButtonEnabled(ValidateData(false));
+        if (useLiveValidation) {
+            boolean result = IsRadiogroupValid();
+            ToggleRadiogroupError(result);
+        }
+        ToggleButtonEnabled(IsDataValid(false));
     }
 
     private boolean IsRadiogroupValid() {

@@ -94,7 +94,7 @@ public class AddTimerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        boolean result = addTimerViewModel.ValidateData(false);
+        boolean result = addTimerViewModel.IsDataValid(false);
         addTimerViewModel.ToggleButtonEnabled(result);
     }
 }
