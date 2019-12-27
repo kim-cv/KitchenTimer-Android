@@ -124,8 +124,8 @@
                     android:layout_height="fill_parent"
                     android:layout_weight=".3"
                     android:value="@={viewmodel.NumberPicker_hours}"
-                    app:numberPickerMinValue="@{0}"
-                    app:numberPickerMaxValue="@{23}" />
+                    app:numberPickerMaxValue="@{23}"
+                    app:numberPickerMinValue="@{0}" />
 
                 <NumberPicker
                     android:id="@+id/numberPicker_minutes"
@@ -133,8 +133,8 @@
                     android:layout_height="fill_parent"
                     android:layout_weight=".3"
                     android:value="@={viewmodel.NumberPicker_minutes}"
-                    app:numberPickerMinValue="@{0}"
-                    app:numberPickerMaxValue="@{59}" />
+                    app:numberPickerMaxValue="@{59}"
+                    app:numberPickerMinValue="@{0}" />
 
                 <NumberPicker
                     android:id="@+id/numberPicker_seconds"
@@ -142,8 +142,8 @@
                     android:layout_height="fill_parent"
                     android:layout_weight=".3"
                     android:value="@={viewmodel.NumberPicker_seconds}"
-                    app:numberPickerMinValue="@{0}"
-                    app:numberPickerMaxValue="@{59}" />
+                    app:numberPickerMaxValue="@{59}"
+                    app:numberPickerMinValue="@{0}" />
 
             </LinearLayout>
         </LinearLayout>
@@ -202,15 +202,15 @@
 
         <Button
             android:id="@+id/btn_addTimer_create"
+            btnClickable="@{viewmodel.btn_clickable}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:onClick="@{() -> viewmodel.CreateTimer()}"
             android:text="@string/addTimer_btn_txt"
             android:textSize="@dimen/txt_title"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addTimer_linearLayout_saveType"
-            android:onClick="@{() -> viewmodel.CreateTimer()}"
-            btnClickable="@{viewmodel.btn_clickable}"/>
+            app:layout_constraintTop_toBottomOf="@+id/addTimer_linearLayout_saveType" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
