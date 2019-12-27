@@ -1,7 +1,7 @@
 package com.funkyqubits.kitchentimer.Interfaces;
 
 public interface IAlarmTimerCreatedUpdatedObserver {
-    void OnCreated(int alarmTimerID);
+    void OnAlarmTimerCreated(int alarmTimerID);
 
-    void OnUpdated(int alarmTimerID);
+    void OnAlarmTimerUpdated(int alarmTimerID);
 }
