@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
+import com.funkyqubits.kitchentimer.models.AlarmTimer;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -36,26 +37,25 @@ public class AddTimerViewModel extends ViewModel {
         TimerController.SaveAllTimersToStorage();
     }
 
-    /*
-    public AlarmTimer CreateTimer(String title, int hours, int minutes, int seconds, boolean saveTimer) {
+
+    public void CreateTimer() {
+        String title_value = Title.getValue();
+        int hours = NumberPicker_hours.getValue();
+        int minutes = NumberPicker_minutes.getValue();
+        int seconds = NumberPicker_seconds.getValue();
+        int selected_radioButton_id = RadioGroup_saveType.getValue();
+
+        AlarmTimer.ALARMTIMER_SAVE_TYPE saveTimerType = (selected_radioButton_id == R.id.radioButton_saveOrSingle_save) ? AlarmTimer.ALARMTIMER_SAVE_TYPE.SAVE : AlarmTimer.ALARMTIMER_SAVE_TYPE.SINGLE_USE;
+
         int lengthInSeconds = 0;
         lengthInSeconds += ((hours * 60) * 60);
         lengthInSeconds += (minutes * 60);
         lengthInSeconds += seconds;
 
-        AlarmTimer.ALARMTIMER_SAVE_TYPE saveTimerType;
-        if (saveTimer == true) {
-            saveTimerType = AlarmTimer.ALARMTIMER_SAVE_TYPE.SAVE;
-        } else {
-            saveTimerType = AlarmTimer.ALARMTIMER_SAVE_TYPE.SINGLE_USE;
-        }
+        AlarmTimer alarmTimer = TimerController.CreateTimer(title_value, lengthInSeconds, saveTimerType);
 
-        return TimerController.CreateTimer(title, lengthInSeconds, saveTimerType);
-    }
-    */
-
-    public void CreateTimer() {
-
+        // Save timers to storage
+        SaveAllTimersToStorage();
     }
 
     public boolean ValidateData(boolean toggleErrors) {

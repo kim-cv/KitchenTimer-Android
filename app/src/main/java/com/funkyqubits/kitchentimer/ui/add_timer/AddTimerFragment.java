@@ -52,17 +52,6 @@ public class AddTimerFragment extends Fragment {
         // Find views
         btn_create = root.findViewById(R.id.btn_addTimer_create);
 
-        // Button create listener
-        /*
-        btn_create.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ValidateData(true)) {
-                    CreateTimer();
-                }
-            }
-        });*/
-
         // Title text change listener
         addTimerViewModel.Title.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
@@ -108,34 +97,4 @@ public class AddTimerFragment extends Fragment {
         boolean result = addTimerViewModel.ValidateData(false);
         addTimerViewModel.ToggleButtonEnabled(result);
     }
-
-
-    private void CreateTimer() {
-        String editText_title_value = addTimerViewModel.Title.getValue();
-        int numberPicker_hours_value = addTimerViewModel.NumberPicker_hours.getValue();
-        int numberPicker_minutes_value = addTimerViewModel.NumberPicker_minutes.getValue();
-        int numberPicker_seconds_value = addTimerViewModel.NumberPicker_seconds.getValue();
-        int selected_radioButton_id = addTimerViewModel.RadioGroup_saveType.getValue();
-
-        boolean shouldSaveTimer;
-        switch (selected_radioButton_id) {
-            case R.id.radioButton_saveOrSingle_save: {
-                shouldSaveTimer = true;
-                break;
-            }
-            case R.id.radioButton_saveOrSingle_single: {
-                shouldSaveTimer = false;
-                break;
-            }
-            default: {
-                shouldSaveTimer = true;
-                break;
-            }
-        }
-        //addTimerViewModel.CreateTimer(editText_title_value, numberPicker_hours_value, numberPicker_minutes_value, numberPicker_seconds_value, shouldSaveTimer);
-
-        // Save timers to storage
-        addTimerViewModel.SaveAllTimersToStorage();
-    }
-
 }
