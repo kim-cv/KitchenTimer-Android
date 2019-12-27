@@ -15,12 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.funkyqubits.kitchentimer.Controller.TimerController;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCreatedUpdatedObserver;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 import com.funkyqubits.kitchentimer.databinding.FragmentAddTimerBinding;
 
-public class AddTimerFragment extends Fragment {
+public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpdatedObserver {
 
     private int parameter_timerId;
 
@@ -88,6 +89,8 @@ public class AddTimerFragment extends Fragment {
             }
         });
 
+        addTimerViewModel.RegisterObserver(this);
+
         return root;
     }
 
@@ -96,5 +99,13 @@ public class AddTimerFragment extends Fragment {
         super.onResume();
         boolean result = addTimerViewModel.IsDataValid(false);
         addTimerViewModel.ToggleButtonEnabled(result);
+    }
+
+    @Override
+    public void OnAlarmTimerCreated(int alarmTimerID) {
+    }
+
+    @Override
+    public void OnAlarmTimerUpdated(int alarmTimerID) {
     }
 }

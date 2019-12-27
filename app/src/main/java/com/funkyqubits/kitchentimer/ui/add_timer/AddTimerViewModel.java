@@ -3,14 +3,20 @@ package com.funkyqubits.kitchentimer.ui.add_timer;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCreatedUpdatedObserver;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCreatedUpdatedSubject;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
-public class AddTimerViewModel extends ViewModel {
+public class AddTimerViewModel extends ViewModel implements IAlarmTimerCreatedUpdatedSubject {
+
+    private final List<IAlarmTimerCreatedUpdatedObserver> ObserversAlarmTimerCreatedOrUpdated = new ArrayList<>();
 
     private TimerController TimerController;
 
@@ -64,6 +70,8 @@ public class AddTimerViewModel extends ViewModel {
 
             // Save timers to storage
             SaveAllTimersToStorage();
+
+            NotifyAlarmTimerCreated(alarmTimer.ID);
         }
     }
 
@@ -209,4 +217,32 @@ public class AddTimerViewModel extends ViewModel {
         this.btn_clickable.setValue(enable);
     }
     //#endregion
+
+    @Override
+    public void RegisterObserver(IAlarmTimerCreatedUpdatedObserver observer) {
+        if (!ObserversAlarmTimerCreatedOrUpdated.contains(observer)) {
+            ObserversAlarmTimerCreatedOrUpdated.add(observer);
+        }
+    }
+
+    @Override
+    public void RemoveObserver(IAlarmTimerCreatedUpdatedObserver observer) {
+        if (ObserversAlarmTimerCreatedOrUpdated.contains(observer)) {
+            ObserversAlarmTimerCreatedOrUpdated.remove(observer);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerCreated(int alarmTimerID) {
+        for (IAlarmTimerCreatedUpdatedObserver observer : ObserversAlarmTimerCreatedOrUpdated) {
+            observer.OnAlarmTimerCreated(alarmTimerID);
+        }
+    }
+
+    @Override
+    public void NotifyAlarmTimerUpdated(int alarmTimerID) {
+        for (IAlarmTimerCreatedUpdatedObserver observer : ObserversAlarmTimerCreatedOrUpdated) {
+            observer.OnAlarmTimerUpdated(alarmTimerID);
+        }
+    }
 }
