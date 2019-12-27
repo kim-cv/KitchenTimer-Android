@@ -18,16 +18,16 @@ public class AddTimerViewModel extends ViewModel {
 
     private TimerController TimerController;
 
-    public MutableLiveData<String> Title = new MutableLiveData<>();
-    public MutableLiveData<Integer> NumberPicker_hours = new MutableLiveData<>();
-    public MutableLiveData<Integer> NumberPicker_minutes = new MutableLiveData<>();
-    public MutableLiveData<Integer> NumberPicker_seconds = new MutableLiveData<>();
-    public MutableLiveData<Integer> RadioGroup_saveType = new MutableLiveData<>();
+    public MutableLiveData<String> Title = new MutableLiveData<>("");
+    public MutableLiveData<Integer> NumberPicker_hours = new MutableLiveData<>(0);
+    public MutableLiveData<Integer> NumberPicker_minutes = new MutableLiveData<>(0);
+    public MutableLiveData<Integer> NumberPicker_seconds = new MutableLiveData<>(0);
+    public MutableLiveData<Integer> RadioGroup_saveType = new MutableLiveData<>(R.id.radioButton_saveOrSingle_save);
 
-    public MutableLiveData<String> title_error = new MutableLiveData<>();
-    public MutableLiveData<String> timer_length_error = new MutableLiveData<>();
-    public MutableLiveData<String> saveOrSingle_error = new MutableLiveData<>();
-    public MutableLiveData<Boolean> btn_clickable = new MutableLiveData<>();
+    public MutableLiveData<String> title_error = new MutableLiveData<>("");
+    public MutableLiveData<String> timer_length_error = new MutableLiveData<>("");
+    public MutableLiveData<String> saveOrSingle_error = new MutableLiveData<>("");
+    public MutableLiveData<Boolean> btn_clickable = new MutableLiveData<>(false);
 
     public AddTimerViewModel() {
     }
@@ -35,12 +35,6 @@ public class AddTimerViewModel extends ViewModel {
     // TODO: Figure out how to use dependency injection in Android MVVM
     public void ProvideExtra(TimerController _timerController) {
         this.TimerController = _timerController;
-        Title.setValue("");
-        NumberPicker_hours.setValue(0);
-        NumberPicker_minutes.setValue(0);
-        NumberPicker_seconds.setValue(0);
-        RadioGroup_saveType.setValue(R.id.radioButton_saveOrSingle_save);
-        btn_clickable.setValue(false);
     }
 
     public void SaveAllTimersToStorage() {
