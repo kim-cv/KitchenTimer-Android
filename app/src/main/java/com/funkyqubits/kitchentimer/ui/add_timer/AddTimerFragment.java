@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,9 +100,13 @@ public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpda
 
     @Override
     public void OnAlarmTimerCreated(int alarmTimerID) {
+        NavController navController = Navigation.findNavController(this.getView());
+        navController.navigate(R.id.navigation_timers);
     }
 
     @Override
     public void OnAlarmTimerUpdated(int alarmTimerID) {
+        NavController navController = Navigation.findNavController(this.getView());
+        navController.navigate(R.id.navigation_timers);
     }
 }
