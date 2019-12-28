@@ -207,7 +207,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:onClick="@{() -> viewmodel.CreateTimer()}"
-            android:text="@string/addTimer_btn_txt"
+            android:text="@{viewmodel.IsCreatingNewTimer == true ? @string/addTimer_btn_txt_create : @string/addTimer_btn_txt_update}"
             android:textSize="@dimen/txt_title"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addTimer_linearLayout_saveType" />

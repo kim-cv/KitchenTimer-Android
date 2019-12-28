@@ -16,6 +16,7 @@
     <string name="addTimer_saveType_title">Save timer or Single use timer</string>
     <string name="addTimer_saveType_radioButton_save">Save</string>
     <string name="addTimer_saveType_radioButton_single">Single use timer</string>
-    <string name="addTimer_btn_txt">Create</string>
+    <string name="addTimer_btn_txt_create">Create</string>
+    <string name="addTimer_btn_txt_update">Update</string>
     <string name="parameter_timerId">timerId</string>
 </resources>

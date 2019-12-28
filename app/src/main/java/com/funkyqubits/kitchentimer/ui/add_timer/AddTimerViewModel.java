@@ -21,6 +21,7 @@ public class AddTimerViewModel extends ViewModel implements IAlarmTimerCreatedUp
 
     private TimerController TimerController;
     private AlarmTimer AlarmTimerToEdit;
+    public MutableLiveData<Boolean> IsCreatingNewTimer = new MutableLiveData<>(false);
 
     public MutableLiveData<String> Title = new MutableLiveData<>("");
     public MutableLiveData<Integer> NumberPicker_hours = new MutableLiveData<>(0);
@@ -43,9 +44,11 @@ public class AddTimerViewModel extends ViewModel implements IAlarmTimerCreatedUp
         this.TimerController = _timerController;
         AlarmTimerToEdit = TimerController.FindTimerOnId(alarmTimerToEditId);
         if (AlarmTimerToEdit == null) {
+            IsCreatingNewTimer.setValue(true);
             return;
         }
 
+        IsCreatingNewTimer.setValue(false);
         useLiveValidation = true;
         String title = AlarmTimerToEdit.Title;
 
@@ -91,7 +94,7 @@ public class AddTimerViewModel extends ViewModel implements IAlarmTimerCreatedUp
             lengthInSeconds += (minutes * 60);
             lengthInSeconds += seconds;
 
-            if (AlarmTimerToEdit == null) {
+            if (IsCreatingNewTimer.getValue() == true) {
                 AlarmTimer alarmTimer = TimerController.CreateTimer(title_value, lengthInSeconds, saveTimerType);
                 NotifyAlarmTimerCreated(alarmTimer.ID);
             } else {
