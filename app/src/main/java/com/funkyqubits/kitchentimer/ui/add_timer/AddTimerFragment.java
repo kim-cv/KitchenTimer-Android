@@ -26,7 +26,6 @@ public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpda
     private int parameter_timerId;
 
     private AddTimerViewModel addTimerViewModel;
-    private Button btn_create;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,9 +48,6 @@ public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpda
         IFileSystemRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
         TimerController timerController = TimerController.Instance(repository);
         addTimerViewModel.ProvideExtra(timerController);
-
-        // Find views
-        btn_create = root.findViewById(R.id.btn_addTimer_create);
 
         // Title text change listener
         addTimerViewModel.Title.observe(getViewLifecycleOwner(), new Observer<String>() {
