@@ -13,12 +13,14 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class AddTimerViewModel extends ViewModel implements IAlarmTimerCreatedUpdatedSubject {
 
     private final List<IAlarmTimerCreatedUpdatedObserver> ObserversAlarmTimerCreatedOrUpdated = new ArrayList<>();
 
     private TimerController TimerController;
+    private AlarmTimer AlarmTimerToEdit;
 
     public MutableLiveData<String> Title = new MutableLiveData<>("");
     public MutableLiveData<Integer> NumberPicker_hours = new MutableLiveData<>(0);
@@ -37,8 +39,31 @@ public class AddTimerViewModel extends ViewModel implements IAlarmTimerCreatedUp
     }
 
     // TODO: Figure out how to use dependency injection in Android MVVM
-    public void ProvideExtra(TimerController _timerController) {
+    public void ProvideExtra(TimerController _timerController, int alarmTimerToEditId) {
         this.TimerController = _timerController;
+        AlarmTimerToEdit = TimerController.FindTimerOnId(alarmTimerToEditId);
+        if (AlarmTimerToEdit == null) {
+            return;
+        }
+        
+        useLiveValidation = true;
+        String title = AlarmTimerToEdit.Title;
+
+        int milliseconds = AlarmTimerToEdit.LengthInSeconds * 1000;
+        int hours = (int) TimeUnit.MILLISECONDS.toHours(milliseconds);
+        int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(milliseconds - (hours * 60 * 60 * 1000));
+        int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(milliseconds - (hours * 60 * 60 * 1000) - (minutes * 60 * 1000));
+
+        int saveType =
+                AlarmTimerToEdit.SaveType == AlarmTimer.ALARMTIMER_SAVE_TYPE.SAVE ?
+                        R.id.radioButton_saveOrSingle_save : R.id.radioButton_saveOrSingle_single;
+
+        // Set values
+        Title.setValue(title);
+        NumberPicker_hours.setValue(hours);
+        NumberPicker_minutes.setValue(minutes);
+        NumberPicker_seconds.setValue(seconds);
+        RadioGroup_saveType.setValue(saveType);
     }
 
     public void SaveAllTimersToStorage() {
