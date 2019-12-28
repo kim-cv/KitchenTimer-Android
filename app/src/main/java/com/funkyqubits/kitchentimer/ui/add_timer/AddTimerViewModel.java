@@ -45,7 +45,7 @@ public class AddTimerViewModel extends ViewModel implements IAlarmTimerCreatedUp
         if (AlarmTimerToEdit == null) {
             return;
         }
-        
+
         useLiveValidation = true;
         String title = AlarmTimerToEdit.Title;
 
@@ -91,12 +91,16 @@ public class AddTimerViewModel extends ViewModel implements IAlarmTimerCreatedUp
             lengthInSeconds += (minutes * 60);
             lengthInSeconds += seconds;
 
-            AlarmTimer alarmTimer = TimerController.CreateTimer(title_value, lengthInSeconds, saveTimerType);
+            if (AlarmTimerToEdit == null) {
+                AlarmTimer alarmTimer = TimerController.CreateTimer(title_value, lengthInSeconds, saveTimerType);
+                NotifyAlarmTimerCreated(alarmTimer.ID);
+            } else {
+                TimerController.UpdateTimer(AlarmTimerToEdit.ID, title_value, lengthInSeconds, saveTimerType);
+                NotifyAlarmTimerUpdated(AlarmTimerToEdit.ID);
+            }
 
             // Save timers to storage
             SaveAllTimersToStorage();
-
-            NotifyAlarmTimerCreated(alarmTimer.ID);
         }
     }
 

@@ -73,6 +73,14 @@ public final class TimerController {
         return alarmTimer;
     }
 
+    public void UpdateTimer(int alarmTimerId, String title, int lengthInSeconds, AlarmTimer.ALARMTIMER_SAVE_TYPE saveType) {
+        AlarmTimer alarmTimer = FindTimerOnId(alarmTimerId);
+        if (alarmTimer == null) {
+            return;
+        }
+        alarmTimer.Update(title, lengthInSeconds, saveType);
+    }
+
     public void SetTimerOffset(AlarmTimerOffset offset) {
         AlarmTimer alarmTimer = FindTimerOnId(offset.ID);
         if (alarmTimer == null) {

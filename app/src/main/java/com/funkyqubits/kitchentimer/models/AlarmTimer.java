@@ -59,6 +59,16 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
         ConvertProgressToReadableTimer();
     }
 
+    public void Update(String _title, int _lengthInSeconds, ALARMTIMER_SAVE_TYPE _saveType) {
+        Pause();
+        Reset();
+
+        this.Title = _title;
+        this.LengthInSeconds = _lengthInSeconds;
+        this.SaveType = _saveType;
+        ConvertProgressToReadableTimer();
+    }
+
     public void SetOffset(AlarmTimerOffset offset) {
         if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
             return;
