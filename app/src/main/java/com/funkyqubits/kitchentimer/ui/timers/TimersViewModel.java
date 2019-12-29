@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.funkyqubits.kitchentimer.Controller.AlarmManagerController;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
-import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCompleteObserver;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerObserver;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class TimersViewModel extends ViewModel implements IAlarmTimerCompleteObserver {
+public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
 
     public MutableLiveData<ArrayList<AlarmTimer>> ObservableAlarmTimers = new MutableLiveData<>();
     private TimerController TimerController;

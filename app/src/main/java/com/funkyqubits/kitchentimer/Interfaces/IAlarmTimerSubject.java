@@ -1,9 +1,9 @@
 package com.funkyqubits.kitchentimer.Interfaces;
 
-public interface IAlarmTimerCompleteSubject {
-    void RegisterObserver(IAlarmTimerCompleteObserver observer);
+public interface IAlarmTimerSubject {
+    void RegisterObserver(IAlarmTimerObserver observer);
 
-    void RemoveObserver(IAlarmTimerCompleteObserver observer);
+    void RemoveObserver(IAlarmTimerObserver observer);
 
     void NotifyAlarmTimerStarted(int alarmTimerID);
 

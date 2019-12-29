@@ -4,14 +4,14 @@ import android.text.format.DateUtils;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCompleteObserver;
-import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCompleteSubject;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerObserver;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerSubject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class AlarmTimer implements IAlarmTimerCompleteSubject {
+public class AlarmTimer implements IAlarmTimerSubject {
 
     public MutableLiveData<ALARMTIMER_STATE> ObservableAlarmTimerState = new MutableLiveData<>();
     public ALARMTIMER_STATE AlarmTimerState;
@@ -22,7 +22,7 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
     public ALARMTIMER_SAVE_TYPE SaveType;
 
     public long WhenTimerStartedInSeconds;
-    private final List<IAlarmTimerCompleteObserver> ObserversAlarmTimerComplete = new ArrayList<>();
+    private final List<IAlarmTimerObserver> AlarmTimerObservers = new ArrayList<>();
 
     // Used for calculating time spent "PAUSED" as an offset for the timer progress
     public long ResumeSecondsOffset;
@@ -193,50 +193,50 @@ public class AlarmTimer implements IAlarmTimerCompleteSubject {
 
     //#region Events
     @Override
-    public void RegisterObserver(IAlarmTimerCompleteObserver observer) {
-        if (!ObserversAlarmTimerComplete.contains(observer)) {
-            ObserversAlarmTimerComplete.add(observer);
+    public void RegisterObserver(IAlarmTimerObserver observer) {
+        if (!AlarmTimerObservers.contains(observer)) {
+            AlarmTimerObservers.add(observer);
         }
     }
 
     @Override
-    public void RemoveObserver(IAlarmTimerCompleteObserver observer) {
-        if (ObserversAlarmTimerComplete.contains(observer)) {
-            ObserversAlarmTimerComplete.remove(observer);
+    public void RemoveObserver(IAlarmTimerObserver observer) {
+        if (AlarmTimerObservers.contains(observer)) {
+            AlarmTimerObservers.remove(observer);
         }
     }
 
     @Override
     public void NotifyAlarmTimerStarted(int alarmTimerID) {
-        for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
+        for (IAlarmTimerObserver observer : AlarmTimerObservers) {
             observer.OnAlarmTimerStarted(alarmTimerID);
         }
     }
 
     @Override
     public void NotifyAlarmTimerResumed(int alarmTimerID) {
-        for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
+        for (IAlarmTimerObserver observer : AlarmTimerObservers) {
             observer.OnAlarmTimerResumed(alarmTimerID);
         }
     }
 
     @Override
     public void NotifyAlarmTimerPaused(int alarmTimerID) {
-        for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
+        for (IAlarmTimerObserver observer : AlarmTimerObservers) {
             observer.OnAlarmTimerPaused(alarmTimerID);
         }
     }
 
     @Override
     public void NotifyAlarmTimerReset(int alarmTimerID) {
-        for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
+        for (IAlarmTimerObserver observer : AlarmTimerObservers) {
             observer.OnAlarmTimerReset(alarmTimerID);
         }
     }
 
     @Override
     public void NotifyAlarmTimerCompleted(int alarmTimerID) {
-        for (IAlarmTimerCompleteObserver observer : ObserversAlarmTimerComplete) {
+        for (IAlarmTimerObserver observer : AlarmTimerObservers) {
             observer.OnAlarmTimerCompleted(alarmTimerID);
         }
     }

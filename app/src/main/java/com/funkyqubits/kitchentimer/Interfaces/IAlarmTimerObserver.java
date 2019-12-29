@@ -1,6 +1,6 @@
 package com.funkyqubits.kitchentimer.Interfaces;
 
-public interface IAlarmTimerCompleteObserver {
+public interface IAlarmTimerObserver {
     void OnAlarmTimerStarted(int alarmTimerID);
 
     void OnAlarmTimerResumed(int alarmTimerID);
