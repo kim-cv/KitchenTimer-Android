@@ -19,7 +19,6 @@ import com.funkyqubits.kitchentimer.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.ViewHolder> implements IAlarmTimerClickedSubject {
     private final List<IAlarmTimerClickObserver> ObservableItemClickedList = new ArrayList<>();
