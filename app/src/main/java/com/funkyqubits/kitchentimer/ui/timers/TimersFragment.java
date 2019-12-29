@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.funkyqubits.kitchentimer.Controller.AlarmManagerController;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
-import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerClickObserver;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsObserver;
 import com.funkyqubits.kitchentimer.Repositories.ISharedPreferencesRepository;
 import com.funkyqubits.kitchentimer.Repositories.SharedPreferencesRepository;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
@@ -29,7 +29,7 @@ import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
 
 import java.util.ArrayList;
 
-public class TimersFragment extends Fragment implements IAlarmTimerClickObserver {
+public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObserver {
 
     private RecyclerView RecyclerView;
     private AlarmTimersAdapter RecyclerViewAdapter;

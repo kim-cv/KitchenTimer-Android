@@ -12,16 +12,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.funkyqubits.kitchentimer.BR;
-import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerClickObserver;
-import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerClickedSubject;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsObserver;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsSubject;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.ViewHolder> implements IAlarmTimerClickedSubject {
-    private final List<IAlarmTimerClickObserver> ObservableItemClickedList = new ArrayList<>();
+public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.ViewHolder> implements IAlarmTimerUIEventsSubject {
+    private final List<IAlarmTimerUIEventsObserver> AlarmTimerUIEventsObservers = new ArrayList<>();
     private ArrayList<AlarmTimer> Dataset_alarmTimers;
     private Fragment ContainingFragment;
 
@@ -128,50 +128,50 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
 
     //#region Subject/Observer
     @Override
-    public void RegisterObserver(IAlarmTimerClickObserver observer) {
-        if (!ObservableItemClickedList.contains(observer)) {
-            ObservableItemClickedList.add(observer);
+    public void RegisterObserver(IAlarmTimerUIEventsObserver observer) {
+        if (!AlarmTimerUIEventsObservers.contains(observer)) {
+            AlarmTimerUIEventsObservers.add(observer);
         }
     }
 
     @Override
-    public void RemoveObserver(IAlarmTimerClickObserver observer) {
-        if (ObservableItemClickedList.contains(observer)) {
-            ObservableItemClickedList.remove(observer);
+    public void RemoveObserver(IAlarmTimerUIEventsObserver observer) {
+        if (AlarmTimerUIEventsObservers.contains(observer)) {
+            AlarmTimerUIEventsObservers.remove(observer);
         }
     }
 
     @Override
     public void NotifyAlarmTimerStart(int alarmTimerID) {
-        for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
+        for (IAlarmTimerUIEventsObserver observer : AlarmTimerUIEventsObservers) {
             observer.OnStart(alarmTimerID);
         }
     }
 
     @Override
     public void NotifyAlarmTimerPause(int alarmTimerID) {
-        for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
+        for (IAlarmTimerUIEventsObserver observer : AlarmTimerUIEventsObservers) {
             observer.OnPause(alarmTimerID);
         }
     }
 
     @Override
     public void NotifyAlarmTimerReset(int alarmTimerID) {
-        for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
+        for (IAlarmTimerUIEventsObserver observer : AlarmTimerUIEventsObservers) {
             observer.OnReset(alarmTimerID);
         }
     }
 
     @Override
     public void NotifyAlarmTimerEdit(int alarmTimerID) {
-        for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
+        for (IAlarmTimerUIEventsObserver observer : AlarmTimerUIEventsObservers) {
             observer.OnEdit(alarmTimerID);
         }
     }
 
     @Override
     public void NotifyAlarmTimerDelete(int alarmTimerID) {
-        for (IAlarmTimerClickObserver observer : ObservableItemClickedList) {
+        for (IAlarmTimerUIEventsObserver observer : AlarmTimerUIEventsObservers) {
             observer.OnDelete(alarmTimerID);
         }
     }

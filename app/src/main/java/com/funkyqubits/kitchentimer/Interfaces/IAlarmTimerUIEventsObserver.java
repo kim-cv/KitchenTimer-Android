@@ -1,6 +1,6 @@
 package com.funkyqubits.kitchentimer.Interfaces;
 
-public interface IAlarmTimerClickObserver {
+public interface IAlarmTimerUIEventsObserver {
     void OnStart(int alarmTimerID);
 
     void OnPause(int alarmTimerID);
