@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.funkyqubits.kitchentimer.BroadcastReceivers.TimerCompleteReceiver;
+import com.funkyqubits.kitchentimer.R;
+import com.funkyqubits.kitchentimer.models.AlarmTimer;
 
 import java.util.Calendar;
 
@@ -21,10 +23,18 @@ public class AlarmManagerController {
         AlarmManager = (AlarmManager) Context.getSystemService(ALARM_SERVICE);
     }
 
-    public void ScheduleAlarm(int uniqueId, int secondsFromNow) {
+    public void ScheduleAlarm(AlarmTimer alarmTimer, int secondsFromNow) {
         Intent intent = new Intent(Context, TimerCompleteReceiver.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(Context, uniqueId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        String paramIdKey = Context.getString(R.string.notifications_parameter_id_key);
+        String paramTitleKey = Context.getString(R.string.notifications_parameter_title_key);
+        String paramDescriptionKey = Context.getString(R.string.notifications_parameter_description_key);
+
+        intent.putExtra(paramIdKey, alarmTimer.ID);
+        intent.putExtra(paramTitleKey, "Timer Complete.");
+        intent.putExtra(paramDescriptionKey, alarmTimer.Title + " is complete.");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(Context, alarmTimer.ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.SECOND, secondsFromNow);

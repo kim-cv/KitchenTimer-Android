@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.funkyqubits.kitchentimer.Controller.AlarmManagerController;
+import com.funkyqubits.kitchentimer.Controller.NotificationController;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsObserver;
 import com.funkyqubits.kitchentimer.Repositories.ISharedPreferencesRepository;
@@ -49,8 +50,9 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
         // TODO: Figure out how to use dependency injection in Android MVVM
         IFileSystemRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
         AlarmManagerController alarmManagerController = new AlarmManagerController(getContext());
+        NotificationController notificationController = new NotificationController(getContext());
         TimerController timerController = TimerController.Instance(repository);
-        TimersViewModel.ProvideExtra(timerController, alarmManagerController);
+        TimersViewModel.ProvideExtra(timerController, alarmManagerController, notificationController);
 
 
         RecyclerView = root.findViewById(R.id.recyclerview_alarmTimers);
