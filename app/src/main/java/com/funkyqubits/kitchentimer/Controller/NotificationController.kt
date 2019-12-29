@@ -51,6 +51,7 @@ class NotificationController constructor(_context: Context) {
                 .setContentText(_message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setAutoCancel(true)
 
         // Show notification
