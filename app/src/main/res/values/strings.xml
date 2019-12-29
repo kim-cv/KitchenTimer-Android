@@ -19,4 +19,12 @@
     <string name="addTimer_btn_txt_create">Create</string>
     <string name="addTimer_btn_txt_update">Update</string>
     <string name="parameter_timerId">timerId</string>
+
+    <!-- Notifications -->
+    <string name="notifications_channel_id">001</string>
+    <string name="notifications_channel_name">Timers Completed</string>
+    <string name="notifications_channel_description">Notifies you when a timer is complete.</string>
+    <string name="notifications_parameter_id_key">param_id</string>
+    <string name="notifications_parameter_title_key">param_title</string>
+    <string name="notifications_parameter_description_key">param_description</string>
 </resources>
