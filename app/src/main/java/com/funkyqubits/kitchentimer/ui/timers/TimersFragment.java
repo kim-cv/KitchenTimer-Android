@@ -125,23 +125,24 @@ public class TimersFragment extends Fragment implements IAlarmTimerClickObserver
 
     @Override
     public void OnDelete(final int alarmTimerID) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogCustom);
 
-        builder.setTitle("Are you sure?");
-        builder.setMessage("Are you sure you want to delete this timer?");
+        builder.setTitle("Are you sure");
+        builder.setMessage("You want to remove this timer?");
 
         builder.setPositiveButton("Yes Remove", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 TimersViewModel.DeleteTimer(alarmTimerID);
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
             }
         });
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
     }
     //#endregion
 }
