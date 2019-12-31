@@ -42,7 +42,7 @@ class AlarmAudioService : Service() {
             InitMediaPlayer()
 
             val paramTitleKey = getString(R.string.notifications_parameter_title_key)
-            val timerTitle = intent?.getStringExtra(paramTitleKey) ?: ""
+            val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
             if (timerTitle.isNotEmpty()) {
                 completedTimers.add(timerTitle)
             }
@@ -51,7 +51,8 @@ class AlarmAudioService : Service() {
 
             // Oreo API 26+ requires a foreground notification for a service
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val notification = NotificationController(this).CreateForegroundNotification(timerTitle)
+                val description = createNotificationDescription()
+                val notification = NotificationController(this).CreateForegroundNotification(description)
                 startForeground(1, notification)
             }
         } else if (action == "observed") {
@@ -92,5 +93,15 @@ class AlarmAudioService : Service() {
 
     private fun StopSound() {
         mediaPlayer?.stop()
+    }
+
+    private fun createNotificationDescription(): String {
+        if (completedTimers.count() > 1) {
+            return "Multiple timers are completed."
+        } else if (completedTimers.count() == 1) {
+            return "${completedTimers.first()} is completed."
+        } else {
+            return "A timer is completed."
+        }
     }
 }

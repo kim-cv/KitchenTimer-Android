@@ -57,7 +57,7 @@ class NotificationController constructor(_context: Context) {
         }
     }
 
-    public fun CreateForegroundNotification(timerTitle: String): Notification? {
+    public fun CreateForegroundNotification(description: String): Notification? {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationIntent = Intent(context, MainActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(
@@ -67,7 +67,7 @@ class NotificationController constructor(_context: Context) {
 
             return Notification.Builder(context, channelForegroundId)
                     .setContentTitle("Timers complete.")
-                    .setContentText("$timerTitle is completed.")
+                    .setContentText(description)
                     .setSmallIcon(R.drawable.ic_settings_white_24dp)
                     .setContentIntent(pendingIntent)
                     .build()
