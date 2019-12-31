@@ -12,40 +12,54 @@ import com.funkyqubits.kitchentimer.R
 
 class AlarmAudioService : Service() {
     private var mediaPlayer: MediaPlayer? = null
+    private val completedTimers = mutableListOf<String>()
 
     companion object {
         fun startService(context: Context, timerTitle: String) {
-            val startIntent = buildStartServiceIntent(context, timerTitle)
+            val startIntent = Intent(context, AlarmAudioService::class.java)
+            val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
+            startIntent.putExtra("action", "start")
+            startIntent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, startIntent)
+        }
+
+        fun observed(context: Context) {
+            val intent = Intent(context, AlarmAudioService::class.java)
+            intent.putExtra("action", "observed")
+            ContextCompat.startForegroundService(context, intent)
         }
 
         fun stopService(context: Context) {
             val stopIntent = Intent(context, AlarmAudioService::class.java)
             context.stopService(stopIntent)
         }
-
-        private fun buildStartServiceIntent(context: Context, timerTitle: String): Intent {
-            val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
-            val startIntent = Intent(context, AlarmAudioService::class.java)
-            startIntent.putExtra(paramTitleKey, timerTitle)
-            return startIntent
-        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        InitMediaPlayer()
-        // Only start media player if not playing
-        if (mediaPlayer?.isPlaying == false) {
-            mediaPlayer?.start()
-        }
+        val action = intent?.getStringExtra("action")
 
-        val paramTitleKey = getString(R.string.notifications_parameter_title_key)
-        val timerTitle = intent?.getStringExtra(paramTitleKey) ?: ""
+        if (action == "start") {
+            InitMediaPlayer()
 
-        // Oreo API 26+ requires a foreground notification for a service
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notification = NotificationController(this).CreateForegroundNotification(timerTitle)
-            startForeground(1, notification)
+            val paramTitleKey = getString(R.string.notifications_parameter_title_key)
+            val timerTitle = intent?.getStringExtra(paramTitleKey) ?: ""
+            if (timerTitle.isNotEmpty()) {
+                completedTimers.add(timerTitle)
+            }
+
+            StartSound()
+
+            // Oreo API 26+ requires a foreground notification for a service
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val notification = NotificationController(this).CreateForegroundNotification(timerTitle)
+                startForeground(1, notification)
+            }
+        } else if (action == "observed") {
+            completedTimers.clear()
+            StopSound()
+        } else {
+            //TODO
+            throw Exception("Something went wrong")
         }
 
         return START_NOT_STICKY
@@ -64,7 +78,19 @@ class AlarmAudioService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        completedTimers.clear()
         mediaPlayer?.stop()
         mediaPlayer?.release()
+    }
+
+    private fun StartSound() {
+        // Only start media player if not playing
+        if (mediaPlayer?.isPlaying == false) {
+            mediaPlayer?.start()
+        }
+    }
+
+    private fun StopSound() {
+        mediaPlayer?.stop()
     }
 }

@@ -1,6 +1,5 @@
 package com.funkyqubits.kitchentimer;
 
-
 import android.os.Bundle;
 
 import com.funkyqubits.kitchentimer.Controller.NotificationController;
@@ -30,7 +29,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Create notification channels
         new NotificationController(this).CreateNotificationChannels();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AlarmAudioService.Companion.observed(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         AlarmAudioService.Companion.stopService(this);
     }
 }
