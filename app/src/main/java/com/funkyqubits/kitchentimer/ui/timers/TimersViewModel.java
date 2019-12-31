@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.funkyqubits.kitchentimer.Controller.AlarmManagerController;
-import com.funkyqubits.kitchentimer.Controller.NotificationController;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerObserver;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
@@ -19,17 +18,14 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
     public MutableLiveData<ArrayList<AlarmTimer>> ObservableAlarmTimers = new MutableLiveData<>();
     private TimerController TimerController;
     private AlarmManagerController AlarmManagerController;
-    private NotificationController NotificationController;
 
     public TimersViewModel() {
     }
 
     // TODO: Figure out how to use dependency injection in Android MVVM
-    public void ProvideExtra(TimerController _timerController, AlarmManagerController alarmManagerController, NotificationController notificationController) {
+    public void ProvideExtra(TimerController _timerController, AlarmManagerController alarmManagerController) {
         TimerController = _timerController;
         AlarmManagerController = alarmManagerController;
-        NotificationController = notificationController;
-        NotificationController.CreateNotificationChannels();
 
         ArrayList<AlarmTimer> tmpAlarmTimers = TimerController.AlarmTimers;
         InitTimer();
