@@ -29,7 +29,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
         TimerController = _timerController;
         AlarmManagerController = alarmManagerController;
         NotificationController = notificationController;
-        NotificationController.CreateNotificationChannel();
+        NotificationController.CreateNotificationChannels();
 
         ArrayList<AlarmTimer> tmpAlarmTimers = TimerController.AlarmTimers;
         InitTimer();
