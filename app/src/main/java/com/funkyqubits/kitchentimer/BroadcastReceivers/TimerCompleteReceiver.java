@@ -20,6 +20,6 @@ public class TimerCompleteReceiver extends BroadcastReceiver {
         int id = intent.getIntExtra(paramIdKey, 0);
         String title = intent.getStringExtra(paramTitleKey);
 
-        AlarmAudioService.Companion.startService(context, title);
+        AlarmAudioService.Companion.timerComplete(context, title);
     }
 }

@@ -43,11 +43,13 @@ class NotificationController constructor(_context: Context) {
         */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = when (channelType) {
-                NOTIFICATION_TYPE.FOREGROUND -> NotificationChannel(channelForegroundId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
+                NOTIFICATION_TYPE.FOREGROUND -> NotificationChannel(channelForegroundId, channelName, NotificationManager.IMPORTANCE_DEFAULT).apply {
                     description = channelDescription
+                    setSound(null, null)
                 }
-                else -> NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
+                else -> NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT).apply {
                     description = channelDescription
+                    setSound(null, null)
                 }
             }
 
@@ -68,7 +70,7 @@ class NotificationController constructor(_context: Context) {
             return Notification.Builder(context, channelForegroundId)
                     .setContentTitle("Timers complete.")
                     .setContentText(description)
-                    .setSmallIcon(R.drawable.ic_settings_white_24dp)
+                    .setSmallIcon(R.drawable.ic_timelapse_white_24dp)
                     .setContentIntent(pendingIntent)
                     .build()
         }
@@ -84,7 +86,7 @@ class NotificationController constructor(_context: Context) {
 
         // Build notification
         val builder = NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.ic_settings_white_24dp)
+                .setSmallIcon(R.drawable.ic_timelapse_white_24dp)
                 .setContentTitle(_title)
                 .setContentText(_message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -95,6 +97,12 @@ class NotificationController constructor(_context: Context) {
         // Show notification
         with(NotificationManagerCompat.from(context)) {
             notify(_id, builder.build())
+        }
+    }
+
+    public fun CancelNotification(_id: Int) {
+        with(NotificationManagerCompat.from(context)) {
+            cancel(_id)
         }
     }
 }

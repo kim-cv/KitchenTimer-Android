@@ -26,6 +26,7 @@ import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
+import com.funkyqubits.kitchentimer.services.AlarmAudioService;
 
 import java.util.ArrayList;
 
@@ -103,6 +104,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     @Override
     public void OnStart(int alarmTimerID) {
         TimersViewModel.StartTimer(alarmTimerID);
+        AlarmAudioService.Companion.startService(getContext());
     }
 
     @Override
@@ -113,6 +115,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     @Override
     public void OnReset(int alarmTimerID) {
         TimersViewModel.ResetTimer(alarmTimerID);
+        AlarmAudioService.Companion.timersInFocus(getContext());
     }
 
     @Override

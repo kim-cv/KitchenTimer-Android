@@ -11,21 +11,30 @@ import com.funkyqubits.kitchentimer.Controller.NotificationController
 import com.funkyqubits.kitchentimer.R
 
 class AlarmAudioService : Service() {
+    private var isServiceRunning: Boolean = false
     private var mediaPlayer: MediaPlayer? = null
     private val completedTimers = mutableListOf<String>()
+    private var notificationController: NotificationController? = null
 
     companion object {
-        fun startService(context: Context, timerTitle: String) {
+        fun startService(context: Context) {
             val startIntent = Intent(context, AlarmAudioService::class.java)
-            val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
             startIntent.putExtra("action", "start")
-            startIntent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, startIntent)
         }
 
-        fun observed(context: Context) {
+        fun timerComplete(context: Context, timerTitle: String) {
             val intent = Intent(context, AlarmAudioService::class.java)
-            intent.putExtra("action", "observed")
+            val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
+            intent.putExtra("action", "timerComplete")
+            intent.putExtra(paramTitleKey, timerTitle)
+            ContextCompat.startForegroundService(context, intent)
+        }
+
+        fun timersInFocus(context: Context) {
+            // This is called when we got the user attention, we can assume they know of completed timers and we can stop the alarm sound
+            val intent = Intent(context, AlarmAudioService::class.java)
+            intent.putExtra("action", "timersInFocus")
             ContextCompat.startForegroundService(context, intent)
         }
 
@@ -36,40 +45,67 @@ class AlarmAudioService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        InitNotificationController()
+        InitMediaPlayer()
         val action = intent?.getStringExtra("action")
 
-        if (action == "start") {
-            InitMediaPlayer()
-
-            val paramTitleKey = getString(R.string.notifications_parameter_title_key)
-            val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
-            if (timerTitle.isNotEmpty()) {
-                completedTimers.add(timerTitle)
+        when (action) {
+            "start" -> {
+                start()
             }
-
-            StartSound()
-
-            // Oreo API 26+ requires a foreground notification for a service
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val description = createNotificationDescription()
-                val notification = NotificationController(this).CreateForegroundNotification(description)
-                startForeground(1, notification)
+            "timerComplete" -> {
+                timerComplete(intent)
             }
-        } else if (action == "observed") {
-            completedTimers.clear()
-            StopSound()
-        } else {
-            //TODO
-            throw Exception("Something went wrong")
+            "timersInFocus" -> {
+                timersInFocus()
+            }
+            else -> {
+                //TODO
+                throw Exception("Something went wrong")
+            }
         }
 
         return START_NOT_STICKY
     }
 
+    //#region Service Actions
+    private fun start() {
+        if (isServiceRunning) {
+            return
+        }
+
+        isServiceRunning = true
+        updateNotificationDescription()
+    }
+
+    private fun timerComplete(intent: Intent) {
+        val paramTitleKey = getString(R.string.notifications_parameter_title_key)
+        val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
+        if (timerTitle.isNotEmpty()) {
+            completedTimers.add(timerTitle)
+        }
+        StartSound()
+        updateNotificationDescription()
+    }
+
+    private fun timersInFocus() {
+        StopSound()
+        completedTimers.clear()
+        updateNotificationDescription()
+    }
+    //#endregion
+
+
     private fun InitMediaPlayer() {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(this, R.raw.alarmnext)
             mediaPlayer?.isLooping = true
+        }
+    }
+
+    private fun InitNotificationController() {
+        if (notificationController == null) {
+            notificationController = NotificationController(this)
         }
     }
 
@@ -79,9 +115,11 @@ class AlarmAudioService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        isServiceRunning = false
         completedTimers.clear()
         mediaPlayer?.stop()
         mediaPlayer?.release()
+        notificationController?.CancelNotification(1)
     }
 
     private fun StartSound() {
@@ -92,16 +130,38 @@ class AlarmAudioService : Service() {
     }
 
     private fun StopSound() {
-        mediaPlayer?.stop()
+        if (mediaPlayer?.isPlaying == true) {
+            mediaPlayer?.stop()
+        }
     }
 
     private fun createNotificationDescription(): String {
-        if (completedTimers.count() > 1) {
-            return "Multiple timers are completed."
-        } else if (completedTimers.count() == 1) {
-            return "${completedTimers.first()} is completed."
+        return when {
+            completedTimers.count() > 1 -> {
+                "Multiple timers are completed."
+            }
+            completedTimers.count() == 1 -> {
+                "${completedTimers.first()} is completed."
+            }
+            else -> {
+                "You will be notified when a timer is complete."
+            }
+        }
+    }
+
+    private fun updateNotificationDescription() {
+        if (!isServiceRunning) {
+            return
+        }
+
+        val description = createNotificationDescription()
+        // Oreo API 26+ requires a foreground notification for a service
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notification = notificationController?.CreateForegroundNotification(description)
+            startForeground(1, notification)
         } else {
-            return "A timer is completed."
+            val notification = notificationController?.CreateForegroundNotification(description)
+            startForeground(1, notification)
         }
     }
 }
