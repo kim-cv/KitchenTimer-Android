@@ -32,12 +32,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        AlarmAudioService.Companion.timersInFocus(this);
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         AlarmAudioService.Companion.stopService(this);

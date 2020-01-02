@@ -85,6 +85,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
         SharedPreferencesRepository = new SharedPreferencesRepository(getContext());
         ArrayList<AlarmTimerOffset> timerOffsets = SharedPreferencesRepository.GetOffsets();
         TimersViewModel.SetTimerOffsets(timerOffsets);
+        AlarmAudioService.Companion.timersInFocus(getContext());
     }
 
     @Override

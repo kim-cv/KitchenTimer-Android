@@ -14,12 +14,21 @@ class AlarmAudioService : Service() {
     private var isServiceRunning: Boolean = false
     private var mediaPlayer: MediaPlayer? = null
     private val completedTimers = mutableListOf<String>()
+    private val runningTimers = mutableListOf<String>()
     private var notificationController: NotificationController? = null
 
     companion object {
         fun startService(context: Context) {
             val intent = createAlarmAudioServiceIntent(context)
             intent.putExtra("action", "start")
+            ContextCompat.startForegroundService(context, intent)
+        }
+
+        fun runningTimer(context: Context, timerTitle: String) {
+            val intent = createAlarmAudioServiceIntent(context)
+            val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
+            intent.putExtra("action", "runningTimer")
+            intent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, intent)
         }
 
@@ -40,7 +49,8 @@ class AlarmAudioService : Service() {
 
         fun stopService(context: Context) {
             val intent = createAlarmAudioServiceIntent(context)
-            context.stopService(intent)
+            intent.putExtra("action", "stop")
+            ContextCompat.startForegroundService(context, intent)
         }
 
         private fun createAlarmAudioServiceIntent(context: Context): Intent {
@@ -49,19 +59,23 @@ class AlarmAudioService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        InitNotificationController()
-        InitMediaPlayer()
         val action = intent?.getStringExtra("action")
 
         when (action) {
             "start" -> {
                 start()
             }
+            "runningTimer" -> {
+                runningTimer(intent)
+            }
             "timerComplete" -> {
                 timerComplete(intent)
             }
             "timersInFocus" -> {
                 timersInFocus()
+            }
+            "stop" -> {
+                stop()
             }
             else -> {
                 //TODO
@@ -79,7 +93,17 @@ class AlarmAudioService : Service() {
         }
 
         isServiceRunning = true
+        InitNotificationController()
+        InitMediaPlayer()
         updateNotificationDescription()
+    }
+
+    private fun runningTimer(intent: Intent) {
+        val paramTitleKey = getString(R.string.notifications_parameter_title_key)
+        val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
+        if (timerTitle.isNotEmpty()) {
+            runningTimers.add(timerTitle)
+        }
     }
 
     private fun timerComplete(intent: Intent) {
@@ -87,6 +111,7 @@ class AlarmAudioService : Service() {
         val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
         if (timerTitle.isNotEmpty()) {
             completedTimers.add(timerTitle)
+            runningTimers.removeAll{ it == timerTitle }
         }
         StartSound()
         updateNotificationDescription()
@@ -96,6 +121,22 @@ class AlarmAudioService : Service() {
         StopSound()
         completedTimers.clear()
         updateNotificationDescription()
+    }
+
+    private fun stop() {
+        if (runningTimers.count() > 0) {
+            return
+        }
+
+        isServiceRunning = false
+        runningTimers.clear()
+        completedTimers.clear()
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+        notificationController?.CancelNotification(1)
+        notificationController = null
+        stopSelf()
     }
     //#endregion
 
@@ -115,15 +156,6 @@ class AlarmAudioService : Service() {
 
     override fun onBind(intent: Intent): IBinder? {
         return null
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        isServiceRunning = false
-        completedTimers.clear()
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        notificationController?.CancelNotification(1)
     }
 
     private fun StartSound() {
