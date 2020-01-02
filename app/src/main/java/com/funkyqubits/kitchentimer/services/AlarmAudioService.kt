@@ -24,10 +24,18 @@ class AlarmAudioService : Service() {
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun runningTimer(context: Context, timerTitle: String) {
+        fun addRunningTimer(context: Context, timerTitle: String) {
             val intent = createAlarmAudioServiceIntent(context)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
-            intent.putExtra("action", "runningTimer")
+            intent.putExtra("action", "addRunningTimer")
+            intent.putExtra(paramTitleKey, timerTitle)
+            ContextCompat.startForegroundService(context, intent)
+        }
+
+        fun removeRunningTimer(context: Context, timerTitle: String) {
+            val intent = createAlarmAudioServiceIntent(context)
+            val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
+            intent.putExtra("action", "removeRunningTimer")
             intent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, intent)
         }
@@ -65,8 +73,11 @@ class AlarmAudioService : Service() {
             "start" -> {
                 start()
             }
-            "runningTimer" -> {
-                runningTimer(intent)
+            "addRunningTimer" -> {
+                addRunningTimer(intent)
+            }
+            "removeRunningTimer" -> {
+                removeRunningTimer(intent)
             }
             "timerComplete" -> {
                 timerComplete(intent)
@@ -98,11 +109,19 @@ class AlarmAudioService : Service() {
         updateNotificationDescription()
     }
 
-    private fun runningTimer(intent: Intent) {
+    private fun addRunningTimer(intent: Intent) {
         val paramTitleKey = getString(R.string.notifications_parameter_title_key)
         val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
         if (timerTitle.isNotEmpty()) {
             runningTimers.add(timerTitle)
+        }
+    }
+
+    private fun removeRunningTimer(intent: Intent) {
+        val paramTitleKey = getString(R.string.notifications_parameter_title_key)
+        val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
+        if (timerTitle.isNotEmpty()) {
+            runningTimers.remove(timerTitle)
         }
     }
 
