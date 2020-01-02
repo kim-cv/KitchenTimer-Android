@@ -18,13 +18,13 @@ class AlarmAudioService : Service() {
 
     companion object {
         fun startService(context: Context) {
-            val startIntent = Intent(context, AlarmAudioService::class.java)
-            startIntent.putExtra("action", "start")
-            ContextCompat.startForegroundService(context, startIntent)
+            val intent = createAlarmAudioServiceIntent(context)
+            intent.putExtra("action", "start")
+            ContextCompat.startForegroundService(context, intent)
         }
 
         fun timerComplete(context: Context, timerTitle: String) {
-            val intent = Intent(context, AlarmAudioService::class.java)
+            val intent = createAlarmAudioServiceIntent(context)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
             intent.putExtra("action", "timerComplete")
             intent.putExtra(paramTitleKey, timerTitle)
@@ -33,14 +33,18 @@ class AlarmAudioService : Service() {
 
         fun timersInFocus(context: Context) {
             // This is called when we got the user attention, we can assume they know of completed timers and we can stop the alarm sound
-            val intent = Intent(context, AlarmAudioService::class.java)
+            val intent = createAlarmAudioServiceIntent(context)
             intent.putExtra("action", "timersInFocus")
             ContextCompat.startForegroundService(context, intent)
         }
 
         fun stopService(context: Context) {
-            val stopIntent = Intent(context, AlarmAudioService::class.java)
-            context.stopService(stopIntent)
+            val intent = createAlarmAudioServiceIntent(context)
+            context.stopService(intent)
+        }
+
+        private fun createAlarmAudioServiceIntent(context: Context): Intent {
+            return Intent(context, AlarmAudioService::class.java)
         }
     }
 
