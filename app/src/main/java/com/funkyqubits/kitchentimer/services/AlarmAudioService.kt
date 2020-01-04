@@ -11,13 +11,14 @@ import com.funkyqubits.kitchentimer.Controller.NotificationController
 import com.funkyqubits.kitchentimer.R
 
 class AlarmAudioService : Service() {
-    private var isServiceRunning: Boolean = false
     private var mediaPlayer: MediaPlayer? = null
     private val completedTimers = mutableListOf<String>()
     private val runningTimers = mutableListOf<String>()
     private var notificationController: NotificationController? = null
 
     companion object {
+        private var isServiceRunning: Boolean = false
+
         fun startService(context: Context) {
             val intent = createAlarmAudioServiceIntent(context)
             intent.putExtra("action", "start")
@@ -25,6 +26,8 @@ class AlarmAudioService : Service() {
         }
 
         fun addRunningTimer(context: Context, timerTitle: String) {
+            if (!isServiceRunning) return
+
             val intent = createAlarmAudioServiceIntent(context)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
             intent.putExtra("action", "addRunningTimer")
@@ -33,6 +36,8 @@ class AlarmAudioService : Service() {
         }
 
         fun removeRunningTimer(context: Context, timerTitle: String) {
+            if (!isServiceRunning) return
+
             val intent = createAlarmAudioServiceIntent(context)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
             intent.putExtra("action", "removeRunningTimer")
@@ -41,6 +46,8 @@ class AlarmAudioService : Service() {
         }
 
         fun timerComplete(context: Context, timerTitle: String) {
+            if (!isServiceRunning) return
+
             val intent = createAlarmAudioServiceIntent(context)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
             intent.putExtra("action", "timerComplete")
@@ -49,15 +56,11 @@ class AlarmAudioService : Service() {
         }
 
         fun timersInFocus(context: Context) {
+            if (!isServiceRunning) return
+
             // This is called when we got the user attention, we can assume they know of completed timers and we can stop the alarm sound
             val intent = createAlarmAudioServiceIntent(context)
             intent.putExtra("action", "timersInFocus")
-            ContextCompat.startForegroundService(context, intent)
-        }
-
-        fun stopService(context: Context) {
-            val intent = createAlarmAudioServiceIntent(context)
-            intent.putExtra("action", "stop")
             ContextCompat.startForegroundService(context, intent)
         }
 
@@ -84,9 +87,6 @@ class AlarmAudioService : Service() {
             }
             "timersInFocus" -> {
                 timersInFocus()
-            }
-            "stop" -> {
-                stop()
             }
             else -> {
                 //TODO
@@ -123,6 +123,8 @@ class AlarmAudioService : Service() {
         if (timerTitle.isNotEmpty()) {
             runningTimers.remove(timerTitle)
         }
+
+        if (runningTimers.count() <= 0) stop()
     }
 
     private fun timerComplete(intent: Intent) {
@@ -140,6 +142,7 @@ class AlarmAudioService : Service() {
         StopSound()
         completedTimers.clear()
         updateNotificationDescription()
+        if (runningTimers.count() <= 0) stop()
     }
 
     private fun stop() {
