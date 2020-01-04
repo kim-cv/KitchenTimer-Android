@@ -8,17 +8,12 @@ import java.io.File
 import java.util.*
 
 class FileSystemRepositoryKotlin(_context: Context, _filename: String) : IFileSystemRepository {
-    private var Context: Context? = null
-    private var Filename: String? = null
+    private var Context: Context = _context
+    private var Filename: String = _filename
     private val FileEncoding = Charsets.UTF_8
 
-    init {
-        Context = _context
-        Filename = _filename
-    }
-
     override fun LoadAlarmTimers(): ArrayList<AlarmTimer> {
-        val file = File(Context?.filesDir, Filename)
+        val file = File(Context.filesDir, Filename)
         val fileContent = file.readText(FileEncoding)
         val gSon = GsonBuilder().registerTypeAdapter(AlarmTimer::class.java, AlarmTimerSerializer.deserializer()).create()
         return gSon.fromJson<ArrayList<AlarmTimer>>(fileContent, AlarmTimer::class.java)
@@ -27,7 +22,7 @@ class FileSystemRepositoryKotlin(_context: Context, _filename: String) : IFileSy
     override fun SaveAlarmTimers(alarmTimers: ArrayList<AlarmTimer>) {
         val gSon = GsonBuilder().registerTypeAdapter(AlarmTimer::class.java, AlarmTimerSerializer.serializer()).create()
         val json = gSon.toJson(alarmTimers)
-        val file = File(Context?.filesDir, Filename)
+        val file = File(Context.filesDir, Filename)
         file.writeText(json, FileEncoding)
     }
 }
