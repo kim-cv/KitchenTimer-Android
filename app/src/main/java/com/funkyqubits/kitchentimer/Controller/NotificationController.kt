@@ -68,7 +68,7 @@ class NotificationController constructor(_context: Context) {
             )
 
             return Notification.Builder(context, channelForegroundId)
-                    .setContentTitle("Timers complete.")
+                    .setContentTitle("Timers Status.")
                     .setContentText(description)
                     .setSmallIcon(R.drawable.ic_timelapse_white_24dp)
                     .setContentIntent(pendingIntent)
