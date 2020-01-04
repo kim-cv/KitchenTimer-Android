@@ -21,7 +21,8 @@ class AlarmAudioService : Service() {
         ADD_RUNNING_TIMER,
         REMOVE_RUNNING_TIMER,
         TIMER_COMPLETE,
-        TIMERS_IN_FOCUS
+        TIMERS_IN_FOCUS,
+        STOP
     }
 
     companion object {
@@ -72,6 +73,14 @@ class AlarmAudioService : Service() {
             ContextCompat.startForegroundService(context, intent)
         }
 
+        fun stopService(context: Context) {
+            if (!isServiceRunning) return
+
+            val intent = createAlarmAudioServiceIntent(context)
+            intent.putExtra("action", SERVICE_ACTION.STOP)
+            ContextCompat.startForegroundService(context, intent)
+        }
+
         private fun createAlarmAudioServiceIntent(context: Context): Intent {
             return Intent(context, AlarmAudioService::class.java)
         }
@@ -86,6 +95,7 @@ class AlarmAudioService : Service() {
             SERVICE_ACTION.REMOVE_RUNNING_TIMER -> removeRunningTimer(intent)
             SERVICE_ACTION.TIMER_COMPLETE -> timerComplete(intent)
             SERVICE_ACTION.TIMERS_IN_FOCUS -> timersInFocus()
+            SERVICE_ACTION.STOP -> stop()
         }
 
         return START_NOT_STICKY
@@ -117,8 +127,6 @@ class AlarmAudioService : Service() {
         if (timerTitle.isNotEmpty()) {
             runningTimers.remove(timerTitle)
         }
-
-        if (runningTimers.count() <= 0) stop()
     }
 
     private fun timerComplete(intent: Intent) {
@@ -136,7 +144,6 @@ class AlarmAudioService : Service() {
         StopSound()
         completedTimers.clear()
         updateNotificationDescription()
-        if (runningTimers.count() <= 0) stop()
     }
 
     private fun stop() {

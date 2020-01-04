@@ -38,6 +38,18 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
         ObservableAlarmTimers.setValue(tmpAlarmTimers);
     }
 
+    public void AddObserverToAlarmTimers(IAlarmTimerObserver observer) {
+        for (AlarmTimer alarmTimer : TimerController.AlarmTimers) {
+            alarmTimer.RegisterObserver(observer);
+        }
+    }
+
+    public void RemoveObserverFromAlarmTimers(IAlarmTimerObserver observer) {
+        for (AlarmTimer alarmTimer : TimerController.AlarmTimers) {
+            alarmTimer.RemoveObserver(observer);
+        }
+    }
+
     public ArrayList<AlarmTimer> GetRunningTimers() {
         return TimerController.GetRunningTimers();
     }
@@ -48,6 +60,10 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
 
     public void SetTimerOffsets(ArrayList<AlarmTimerOffset> timerOffsets) {
         TimerController.SetTimerOffsets(timerOffsets);
+    }
+
+    public AlarmTimer FindTimerOnId(int id) {
+        return TimerController.FindTimerOnId(id);
     }
 
     public void StartTimer(int id) {

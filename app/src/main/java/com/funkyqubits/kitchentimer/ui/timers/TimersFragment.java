@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.funkyqubits.kitchentimer.Controller.AlarmManagerController;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
+import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerObserver;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsObserver;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepositoryKotlin;
 import com.funkyqubits.kitchentimer.Repositories.ISharedPreferencesRepository;
@@ -30,7 +31,7 @@ import com.funkyqubits.kitchentimer.services.AlarmAudioService;
 
 import java.util.ArrayList;
 
-public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObserver {
+public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObserver, IAlarmTimerObserver {
 
     private RecyclerView RecyclerView;
     private AlarmTimersAdapter RecyclerViewAdapter;
@@ -52,6 +53,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
         AlarmManagerController alarmManagerController = new AlarmManagerController(getContext());
         TimerController timerController = TimerController.Instance(repository);
         TimersViewModel.ProvideExtra(timerController, alarmManagerController);
+        TimersViewModel.AddObserverToAlarmTimers(this);
 
 
         RecyclerView = root.findViewById(R.id.recyclerview_alarmTimers);
@@ -105,7 +107,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     @Override
     public void OnStart(int alarmTimerID) {
         TimersViewModel.StartTimer(alarmTimerID);
-        AlarmAudioService.Companion.startService(getContext());
     }
 
     @Override
@@ -146,6 +147,36 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
+    }
+    //#endregion
+
+    //#region Events for each alarm timer
+    @Override
+    public void OnAlarmTimerStarted(int alarmTimerID) {
+        AlarmTimer alarmTimer = TimersViewModel.FindTimerOnId(alarmTimerID);
+        AlarmAudioService.Companion.addRunningTimer(getContext(), alarmTimer.Title);
+    }
+
+    @Override
+    public void OnAlarmTimerResumed(int alarmTimerID) {
+        AlarmTimer alarmTimer = TimersViewModel.FindTimerOnId(alarmTimerID);
+        AlarmAudioService.Companion.addRunningTimer(getContext(), alarmTimer.Title);
+    }
+
+    @Override
+    public void OnAlarmTimerPaused(int alarmTimerID) {
+        AlarmTimer alarmTimer = TimersViewModel.FindTimerOnId(alarmTimerID);
+        AlarmAudioService.Companion.removeRunningTimer(getContext(), alarmTimer.Title);
+    }
+
+    @Override
+    public void OnAlarmTimerReset(int alarmTimerID) {
+
+    }
+
+    @Override
+    public void OnAlarmTimerCompleted(int alarmTimerID) {
 
     }
     //#endregion
