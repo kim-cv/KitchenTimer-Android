@@ -117,7 +117,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     @Override
     public void OnReset(int alarmTimerID) {
         TimersViewModel.ResetTimer(alarmTimerID);
-        AlarmAudioService.Companion.timersInFocus(getContext());
     }
 
     @Override
@@ -172,7 +171,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
     @Override
     public void OnAlarmTimerReset(int alarmTimerID) {
-
+        AlarmAudioService.Companion.timersInFocus(getContext());
     }
 
     @Override
