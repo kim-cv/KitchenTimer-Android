@@ -121,7 +121,7 @@ public class BindingAdapters {
                 }
                 case RUNNING: {
                     button.setVisibility(View.VISIBLE);
-                    return button.getResources().getColor(R.color.colorPrimary);
+                    return button.getResources().getColor(R.color.timerPaused);
                 }
                 case COMPLETED: {
                     button.setVisibility(View.GONE);
@@ -217,22 +217,22 @@ public class BindingAdapters {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {
-                    color = view.getResources().getColor(R.color.colorSecondary);
+                    color = view.getResources().getColor(R.color.timerNotRunning);
                     leftBorderMutated.setColor(color);
                     break;
                 }
                 case PAUSED: {
-                    color = view.getResources().getColor(R.color.colorMain);
+                    color = view.getResources().getColor(R.color.timerPaused);
                     leftBorderMutated.setColor(color);
                     break;
                 }
                 case RUNNING: {
-                    color = view.getResources().getColor(R.color.colorDanger);
+                    color = view.getResources().getColor(R.color.timerRunning);
                     leftBorderMutated.setColor(color);
                     break;
                 }
                 case COMPLETED: {
-                    color = view.getResources().getColor(R.color.colorSuccess);
+                    color = view.getResources().getColor(R.color.timerComplete);
                     leftBorderMutated.setColor(color);
                     break;
                 }
