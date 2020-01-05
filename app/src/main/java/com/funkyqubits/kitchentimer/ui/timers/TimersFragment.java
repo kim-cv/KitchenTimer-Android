@@ -53,7 +53,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
         AlarmManagerController alarmManagerController = new AlarmManagerController(getContext());
         TimerController timerController = TimerController.Instance(repository);
         TimersViewModel.ProvideExtra(timerController, alarmManagerController);
-        TimersViewModel.AddObserverToAlarmTimers(this);
 
 
         RecyclerView = root.findViewById(R.id.recyclerview_alarmTimers);
@@ -65,7 +64,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
         RecyclerView.setLayoutManager(LayoutManager);
 
         RecyclerViewAdapter = new AlarmTimersAdapter(this);
-        RecyclerViewAdapter.RegisterObserver(this);
 
         // Listen for when timers are ready and then give them to the adapter
         TimersViewModel.ObservableAlarmTimers.observe(getViewLifecycleOwner(), new Observer<ArrayList<AlarmTimer>>() {
@@ -88,6 +86,9 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
         ArrayList<AlarmTimerOffset> timerOffsets = SharedPreferencesRepository.GetOffsets();
         TimersViewModel.SetTimerOffsets(timerOffsets);
         AlarmAudioService.Companion.timersInFocus(getContext());
+
+        RecyclerViewAdapter.RegisterObserver(this);
+        TimersViewModel.AddObserverToAlarmTimers(this);
     }
 
     @Override
@@ -101,6 +102,9 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
         // Save timers to storage
         TimersViewModel.SaveAllTimersToStorage();
+
+        RecyclerViewAdapter.RemoveObserver(this);
+        TimersViewModel.RemoveObserverFromAlarmTimers(this);
     }
 
     //#region Timer UI events
