@@ -191,6 +191,7 @@ class AlarmAudioService : Service() {
     private fun StopSound() {
         if (mediaPlayer?.isPlaying == true) {
             mediaPlayer?.stop()
+            mediaPlayer?.prepare()
         }
     }
 
