@@ -29,6 +29,8 @@ class AlarmAudioService : Service() {
         private var isServiceRunning: Boolean = false
 
         fun startService(context: Context) {
+            if (isServiceRunning) return
+
             val intent = createAlarmAudioServiceIntent(context)
             intent.putExtra("action", SERVICE_ACTION.START)
             ContextCompat.startForegroundService(context, intent)
@@ -98,19 +100,15 @@ class AlarmAudioService : Service() {
             SERVICE_ACTION.STOP -> stop()
         }
 
-        return START_NOT_STICKY
+        return START_STICKY
     }
 
     //#region Service Actions
     private fun start() {
-        if (isServiceRunning) {
-            return
-        }
-
         isServiceRunning = true
         InitNotificationController()
-        InitMediaPlayer()
         updateNotificationDescription()
+        InitMediaPlayer()
     }
 
     private fun addRunningTimer(intent: Intent) {

@@ -34,12 +34,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        AlarmAudioService.Companion.startService(this);
+        if (!isChangingConfigurations()) {
+            AlarmAudioService.Companion.startService(this);
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        AlarmAudioService.Companion.stopService(this);
+        if (!isChangingConfigurations()) {
+            AlarmAudioService.Companion.stopService(this);
+        }
     }
 }
