@@ -31,6 +31,7 @@ public class AlarmManagerController {
 
         intent.putExtra(paramIdKey, alarmTimer.ID);
         intent.putExtra(paramTitleKey, alarmTimer.Title);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(Context, alarmTimer.ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
