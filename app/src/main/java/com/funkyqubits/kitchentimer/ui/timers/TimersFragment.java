@@ -81,19 +81,24 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     @Override
     public void onResume() {
         super.onResume();
+
+        RecyclerViewAdapter.RegisterObserver(this);
+        TimersViewModel.AddObserverToAlarmTimers(this);
+
         // Load timer data from shared preferences
         SharedPreferencesRepository = new SharedPreferencesRepository(getContext());
         ArrayList<AlarmTimerOffset> timerOffsets = SharedPreferencesRepository.GetOffsets();
         TimersViewModel.SetTimerOffsets(timerOffsets);
-        AlarmAudioService.Companion.timersInFocus(getContext());
 
-        RecyclerViewAdapter.RegisterObserver(this);
-        TimersViewModel.AddObserverToAlarmTimers(this);
+        AlarmAudioService.Companion.timersInFocus(getContext());
     }
 
     @Override
     public void onPause() {
         super.onPause();
+
+        RecyclerViewAdapter.RemoveObserver(this);
+        TimersViewModel.RemoveObserverFromAlarmTimers(this);
 
         //Save running timers to shared preferences key/value storage
         ArrayList<AlarmTimer> runningAlarmTimers = TimersViewModel.GetRunningTimers();
@@ -102,9 +107,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
         // Save timers to storage
         TimersViewModel.SaveAllTimersToStorage();
-
-        RecyclerViewAdapter.RemoveObserver(this);
-        TimersViewModel.RemoveObserverFromAlarmTimers(this);
     }
 
     //#region Timer UI events
