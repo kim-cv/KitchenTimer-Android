@@ -31,7 +31,8 @@ public class BindingAdapters {
         Drawable buttonDrawable = button.getBackground();
         buttonDrawable = DrawableCompat.wrap(buttonDrawable);
         DrawableCompat.setTint(buttonDrawable, color);
-        button.setBackground(buttonDrawable);
+        //button.setBackground(buttonDrawable);
+        button.setBackgroundColor(color);
     }
 
     @BindingAdapter("errorText")
