@@ -60,21 +60,28 @@ class NotificationController constructor(_context: Context) {
     }
 
     public fun CreateForegroundNotification(description: String): Notification? {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationIntent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(
-                    context,
-                    0, notificationIntent, 0
-            )
+        val title = "Timers Status."
+        val notificationIntent = Intent(context, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+                context,
+                0, notificationIntent, 0
+        )
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return Notification.Builder(context, channelForegroundId)
-                    .setContentTitle("Timers Status.")
+                    .setContentTitle(title)
+                    .setContentText(description)
+                    .setSmallIcon(R.drawable.ic_timelapse_white_24dp)
+                    .setContentIntent(pendingIntent)
+                    .build()
+        } else {
+            return NotificationCompat.Builder(context, channelForegroundId)
+                    .setContentTitle(title)
                     .setContentText(description)
                     .setSmallIcon(R.drawable.ic_timelapse_white_24dp)
                     .setContentIntent(pendingIntent)
                     .build()
         }
-        return null
     }
 
     public fun ScheduleNotification(_id: Int, _title: String, _message: String) {
