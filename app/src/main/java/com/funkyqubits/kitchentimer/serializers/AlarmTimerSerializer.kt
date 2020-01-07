@@ -10,7 +10,7 @@ class AlarmTimerSerializer {
                 val jsonObject = JsonObject()
 
                 jsonObject.add("id", context.serialize(src.ID))
-                jsonObject.add("title", JsonParser.parseString(src.Title))
+                jsonObject.add("title", context.serialize(src.Title))
                 jsonObject.add("time", context.serialize(src.LengthInSeconds))
 
                 jsonObject
