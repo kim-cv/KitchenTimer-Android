@@ -31,17 +31,15 @@ class AlarmAudioService : Service() {
         fun startService(context: Context) {
             if (isServiceRunning) return
 
-            val intent = createAlarmAudioServiceIntent(context)
-            intent.putExtra("action", SERVICE_ACTION.START)
+            val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.START)
             ContextCompat.startForegroundService(context, intent)
         }
 
         fun addRunningTimer(context: Context, timerTitle: String) {
             if (!isServiceRunning) return
 
-            val intent = createAlarmAudioServiceIntent(context)
+            val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.ADD_RUNNING_TIMER)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
-            intent.putExtra("action", SERVICE_ACTION.ADD_RUNNING_TIMER)
             intent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, intent)
         }
@@ -49,9 +47,8 @@ class AlarmAudioService : Service() {
         fun removeRunningTimer(context: Context, timerTitle: String) {
             if (!isServiceRunning) return
 
-            val intent = createAlarmAudioServiceIntent(context)
+            val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.REMOVE_RUNNING_TIMER)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
-            intent.putExtra("action", SERVICE_ACTION.REMOVE_RUNNING_TIMER)
             intent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, intent)
         }
@@ -59,9 +56,8 @@ class AlarmAudioService : Service() {
         fun timerComplete(context: Context, timerTitle: String) {
             if (!isServiceRunning) return
 
-            val intent = createAlarmAudioServiceIntent(context)
+            val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.TIMER_COMPLETE)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
-            intent.putExtra("action", SERVICE_ACTION.TIMER_COMPLETE)
             intent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, intent)
         }
@@ -70,21 +66,21 @@ class AlarmAudioService : Service() {
             if (!isServiceRunning) return
 
             // This is called when we got the user attention, we can assume they know of completed timers and we can stop the alarm sound
-            val intent = createAlarmAudioServiceIntent(context)
-            intent.putExtra("action", SERVICE_ACTION.TIMERS_IN_FOCUS)
+            val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.TIMERS_IN_FOCUS)
             ContextCompat.startForegroundService(context, intent)
         }
 
         fun stopService(context: Context) {
             if (!isServiceRunning) return
 
-            val intent = createAlarmAudioServiceIntent(context)
-            intent.putExtra("action", SERVICE_ACTION.STOP)
+            val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.STOP)
             ContextCompat.startForegroundService(context, intent)
         }
 
-        private fun createAlarmAudioServiceIntent(context: Context): Intent {
-            return Intent(context, AlarmAudioService::class.java)
+        private fun createAlarmAudioServiceIntent(context: Context, action: SERVICE_ACTION): Intent {
+            val intent = Intent(context, AlarmAudioService::class.java)
+            intent.putExtra("action", action)
+            return intent
         }
     }
 
