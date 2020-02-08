@@ -7,6 +7,7 @@
     android:layout_marginBottom="0px">
 
     <data>
+
         <variable
             name="alarmTimer"
             type="com.funkyqubits.kitchentimer.models.AlarmTimer" />
@@ -61,12 +62,15 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_timer_start"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
+                android:stateListAnimator="@null"
                 app:cornerRadius="0dp"
                 app:icon="@drawable/ic_play_circle_outline_white_24dp"
                 app:iconGravity="textStart"
@@ -76,12 +80,15 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_timer_pause"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
+                android:stateListAnimator="@null"
                 app:cornerRadius="0dp"
                 app:icon="@drawable/ic_pause_circle_outline_white_24dp"
                 app:iconGravity="textStart"
@@ -91,12 +98,15 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_timer_reset"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
+                android:stateListAnimator="@null"
                 app:cornerRadius="0dp"
                 app:icon="@drawable/ic_replay_white_24dp"
                 app:iconGravity="textStart"
@@ -106,12 +116,15 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_timer_edit"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
+                android:stateListAnimator="@null"
                 app:cornerRadius="0dp"
                 app:icon="@drawable/ic_edit_white_24dp"
                 app:iconGravity="textStart"
@@ -121,12 +134,15 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_timer_delete"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
+                android:stateListAnimator="@null"
                 app:cornerRadius="0dp"
                 app:icon="@drawable/ic_delete_white_24dp"
                 app:iconGravity="textStart"
