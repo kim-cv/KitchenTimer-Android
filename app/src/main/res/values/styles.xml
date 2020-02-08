@@ -8,6 +8,7 @@
         <item name="bottomNavigationStyle">@style/AppBottomNavigation</item>
         <item name="android:fontFamily">@font/open_sans</item>
         <item name="textInputStyle">@style/AppTextField</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
     <style name="AppTextField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -22,13 +23,31 @@
         <item name="itemTextColor">@color/colorMainText</item>
     </style>
 
-    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <!-- Used for the buttons -->
-        <item name="colorAccent">@color/colorMain</item>
-        <!-- Used for the title and text -->
-        <item name="android:textColorPrimary">@color/colorMainText</item>
-        <!-- Used for the background -->
-        <item name="android:background">@color/colorMainBackground</item>
+    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/colorSecondBackground</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/TitleTextStyle</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
+    </style>
+
+    <style name="TitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/colorMainText</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="BodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textColor">@color/colorSecondText</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorMainText</item>
+    </style>
+
+    <style name="NeutralButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorSecondText</item>
     </style>
 
 </resources>
