@@ -28,6 +28,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/title_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
@@ -85,6 +86,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textView_hours"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight=".3"
@@ -94,6 +96,7 @@
                     android:textSize="@dimen/txt_second" />
 
                 <TextView
+                    android:id="@+id/textView_minutes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight=".3"
@@ -103,6 +106,7 @@
                     android:textSize="@dimen/txt_second" />
 
                 <TextView
+                    android:id="@+id/textView_seconds"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight=".3"
