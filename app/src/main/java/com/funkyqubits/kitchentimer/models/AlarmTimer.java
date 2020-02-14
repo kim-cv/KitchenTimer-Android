@@ -181,14 +181,18 @@ public class AlarmTimer implements IAlarmTimerSubject {
     }
 
     private void ConvertProgressToReadableTimer() {
+        long numberToFormat;
+
         if (AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
-            this.ReadableTimer.postValue(DateUtils.formatElapsedTime(0));
+            numberToFormat = 0;
         } else if (AlarmTimerState == ALARMTIMER_STATE.NOT_RUNNING) {
-            this.ReadableTimer.postValue(DateUtils.formatElapsedTime(LengthInSeconds));
+            numberToFormat = LengthInSeconds;
         } else {
-            long remainingSeconds = CalculateRemainingSeconds();
-            this.ReadableTimer.postValue(DateUtils.formatElapsedTime(remainingSeconds));
+            numberToFormat = CalculateRemainingSeconds();
         }
+
+        String readableTimer = DateUtils.formatElapsedTime(numberToFormat);
+        this.ReadableTimer.postValue(readableTimer);
     }
 
     //#region Events
