@@ -75,6 +75,7 @@
                 app:icon="@drawable/ic_play_circle_outline_white_24dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
+                app:rippleColor="@android:color/transparent"
                 app:strokeWidth="0dp"
                 app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
 
@@ -93,6 +94,7 @@
                 app:icon="@drawable/ic_pause_circle_outline_white_24dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
+                app:rippleColor="@android:color/transparent"
                 app:strokeWidth="0dp"
                 app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
 
@@ -111,6 +113,7 @@
                 app:icon="@drawable/ic_replay_white_24dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
+                app:rippleColor="@android:color/transparent"
                 app:strokeWidth="0dp"
                 app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
 
@@ -129,6 +132,7 @@
                 app:icon="@drawable/ic_edit_white_24dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
+                app:rippleColor="@android:color/transparent"
                 app:strokeWidth="0dp"
                 app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
 
@@ -147,6 +151,7 @@
                 app:icon="@drawable/ic_delete_white_24dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
+                app:rippleColor="@android:color/transparent"
                 app:strokeWidth="0dp"
                 app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
 
