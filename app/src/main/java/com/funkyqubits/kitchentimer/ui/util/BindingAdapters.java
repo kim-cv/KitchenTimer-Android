@@ -41,35 +41,40 @@ public class BindingAdapters {
 
     @BindingAdapter("timerStateButton")
     public static void timerStateButton(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
-        int color;
-        ColorStateList colorState;
+        int colorResource;
 
         switch (button.getId()) {
             case R.id.btn_timer_start: {
-                color = btn_start_state(button, alarmtimerState);
+                colorResource = btn_start_state(button, alarmtimerState);
                 break;
             }
             case R.id.btn_timer_pause: {
-                color = btn_pause_state(button, alarmtimerState);
+                colorResource = btn_pause_state(button, alarmtimerState);
                 break;
             }
             case R.id.btn_timer_reset: {
-                color = btn_reset_state(button, alarmtimerState);
+                colorResource = btn_reset_state(button, alarmtimerState);
                 break;
             }
             case R.id.btn_timer_edit: {
-                color = btn_edit_state(button, alarmtimerState);
+                colorResource = btn_edit_state(button, alarmtimerState);
                 break;
             }
             case R.id.btn_timer_delete: {
-                color = btn_delete_state(button, alarmtimerState);
+                colorResource = btn_delete_state(button, alarmtimerState);
                 break;
             }
             default: {
-                color = button.getResources().getColor(R.color.colorInactive);
+                colorResource = R.color.colorInactive;
             }
         }
-        colorState = ColorStateList.valueOf(color);
+
+        // Set button NOT clickable if color is inactive
+        button.setClickable(!(colorResource == R.color.colorInactive));
+
+        // Set color
+        int color = button.getResources().getColor(colorResource);
+        ColorStateList colorState = ColorStateList.valueOf(color);
         button.setIconTint(colorState);
     }
 
@@ -78,28 +83,28 @@ public class BindingAdapters {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {
                     button.setVisibility(View.VISIBLE);
-                    return button.getResources().getColor(R.color.colorSuccess);
+                    return R.color.colorSuccess;
                 }
                 case PAUSED: {
                     button.setVisibility(View.VISIBLE);
-                    return button.getResources().getColor(R.color.colorSuccess);
+                    return R.color.colorSuccess;
                 }
                 case RUNNING: {
                     button.setVisibility(View.GONE);
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 case COMPLETED: {
                     button.setVisibility(View.VISIBLE);
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 default: {
                     button.setVisibility(View.GONE);
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
             }
         }
         button.setVisibility(View.GONE);
-        return button.getResources().getColor(R.color.colorInactive);
+        return R.color.colorInactive;
     }
 
     private static int btn_pause_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
@@ -107,97 +112,97 @@ public class BindingAdapters {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {
                     button.setVisibility(View.GONE);
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 case PAUSED: {
                     button.setVisibility(View.GONE);
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 case RUNNING: {
                     button.setVisibility(View.VISIBLE);
-                    return button.getResources().getColor(R.color.timerPaused);
+                    return R.color.timerPaused;
                 }
                 case COMPLETED: {
                     button.setVisibility(View.GONE);
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 default: {
                     button.setVisibility(View.GONE);
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
             }
         }
         button.setVisibility(View.GONE);
-        return button.getResources().getColor(R.color.colorInactive);
+        return R.color.colorInactive;
     }
 
     private static int btn_reset_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 case PAUSED: {
-                    return button.getResources().getColor(R.color.colorPrimary);
+                    return R.color.colorPrimary;
                 }
                 case RUNNING: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 case COMPLETED: {
-                    return button.getResources().getColor(R.color.colorPrimary);
+                    return R.color.colorPrimary;
                 }
                 default: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
             }
         }
-        return button.getResources().getColor(R.color.colorInactive);
+        return R.color.colorInactive;
     }
 
     private static int btn_edit_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {
-                    return button.getResources().getColor(R.color.colorPrimary);
+                    return R.color.colorPrimary;
                 }
                 case PAUSED: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 case RUNNING: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 case COMPLETED: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 default: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
             }
         }
-        return button.getResources().getColor(R.color.colorInactive);
+        return R.color.colorInactive;
     }
 
     private static int btn_delete_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {
-                    return button.getResources().getColor(R.color.colorDanger);
+                    return R.color.colorDanger;
                 }
                 case PAUSED: {
-                    return button.getResources().getColor(R.color.colorDanger);
+                    return R.color.colorDanger;
                 }
                 case RUNNING: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 case COMPLETED: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
                 default: {
-                    return button.getResources().getColor(R.color.colorInactive);
+                    return R.color.colorInactive;
                 }
             }
         }
-        return button.getResources().getColor(R.color.colorInactive);
+        return R.color.colorInactive;
     }
 
     @BindingAdapter("timerStateLeftBorder")
