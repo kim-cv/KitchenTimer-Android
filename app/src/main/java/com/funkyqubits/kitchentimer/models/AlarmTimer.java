@@ -49,7 +49,8 @@ public class AlarmTimer implements IAlarmTimerSubject {
     }
 
     private void ctor(int _id, String _title, int _lengthInSeconds, ALARMTIMER_SAVE_TYPE _saveType) {
-        this.ObservableAlarmTimerState.setValue(ALARMTIMER_STATE.NOT_RUNNING);
+        //this.ObservableAlarmTimerState.setValue(ALARMTIMER_STATE.NOT_RUNNING);
+        this.ObservableAlarmTimerState.postValue(ALARMTIMER_STATE.NOT_RUNNING);
         this.AlarmTimerState = ALARMTIMER_STATE.NOT_RUNNING;
 
         this.ID = _id;
