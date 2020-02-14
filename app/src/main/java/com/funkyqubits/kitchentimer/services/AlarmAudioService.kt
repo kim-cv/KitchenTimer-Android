@@ -3,6 +3,7 @@ package com.funkyqubits.kitchentimer.services
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
@@ -101,6 +102,10 @@ class AlarmAudioService : Service() {
 
     //#region Service Actions
     private fun start() {
+        if (isServiceRunning) {
+            return
+        }
+
         isServiceRunning = true
         InitNotificationController()
         updateNotificationDescription()
@@ -160,7 +165,12 @@ class AlarmAudioService : Service() {
 
     private fun InitMediaPlayer() {
         if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.alarmnext)
+            val attr = AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                    .build()
+            mediaPlayer = MediaPlayer.create(this, R.raw.alarmnext, attr, 0)
             mediaPlayer?.isLooping = true
         }
     }
@@ -186,6 +196,9 @@ class AlarmAudioService : Service() {
         if (mediaPlayer?.isPlaying == true) {
             mediaPlayer?.stop()
             mediaPlayer?.prepare()
+            mediaPlayer?.pause()
+            //mediaPlayer?.stop()
+            //mediaPlayer?.prepare()
         }
     }
 
