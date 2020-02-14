@@ -185,7 +185,7 @@
                 <RadioButton
                     android:id="@+id/radioButton_saveOrSingle_save"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:buttonTint="@color/colorSecondary"
                     android:text="@string/addTimer_saveType_radioButton_save"
                     android:textColor="@color/colorSecondText"
@@ -194,7 +194,7 @@
                 <RadioButton
                     android:id="@+id/radioButton_saveOrSingle_single"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:buttonTint="@color/colorSecondary"
                     android:text="@string/addTimer_saveType_radioButton_single"
                     android:textColor="@color/colorSecondText"
