@@ -153,6 +153,7 @@ class AlarmAudioService : Service() {
         isServiceRunning = false
         runningTimers.clear()
         completedTimers.clear()
+        mediaPlayer?.pause()
         mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
@@ -194,8 +195,6 @@ class AlarmAudioService : Service() {
 
     private fun StopSound() {
         if (mediaPlayer?.isPlaying == true) {
-            mediaPlayer?.stop()
-            mediaPlayer?.prepare()
             mediaPlayer?.pause()
             //mediaPlayer?.stop()
             //mediaPlayer?.prepare()
