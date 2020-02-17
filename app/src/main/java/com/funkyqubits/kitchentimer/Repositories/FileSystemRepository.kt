@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder
 import java.io.File
 import java.util.*
 
-class FileSystemRepositoryKotlin(_context: Context, _filename: String) : IFileSystemRepository {
+class FileSystemRepository(_context: Context, _filename: String) : IFileSystemRepository {
     private var Context: Context = _context
     private var Filename: String = _filename
     private val FileEncoding = Charsets.UTF_8

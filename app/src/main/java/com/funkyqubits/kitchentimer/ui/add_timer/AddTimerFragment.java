@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCreatedUpdatedObserver;
 import com.funkyqubits.kitchentimer.R;
-import com.funkyqubits.kitchentimer.Repositories.FileSystemRepositoryKotlin;
+import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 import com.funkyqubits.kitchentimer.databinding.FragmentAddTimerBinding;
 
@@ -46,7 +46,7 @@ public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpda
         View root = binding.getRoot();
 
         // TODO: Figure out how to use dependency injection in Android MVVM
-        IFileSystemRepository repository = new FileSystemRepositoryKotlin(getContext(), getString(R.string.file_timers));
+        IFileSystemRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
         TimerController timerController = TimerController.Instance(repository);
         addTimerViewModel.ProvideExtra(timerController, parameter_timerId);
 
