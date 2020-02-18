@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -71,14 +72,18 @@ class NotificationController constructor(_context: Context) {
             return Notification.Builder(context, channelForegroundId)
                     .setContentTitle(title)
                     .setContentText(description)
-                    .setSmallIcon(R.drawable.ic_timelapse_white_24dp)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                            R.mipmap.ic_launcher))
                     .setContentIntent(pendingIntent)
                     .build()
         } else {
             return NotificationCompat.Builder(context, channelForegroundId)
                     .setContentTitle(title)
                     .setContentText(description)
-                    .setSmallIcon(R.drawable.ic_timelapse_white_24dp)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                            R.mipmap.ic_launcher))
                     .setContentIntent(pendingIntent)
                     .build()
         }
