@@ -192,6 +192,16 @@ public class AlarmTimer implements IAlarmTimerSubject {
             numberToFormat = CalculateRemainingSeconds();
         }
 
+        /*
+            numberToFormat might be lower than 0, force to 0
+            Issue : "AlarmManager.setExact(AlarmManager.RTC_WAKEUP" is not 100% exact.
+            Info  : If long timer is started and app was in idle mode, when timer is complete it might be some seconds later than it should and when
+            app is started again timers readable timer is being set with "SetTimerOffsets / SetTimerOffset" so the remaining time might show below  0.
+        */
+        if (numberToFormat < 0) {
+            numberToFormat = 0;
+        }
+
         String readableTimer = DateUtils.formatElapsedTime(numberToFormat);
         this.ReadableTimer.postValue(readableTimer);
     }
