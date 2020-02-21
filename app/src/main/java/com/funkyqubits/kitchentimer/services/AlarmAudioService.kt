@@ -11,10 +11,12 @@ import androidx.core.content.ContextCompat
 import com.funkyqubits.kitchentimer.Controller.NotificationController
 import com.funkyqubits.kitchentimer.R
 
+private class ServiceTimer(val timerId: Int, val timerTitle: String)
+
 class AlarmAudioService : Service() {
     private var mediaPlayer: MediaPlayer? = null
-    private val completedTimers = mutableListOf<String>()
-    private val runningTimers = mutableListOf<String>()
+    private val completedTimers = mutableListOf<ServiceTimer>()
+    private val runningTimers = mutableListOf<ServiceTimer>()
     private var notificationController: NotificationController? = null
 
     enum class SERVICE_ACTION {
@@ -36,29 +38,35 @@ class AlarmAudioService : Service() {
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun addRunningTimer(context: Context, timerTitle: String) {
+        fun addRunningTimer(context: Context, timerId: Int, timerTitle: String) {
             if (!isServiceRunning) return
 
             val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.ADD_RUNNING_TIMER)
+            val paramIdKey = context.getString(R.string.notifications_parameter_id_key)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
+            intent.putExtra(paramIdKey, timerId)
             intent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun removeRunningTimer(context: Context, timerTitle: String) {
+        fun removeRunningTimer(context: Context, timerId: Int, timerTitle: String) {
             if (!isServiceRunning) return
 
             val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.REMOVE_RUNNING_TIMER)
+            val paramIdKey = context.getString(R.string.notifications_parameter_id_key)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
+            intent.putExtra(paramIdKey, timerId)
             intent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun timerComplete(context: Context, timerTitle: String) {
+        fun timerComplete(context: Context, timerId: Int, timerTitle: String) {
             if (!isServiceRunning) return
 
             val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.TIMER_COMPLETE)
+            val paramIdKey = context.getString(R.string.notifications_parameter_id_key)
             val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
+            intent.putExtra(paramIdKey, timerId)
             intent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, intent)
         }
@@ -113,27 +121,33 @@ class AlarmAudioService : Service() {
     }
 
     private fun addRunningTimer(intent: Intent) {
+        val paramIdKey = getString(R.string.notifications_parameter_id_key)
         val paramTitleKey = getString(R.string.notifications_parameter_title_key)
+        val timerId = intent.getIntExtra(paramIdKey, 0)
         val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
         if (timerTitle.isNotEmpty()) {
-            runningTimers.add(timerTitle)
+            runningTimers.add(ServiceTimer(timerId, timerTitle))
         }
     }
 
     private fun removeRunningTimer(intent: Intent) {
+        val paramIdKey = getString(R.string.notifications_parameter_id_key)
         val paramTitleKey = getString(R.string.notifications_parameter_title_key)
+        val timerId = intent.getIntExtra(paramIdKey, 0)
         val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
         if (timerTitle.isNotEmpty()) {
-            runningTimers.remove(timerTitle)
+            runningTimers.removeAll{ it.timerId == timerId}
         }
     }
 
     private fun timerComplete(intent: Intent) {
+        val paramIdKey = getString(R.string.notifications_parameter_id_key)
         val paramTitleKey = getString(R.string.notifications_parameter_title_key)
+        val timerId = intent.getIntExtra(paramIdKey, 0)
         val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
         if (timerTitle.isNotEmpty()) {
-            completedTimers.add(timerTitle)
-            runningTimers.removeAll{ it == timerTitle }
+            completedTimers.add(ServiceTimer(timerId, timerTitle))
+            runningTimers.removeAll{ it.timerId == timerId}
         }
         StartSound()
         updateNotificationDescription()
