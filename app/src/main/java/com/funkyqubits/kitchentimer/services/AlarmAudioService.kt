@@ -183,7 +183,7 @@ class AlarmAudioService : Service() {
             val attr = AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                    //.setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
                     .build()
             mediaPlayer = MediaPlayer.create(this, R.raw.alarmnext, attr, 0)
             mediaPlayer?.isLooping = true
