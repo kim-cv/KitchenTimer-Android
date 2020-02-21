@@ -221,7 +221,7 @@ class AlarmAudioService : Service() {
                 "Multiple timers are completed."
             }
             completedTimers.count() == 1 -> {
-                "${completedTimers.first()} is completed."
+                "${completedTimers.first().timerTitle} is completed."
             }
             else -> {
                 "You will be notified when a timer is complete."
