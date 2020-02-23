@@ -38,7 +38,11 @@ public class AlarmManagerController {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.SECOND, secondsFromNow);
 
-        AlarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        //AlarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        long timerLengthInMilliseconds = System.currentTimeMillis() + (secondsFromNow * 1000);
+        AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(timerLengthInMilliseconds, pendingIntent);
+        // setAlarmClock activates alarm in normal, standby and doze mode
+        AlarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
     }
 
     public void CancelAlarm(int uniqueId) {
