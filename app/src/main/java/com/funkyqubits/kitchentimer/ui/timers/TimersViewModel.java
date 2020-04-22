@@ -50,10 +50,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
         }
     }
 
-    public ArrayList<AlarmTimer> GetRunningTimers() {
-        return TimerController.GetRunningTimers();
-    }
-
     public void SaveAllTimersToStorage() {
         TimerController.SaveAllTimersToStorage();
     }
