@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,8 +41,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        TimersViewModel =
-                ViewModelProviders.of(this).get(TimersViewModel.class);
+        TimersViewModel = new ViewModelProvider(this).get(TimersViewModel.class);
         View root = inflater.inflate(R.layout.fragment_timers, container, false);
 
 

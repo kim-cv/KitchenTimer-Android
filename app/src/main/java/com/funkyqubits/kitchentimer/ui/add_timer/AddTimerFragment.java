@@ -2,7 +2,7 @@ package com.funkyqubits.kitchentimer.ui.add_timer;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
@@ -37,7 +37,7 @@ public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpda
             parameter_timerId = getArguments().getInt(getString(R.string.parameter_timerId));
         }
 
-        addTimerViewModel = ViewModelProviders.of(this).get(AddTimerViewModel.class);
+        addTimerViewModel = new ViewModelProvider(this).get(AddTimerViewModel.class);
 
         // Inflate view and obtain an instance of the binding class.
         FragmentAddTimerBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_timer, container, false);
