@@ -25,7 +25,6 @@ import com.funkyqubits.kitchentimer.Repositories.SharedPreferencesRepository;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
-import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
 import com.funkyqubits.kitchentimer.services.AlarmAudioService;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -39,7 +38,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
 
     private TimersViewModel TimersViewModel;
-    private ISharedPreferencesRepository SharedPreferencesRepository;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,8 +48,9 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
         // TODO: Figure out how to use dependency injection in Android MVVM
         IFileSystemRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
+        ISharedPreferencesRepository timerOffsets = new SharedPreferencesRepository(getContext());
         AlarmManagerController alarmManagerController = new AlarmManagerController(getContext());
-        TimerController timerController = TimerController.Instance(repository);
+        TimerController timerController = TimerController.Instance(repository, timerOffsets);
         TimersViewModel.ProvideExtra(timerController, alarmManagerController);
 
 
@@ -85,11 +84,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
         RecyclerViewAdapter.RegisterObserver(this);
         TimersViewModel.AddObserverToAlarmTimers(this);
 
-        // Load timer data from shared preferences
-        SharedPreferencesRepository = new SharedPreferencesRepository(getContext());
-        ArrayList<AlarmTimerOffset> timerOffsets = SharedPreferencesRepository.GetOffsets();
-        TimersViewModel.SetTimerOffsets(timerOffsets);
-
         AlarmAudioService.Companion.timersInFocus(getContext());
     }
 
@@ -99,11 +93,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
         RecyclerViewAdapter.RemoveObserver(this);
         TimersViewModel.RemoveObserverFromAlarmTimers(this);
-
-        //Save running timers to shared preferences key/value storage
-        ArrayList<AlarmTimer> runningAlarmTimers = TimersViewModel.GetRunningTimers();
-        SharedPreferencesRepository.SaveRunningTimersStartOffset(runningAlarmTimers);
-        SharedPreferencesRepository.SaveRunningTimersPauseOffsets(runningAlarmTimers);
 
         // Save timers to storage
         TimersViewModel.SaveAllTimersToStorage();

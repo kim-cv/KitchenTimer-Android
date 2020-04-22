@@ -1,5 +1,6 @@
 package com.funkyqubits.kitchentimer.Controller;
 
+import com.funkyqubits.kitchentimer.Repositories.ISharedPreferencesRepository;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
 import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
@@ -9,19 +10,22 @@ import java.util.ArrayList;
 public final class TimerController {
 
     private static TimerController _instance;
-    public static TimerController Instance(IFileSystemRepository _timerRepository) {
+
+    public static TimerController Instance(IFileSystemRepository _timerRepository, ISharedPreferencesRepository _sharedPreferencesTimerOffsetsRepository) {
         if (_instance == null) {
-            _instance = new TimerController(_timerRepository);
+            _instance = new TimerController(_timerRepository, _sharedPreferencesTimerOffsetsRepository);
         }
         return _instance;
     }
 
     public ArrayList<AlarmTimer> AlarmTimers = new ArrayList<>();
     private IFileSystemRepository TimerRepository;
+    private ISharedPreferencesRepository SharedPreferencesTimerOffsetsRepository;
 
-    private TimerController(IFileSystemRepository _timerRepository) {
+    private TimerController(IFileSystemRepository _timerRepository, ISharedPreferencesRepository _sharedPreferencesTimerOffsetsRepository) {
         this.TimerRepository = _timerRepository;
-
+        this.SharedPreferencesTimerOffsetsRepository = _sharedPreferencesTimerOffsetsRepository;
+        SetTimerOffsets();
         /*
             Old app didn't use unique ID's so for backward compatibility loading old timers from storage receive -1 as id
             When timers are loaded this piece of code check for timers with -1 as id and assign a new unique id
@@ -38,10 +42,15 @@ public final class TimerController {
     }
 
     public void SaveAllTimersToStorage() {
+        ArrayList<AlarmTimer> runningAlarmTimers = GetRunningTimers();
+        SharedPreferencesTimerOffsetsRepository.SaveRunningTimersStartOffset(runningAlarmTimers);
+        SharedPreferencesTimerOffsetsRepository.SaveRunningTimersPauseOffsets(runningAlarmTimers);
+
         TimerRepository.SaveAlarmTimers(GetTimersThatShouldBeSaved());
     }
 
-    public void SetTimerOffsets(ArrayList<AlarmTimerOffset> timerOffsets) {
+    public void SetTimerOffsets() {
+        ArrayList<AlarmTimerOffset> timerOffsets = this.SharedPreferencesTimerOffsetsRepository.GetOffsets();
         for (AlarmTimerOffset offset : timerOffsets) {
             SetTimerOffset(offset);
         }
@@ -56,6 +65,7 @@ public final class TimerController {
         }
         return tmpAlarmTimers;
     }
+
     public ArrayList<AlarmTimer> GetTimersThatShouldBeSaved() {
         ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
         for (AlarmTimer alarmTimer : AlarmTimers) {

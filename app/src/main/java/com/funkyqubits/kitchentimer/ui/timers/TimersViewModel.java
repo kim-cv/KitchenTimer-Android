@@ -58,10 +58,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
         TimerController.SaveAllTimersToStorage();
     }
 
-    public void SetTimerOffsets(ArrayList<AlarmTimerOffset> timerOffsets) {
-        TimerController.SetTimerOffsets(timerOffsets);
-    }
-
     public AlarmTimer FindTimerOnId(int id) {
         return TimerController.FindTimerOnId(id);
     }
