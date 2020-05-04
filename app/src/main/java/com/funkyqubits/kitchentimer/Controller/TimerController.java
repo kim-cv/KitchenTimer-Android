@@ -33,8 +33,7 @@ public final class TimerController {
         ArrayList<AlarmTimer> tmpAlarmTimers = TimerRepository.LoadAlarmTimers();
         for (AlarmTimer tmpAlarmTimer : tmpAlarmTimers) {
             if (tmpAlarmTimer.ID == -1) {
-                int newRandomId = GenerateUniqueIntId();
-                tmpAlarmTimer.ID = newRandomId;
+                tmpAlarmTimer.ID = GenerateUniqueIntId();
             }
         }
 
