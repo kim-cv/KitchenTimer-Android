@@ -94,7 +94,12 @@ class AlarmAudioService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val action = intent?.getSerializableExtra("action") as SERVICE_ACTION
+        if (intent == null) {
+            start()
+            return START_STICKY
+        }
+
+        val action = intent.getSerializableExtra("action") as SERVICE_ACTION
 
         when (action) {
             SERVICE_ACTION.START -> start()
@@ -107,6 +112,20 @@ class AlarmAudioService : Service() {
 
         return START_STICKY
     }
+
+    override fun onDestroy() {
+        // The service is no longer used and is being destroyed
+        isServiceRunning = false
+        runningTimers.clear()
+        completedTimers.clear()
+        mediaPlayer?.pause()
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+        notificationController?.CancelNotification(1)
+        notificationController = null
+    }
+
 
     //#region Service Actions
     private fun start() {
@@ -164,15 +183,6 @@ class AlarmAudioService : Service() {
             return
         }
 
-        isServiceRunning = false
-        runningTimers.clear()
-        completedTimers.clear()
-        mediaPlayer?.pause()
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
-        notificationController?.CancelNotification(1)
-        notificationController = null
         stopSelf()
     }
     //#endregion
