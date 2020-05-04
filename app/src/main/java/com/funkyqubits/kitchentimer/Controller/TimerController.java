@@ -25,7 +25,7 @@ public final class TimerController {
     private TimerController(IFileSystemRepository _timerRepository, ISharedPreferencesRepository _sharedPreferencesTimerOffsetsRepository) {
         this.TimerRepository = _timerRepository;
         this.SharedPreferencesTimerOffsetsRepository = _sharedPreferencesTimerOffsetsRepository;
-        SetTimerOffsets();
+
         /*
             Old app didn't use unique ID's so for backward compatibility loading old timers from storage receive -1 as id
             When timers are loaded this piece of code check for timers with -1 as id and assign a new unique id
@@ -39,6 +39,8 @@ public final class TimerController {
         }
 
         AlarmTimers.addAll(tmpAlarmTimers);
+
+        SetTimerOffsets();
     }
 
     public void SaveAllTimersToStorage() {
@@ -49,14 +51,7 @@ public final class TimerController {
         TimerRepository.SaveAlarmTimers(GetTimersThatShouldBeSaved());
     }
 
-    public void SetTimerOffsets() {
-        ArrayList<AlarmTimerOffset> timerOffsets = this.SharedPreferencesTimerOffsetsRepository.GetOffsets();
-        for (AlarmTimerOffset offset : timerOffsets) {
-            SetTimerOffset(offset);
-        }
-    }
-
-    public ArrayList<AlarmTimer> GetRunningTimers() {
+    private ArrayList<AlarmTimer> GetRunningTimers() {
         ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
         for (AlarmTimer alarmTimer : AlarmTimers) {
             if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
@@ -66,7 +61,7 @@ public final class TimerController {
         return tmpAlarmTimers;
     }
 
-    public ArrayList<AlarmTimer> GetTimersThatShouldBeSaved() {
+    private ArrayList<AlarmTimer> GetTimersThatShouldBeSaved() {
         ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
         for (AlarmTimer alarmTimer : AlarmTimers) {
             if (alarmTimer.SaveType == AlarmTimer.ALARMTIMER_SAVE_TYPE.SAVE) {
@@ -91,7 +86,15 @@ public final class TimerController {
         alarmTimer.Update(title, lengthInSeconds, saveType);
     }
 
-    public void SetTimerOffset(AlarmTimerOffset offset) {
+    //#region Timer offsets
+    private void SetTimerOffsets() {
+        ArrayList<AlarmTimerOffset> timerOffsets = this.SharedPreferencesTimerOffsetsRepository.GetOffsets();
+        for (AlarmTimerOffset offset : timerOffsets) {
+            SetTimerOffset(offset);
+        }
+    }
+
+    private void SetTimerOffset(AlarmTimerOffset offset) {
         AlarmTimer alarmTimer = FindTimerOnId(offset.ID);
         if (alarmTimer == null) {
             return;
@@ -99,6 +102,7 @@ public final class TimerController {
 
         alarmTimer.SetOffset(offset);
     }
+    //#endregion Timer offsets
 
     public void StartTimer(int id) {
         AlarmTimer alarmTimer = FindTimerOnId(id);
