@@ -42,34 +42,8 @@ public final class TimerController {
         SetTimerOffsets();
     }
 
-    public void SaveAllTimersToStorage() {
-        ArrayList<AlarmTimer> runningAlarmTimers = GetRunningTimers();
-        RunningTimersDataRepository.SaveRunningTimersStartOffset(runningAlarmTimers);
-        RunningTimersDataRepository.SaveRunningTimersPauseOffsets(runningAlarmTimers);
 
-        TimerRepository.SaveAlarmTimers(GetTimersThatShouldBeSaved());
-    }
-
-    private ArrayList<AlarmTimer> GetRunningTimers() {
-        ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
-        for (AlarmTimer alarmTimer : AlarmTimers) {
-            if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
-                tmpAlarmTimers.add(alarmTimer);
-            }
-        }
-        return tmpAlarmTimers;
-    }
-
-    private ArrayList<AlarmTimer> GetTimersThatShouldBeSaved() {
-        ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
-        for (AlarmTimer alarmTimer : AlarmTimers) {
-            if (alarmTimer.SaveType == AlarmTimer.ALARMTIMER_SAVE_TYPE.SAVE) {
-                tmpAlarmTimers.add(alarmTimer);
-            }
-        }
-        return tmpAlarmTimers;
-    }
-
+    // #region CRUD
     public AlarmTimer CreateTimer(String title, int lengthInSeconds, AlarmTimer.ALARMTIMER_SAVE_TYPE saveType) {
         int newId = GenerateUniqueIntId();
         AlarmTimer alarmTimer = new AlarmTimer(newId, title, lengthInSeconds, saveType);
@@ -84,6 +58,7 @@ public final class TimerController {
         }
         alarmTimer.Update(title, lengthInSeconds, saveType);
     }
+    // #endregion
 
     //#region Timer offsets
     private void SetTimerOffsets() {
@@ -103,6 +78,7 @@ public final class TimerController {
     }
     //#endregion Timer offsets
 
+    // #region Manage single timer
     public void StartTimer(int id) {
         AlarmTimer alarmTimer = FindTimerOnId(id);
         if (alarmTimer == null) {
@@ -142,7 +118,9 @@ public final class TimerController {
 
         AlarmTimers.remove(alarmTimer);
     }
+    // #endregion
 
+    // #region Get timers
     public AlarmTimer FindTimerOnId(int id) {
         for (AlarmTimer alarmTimer : AlarmTimers) {
             if (alarmTimer.ID == id) {
@@ -150,6 +128,36 @@ public final class TimerController {
             }
         }
         return null;
+    }
+
+    public ArrayList<AlarmTimer> GetRunningTimers() {
+        ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
+        for (AlarmTimer alarmTimer : AlarmTimers) {
+            if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.RUNNING) {
+                tmpAlarmTimers.add(alarmTimer);
+            }
+        }
+        return tmpAlarmTimers;
+    }
+
+    private ArrayList<AlarmTimer> GetTimersThatShouldBeSaved() {
+        ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
+        for (AlarmTimer alarmTimer : AlarmTimers) {
+            if (alarmTimer.SaveType == AlarmTimer.ALARMTIMER_SAVE_TYPE.SAVE) {
+                tmpAlarmTimers.add(alarmTimer);
+            }
+        }
+        return tmpAlarmTimers;
+    }
+    // #endregion
+
+    // #region Util
+    public void SaveAllTimersToStorage() {
+        ArrayList<AlarmTimer> runningAlarmTimers = GetRunningTimers();
+        RunningTimersDataRepository.SaveRunningTimersStartOffset(runningAlarmTimers);
+        RunningTimersDataRepository.SaveRunningTimersPauseOffsets(runningAlarmTimers);
+
+        TimerRepository.SaveAlarmTimers(GetTimersThatShouldBeSaved());
     }
 
     private int GenerateUniqueIntId() {
@@ -162,4 +170,5 @@ public final class TimerController {
             return GenerateUniqueIntId();
         }
     }
+    // #endregion
 }
