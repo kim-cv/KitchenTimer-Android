@@ -67,20 +67,6 @@ public class SharedPreferencesRepository implements ISharedPreferencesRepository
         return runningTimersData;
     }
 
-
-    @Override
-    public void SaveRunningTimersStartOffset(ArrayList<AlarmTimer> runningAlarmTimers) {
-        // Get SharedPreferences Editor
-        SharedPreferences.Editor sharedPreferences_editor_runningTimers = GetSharedPreferencesEditor(Filename_RunningTimers);
-
-        // Commit timer data
-        sharedPreferences_editor_runningTimers.clear();
-        for (AlarmTimer alarmTimer : runningAlarmTimers) {
-            sharedPreferences_editor_runningTimers.putLong(Integer.toString(alarmTimer.ID), alarmTimer.WhenTimerStartedInSeconds);
-        }
-        sharedPreferences_editor_runningTimers.commit();
-    }
-
     @Override
     public Map<String, Long> LoadRunningTimersPauseOffsets() {
         Map<String, Long> runningTimersData = new HashMap<>();
@@ -98,6 +84,18 @@ public class SharedPreferencesRepository implements ISharedPreferencesRepository
         return runningTimersData;
     }
 
+    @Override
+    public void SaveRunningTimersStartOffset(ArrayList<AlarmTimer> runningAlarmTimers) {
+        // Get SharedPreferences Editor
+        SharedPreferences.Editor sharedPreferences_editor_runningTimers = GetSharedPreferencesEditor(Filename_RunningTimers);
+
+        // Commit timer data
+        sharedPreferences_editor_runningTimers.clear();
+        for (AlarmTimer alarmTimer : runningAlarmTimers) {
+            sharedPreferences_editor_runningTimers.putLong(Integer.toString(alarmTimer.ID), alarmTimer.WhenTimerStartedInSeconds);
+        }
+        sharedPreferences_editor_runningTimers.commit();
+    }
 
     @Override
     public void SaveRunningTimersPauseOffsets(ArrayList<AlarmTimer> runningAlarmTimers) {
