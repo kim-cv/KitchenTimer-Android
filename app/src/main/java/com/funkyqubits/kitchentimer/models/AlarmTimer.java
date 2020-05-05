@@ -70,7 +70,7 @@ public class AlarmTimer implements IAlarmTimerSubject {
         ConvertProgressToReadableTimer();
     }
 
-    public void SetOffset(AlarmTimerOffset offset) {
+    public void StartWithOffset(AlarmTimerOffset offset) {
         if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
