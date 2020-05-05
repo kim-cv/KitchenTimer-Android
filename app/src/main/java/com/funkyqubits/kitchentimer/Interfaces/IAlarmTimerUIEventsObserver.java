@@ -1,13 +1,13 @@
 package com.funkyqubits.kitchentimer.Interfaces;
 
 public interface IAlarmTimerUIEventsObserver {
-    void OnStart(int alarmTimerID);
+    void OnUIAlarmTimerStart(int alarmTimerID);
 
-    void OnPause(int alarmTimerID);
+    void OnUIAlarmTimerPause(int alarmTimerID);
 
-    void OnReset(int alarmTimerID);
+    void OnUIAlarmTimerReset(int alarmTimerID);
 
-    void OnEdit(int alarmTimerID);
+    void OnUIAlarmTimerEdit(int alarmTimerID);
 
-    void OnDelete(int alarmTimerID);
+    void OnUIAlarmTimerDelete(int alarmTimerID);
 }

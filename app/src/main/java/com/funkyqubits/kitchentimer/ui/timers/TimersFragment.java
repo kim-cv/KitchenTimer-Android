@@ -99,22 +99,22 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
     //#region Timer UI events
     @Override
-    public void OnStart(int alarmTimerID) {
+    public void OnUIAlarmTimerStart(int alarmTimerID) {
         TimersViewModel.StartTimer(alarmTimerID);
     }
 
     @Override
-    public void OnPause(int alarmTimerID) {
+    public void OnUIAlarmTimerPause(int alarmTimerID) {
         TimersViewModel.PauseTimer(alarmTimerID);
     }
 
     @Override
-    public void OnReset(int alarmTimerID) {
+    public void OnUIAlarmTimerReset(int alarmTimerID) {
         TimersViewModel.ResetTimer(alarmTimerID);
     }
 
     @Override
-    public void OnEdit(int alarmTimerID) {
+    public void OnUIAlarmTimerEdit(int alarmTimerID) {
         NavController navController = Navigation.findNavController(this.getView());
         Bundle bundle = new Bundle();
         bundle.putInt(getString(R.string.parameter_timerId), alarmTimerID);
@@ -122,7 +122,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     }
 
     @Override
-    public void OnDelete(final int alarmTimerID) {
+    public void OnUIAlarmTimerDelete(final int alarmTimerID) {
         new MaterialAlertDialogBuilder(getActivity())
                 .setTitle("Are you sure")
                 .setMessage("You want to remove this timer?")

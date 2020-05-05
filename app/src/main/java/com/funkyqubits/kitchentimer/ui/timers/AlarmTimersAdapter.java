@@ -91,31 +91,31 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
         btn_timer_start.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotifyAlarmTimerStart(alarmTimer.ID);
+                NotifyOfUIAlarmTimerStart(alarmTimer.ID);
             }
         });
         btn_timer_pause.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotifyAlarmTimerPause(alarmTimer.ID);
+                NotifyOfUIAlarmTimerPause(alarmTimer.ID);
             }
         });
         btn_timer_reset.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotifyAlarmTimerReset(alarmTimer.ID);
+                NotifyOfUIAlarmTimerReset(alarmTimer.ID);
             }
         });
         btn_timer_edit.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotifyAlarmTimerEdit(alarmTimer.ID);
+                NotifyOfUIAlarmTimerEdit(alarmTimer.ID);
             }
         });
         btn_timer_delete.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotifyAlarmTimerDelete(alarmTimer.ID);
+                NotifyOfUIAlarmTimerDelete(alarmTimer.ID);
             }
         });
     }
@@ -142,37 +142,37 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     }
 
     @Override
-    public void NotifyAlarmTimerStart(int alarmTimerID) {
+    public void NotifyOfUIAlarmTimerStart(int alarmTimerID) {
         for (IAlarmTimerUIEventsObserver observer : AlarmTimerUIEventsObservers) {
-            observer.OnStart(alarmTimerID);
+            observer.OnUIAlarmTimerStart(alarmTimerID);
         }
     }
 
     @Override
-    public void NotifyAlarmTimerPause(int alarmTimerID) {
+    public void NotifyOfUIAlarmTimerPause(int alarmTimerID) {
         for (IAlarmTimerUIEventsObserver observer : AlarmTimerUIEventsObservers) {
-            observer.OnPause(alarmTimerID);
+            observer.OnUIAlarmTimerPause(alarmTimerID);
         }
     }
 
     @Override
-    public void NotifyAlarmTimerReset(int alarmTimerID) {
+    public void NotifyOfUIAlarmTimerReset(int alarmTimerID) {
         for (IAlarmTimerUIEventsObserver observer : AlarmTimerUIEventsObservers) {
-            observer.OnReset(alarmTimerID);
+            observer.OnUIAlarmTimerReset(alarmTimerID);
         }
     }
 
     @Override
-    public void NotifyAlarmTimerEdit(int alarmTimerID) {
+    public void NotifyOfUIAlarmTimerEdit(int alarmTimerID) {
         for (IAlarmTimerUIEventsObserver observer : AlarmTimerUIEventsObservers) {
-            observer.OnEdit(alarmTimerID);
+            observer.OnUIAlarmTimerEdit(alarmTimerID);
         }
     }
 
     @Override
-    public void NotifyAlarmTimerDelete(int alarmTimerID) {
+    public void NotifyOfUIAlarmTimerDelete(int alarmTimerID) {
         for (IAlarmTimerUIEventsObserver observer : AlarmTimerUIEventsObservers) {
-            observer.OnDelete(alarmTimerID);
+            observer.OnUIAlarmTimerDelete(alarmTimerID);
         }
     }
     //#endregion

@@ -5,13 +5,13 @@ public interface IAlarmTimerUIEventsSubject {
 
     void RemoveObserver(IAlarmTimerUIEventsObserver observer);
 
-    void NotifyAlarmTimerStart(int alarmTimerID);
+    void NotifyOfUIAlarmTimerStart(int alarmTimerID);
 
-    void NotifyAlarmTimerPause(int alarmTimerID);
+    void NotifyOfUIAlarmTimerPause(int alarmTimerID);
 
-    void NotifyAlarmTimerReset(int alarmTimerID);
+    void NotifyOfUIAlarmTimerReset(int alarmTimerID);
 
-    void NotifyAlarmTimerEdit(int alarmTimerID);
+    void NotifyOfUIAlarmTimerEdit(int alarmTimerID);
 
-    void NotifyAlarmTimerDelete(int alarmTimerID);
+    void NotifyOfUIAlarmTimerDelete(int alarmTimerID);
 }
