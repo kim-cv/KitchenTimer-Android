@@ -20,11 +20,11 @@ public final class TimerController {
 
     public ArrayList<AlarmTimer> AlarmTimers = new ArrayList<>();
     private IFileSystemRepository TimerRepository;
-    private ISharedPreferencesRepository SharedPreferencesTimerOffsetsRepository;
+    private ISharedPreferencesRepository RunningTimersDataRepository;
 
     private TimerController(IFileSystemRepository _timerRepository, ISharedPreferencesRepository _sharedPreferencesTimerOffsetsRepository) {
         this.TimerRepository = _timerRepository;
-        this.SharedPreferencesTimerOffsetsRepository = _sharedPreferencesTimerOffsetsRepository;
+        this.RunningTimersDataRepository = _sharedPreferencesTimerOffsetsRepository;
 
         /*
             Old app didn't use unique ID's so for backward compatibility loading old timers from storage receive -1 as id
@@ -44,8 +44,8 @@ public final class TimerController {
 
     public void SaveAllTimersToStorage() {
         ArrayList<AlarmTimer> runningAlarmTimers = GetRunningTimers();
-        SharedPreferencesTimerOffsetsRepository.SaveRunningTimersStartOffset(runningAlarmTimers);
-        SharedPreferencesTimerOffsetsRepository.SaveRunningTimersPauseOffsets(runningAlarmTimers);
+        RunningTimersDataRepository.SaveRunningTimersStartOffset(runningAlarmTimers);
+        RunningTimersDataRepository.SaveRunningTimersPauseOffsets(runningAlarmTimers);
 
         TimerRepository.SaveAlarmTimers(GetTimersThatShouldBeSaved());
     }
@@ -87,7 +87,7 @@ public final class TimerController {
 
     //#region Timer offsets
     private void SetTimerOffsets() {
-        ArrayList<AlarmTimerOffset> timerOffsets = this.SharedPreferencesTimerOffsetsRepository.GetOffsets();
+        ArrayList<AlarmTimerOffset> timerOffsets = this.RunningTimersDataRepository.GetOffsets();
         for (AlarmTimerOffset offset : timerOffsets) {
             SetTimerOffset(offset);
         }
