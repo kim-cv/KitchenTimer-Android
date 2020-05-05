@@ -140,6 +140,16 @@ public final class TimerController {
         return tmpAlarmTimers;
     }
 
+    public ArrayList<AlarmTimer> GetCompleteTimers() {
+        ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
+        for (AlarmTimer alarmTimer : AlarmTimers) {
+            if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.COMPLETED) {
+                tmpAlarmTimers.add(alarmTimer);
+            }
+        }
+        return tmpAlarmTimers;
+    }
+
     private ArrayList<AlarmTimer> GetTimersThatShouldBeSaved() {
         ArrayList<AlarmTimer> tmpAlarmTimers = new ArrayList<>();
         for (AlarmTimer alarmTimer : AlarmTimers) {
