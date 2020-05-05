@@ -99,7 +99,7 @@ public final class TimerController {
             return;
         }
 
-        alarmTimer.SetOffset(offset);
+        alarmTimer.StartWithOffset(offset);
     }
     //#endregion Timer offsets
 
