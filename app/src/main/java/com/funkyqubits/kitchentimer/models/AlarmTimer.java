@@ -142,6 +142,17 @@ public class AlarmTimer implements IAlarmTimerSubject {
         NotifyAlarmTimerReset(ID);
     }
 
+    public void SetTimerCompleted() {
+        // Prevent double event firing
+        if (AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
+            return;
+        }
+
+        ObservableAlarmTimerState.postValue(ALARMTIMER_STATE.COMPLETED);
+        AlarmTimerState = ALARMTIMER_STATE.COMPLETED;
+        NotifyAlarmTimerCompleted(ID);
+    }
+
     public int GetNowSeconds() {
         return (int) Math.floor(Calendar.getInstance().getTimeInMillis() / 1000);
     }
@@ -163,9 +174,7 @@ public class AlarmTimer implements IAlarmTimerSubject {
         long timerProgress = CalculateTimerProgress();
 
         if (timerProgress >= LengthInSeconds) {
-            ObservableAlarmTimerState.postValue(ALARMTIMER_STATE.COMPLETED);
-            AlarmTimerState = ALARMTIMER_STATE.COMPLETED;
-            NotifyAlarmTimerCompleted(ID);
+            SetTimerCompleted();
         }
 
         return timerProgress >= LengthInSeconds;
