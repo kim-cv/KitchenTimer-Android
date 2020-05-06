@@ -142,32 +142,14 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     //#region Events for each alarm timer
     @Override
     public void OnAlarmTimerStarted(int alarmTimerID) {
-        AlarmTimer alarmTimer = TimersViewModel.FindTimerOnId(alarmTimerID);
-        if (alarmTimer == null) {
-            return;
-        }
-
-        AlarmAudioService.Companion.addRunningTimer(getContext(), alarmTimer.ID, alarmTimer.Title);
     }
 
     @Override
     public void OnAlarmTimerResumed(int alarmTimerID) {
-        AlarmTimer alarmTimer = TimersViewModel.FindTimerOnId(alarmTimerID);
-        if (alarmTimer == null) {
-            return;
-        }
-
-        AlarmAudioService.Companion.addRunningTimer(getContext(), alarmTimer.ID, alarmTimer.Title);
     }
 
     @Override
     public void OnAlarmTimerPaused(int alarmTimerID) {
-        AlarmTimer alarmTimer = TimersViewModel.FindTimerOnId(alarmTimerID);
-        if (alarmTimer == null) {
-            return;
-        }
-
-        AlarmAudioService.Companion.removeRunningTimer(getContext(), alarmTimer.ID, alarmTimer.Title);
     }
 
     @Override
