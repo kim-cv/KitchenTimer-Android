@@ -18,6 +18,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
     public MutableLiveData<ArrayList<AlarmTimer>> ObservableAlarmTimers = new MutableLiveData<>();
     private TimerController TimerController;
     private AlarmManagerController AlarmManagerController;
+    private Timer Timer = new Timer();
 
     public TimersViewModel() {
     }
@@ -87,9 +88,20 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
     }
 
     private void InitTimer() {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        /*
+        Very bad code!
+        Problem: Timer was running on separate background thread even after viewmodel was destroyed, if viewmodel was recreated another background timer thread
+        would also be started, meaning it would leak background threads until the app was stopped.
+        First solution: Cleanup timer on overridden method onCleared but that method is not always called :(
+        Temporary quick fix: If timer background thread is running, stop it and recreate a new timer. Bad but works :)
+         */
+        if (Timer != null) {
+            Timer.cancel();
+            Timer = null;
+        }
 
+        Timer = new Timer();
+        Timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 for (AlarmTimer alarmTimer : TimerController.AlarmTimers) {
