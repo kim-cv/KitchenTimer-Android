@@ -118,6 +118,16 @@ public final class TimerController {
 
         AlarmTimers.remove(alarmTimer);
     }
+
+    //Broadcast event notifying AlarmAudioService that a timer is complete which uses this method to set a timer to complete state.
+    public void SetTimerComplete(int id) {
+        AlarmTimer alarmTimer = FindTimerOnId(id);
+        if (alarmTimer == null) {
+            return;
+        }
+
+        alarmTimer.SetTimerCompleted();
+    }
     // #endregion
 
     // #region Get timers
