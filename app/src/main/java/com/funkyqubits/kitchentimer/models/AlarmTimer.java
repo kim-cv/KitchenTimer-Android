@@ -172,11 +172,11 @@ public class AlarmTimer implements IAlarmTimerSubject {
 
     private boolean CalculateIfTimerComplete() {
         long timerProgress = CalculateTimerProgress();
-
+/*
         if (timerProgress >= LengthInSeconds) {
             SetTimerCompleted();
         }
-
+*/
         return timerProgress >= LengthInSeconds;
     }
 
