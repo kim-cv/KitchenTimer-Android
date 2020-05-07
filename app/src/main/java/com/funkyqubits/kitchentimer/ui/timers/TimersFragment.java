@@ -142,24 +142,29 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     //#region Events for each alarm timer
     @Override
     public void OnAlarmTimerStarted(int alarmTimerID) {
+        RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
 
     @Override
     public void OnAlarmTimerResumed(int alarmTimerID) {
+        RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
 
     @Override
     public void OnAlarmTimerPaused(int alarmTimerID) {
+        RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
 
     @Override
     public void OnAlarmTimerReset(int alarmTimerID) {
         AlarmAudioService.Companion.timersInFocus(getContext());
+        RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
 
     @Override
     public void OnAlarmTimerCompleted(int alarmTimerID) {
 
+        RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
     //#endregion
 }
