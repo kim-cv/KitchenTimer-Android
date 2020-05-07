@@ -10,6 +10,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
+import androidx.recyclerview.widget.SortedListAdapterCallback;
 
 import com.funkyqubits.kitchentimer.BR;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsObserver;
@@ -22,8 +24,17 @@ import java.util.List;
 
 public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.ViewHolder> implements IAlarmTimerUIEventsSubject {
     private final List<IAlarmTimerUIEventsObserver> AlarmTimerUIEventsObservers = new ArrayList<>();
-    private ArrayList<AlarmTimer> Dataset_alarmTimers;
+    private SortedList<AlarmTimer> Sorted_Dataset_alarmTimers;
     private Fragment ContainingFragment;
+
+    public void UpdateItemPosition(int alarmTimerID) {
+        for (int i = 0; i <= Sorted_Dataset_alarmTimers.size(); i++) {
+            if (Sorted_Dataset_alarmTimers.get(i).ID == alarmTimerID) {
+                Sorted_Dataset_alarmTimers.recalculatePositionOfItemAt(i);
+                break;
+            }
+        }
+    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -45,10 +56,32 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     // Provide a suitable constructor (depends on the kind of dataset)
     public AlarmTimersAdapter(Fragment _fragment) {
         ContainingFragment = _fragment;
+
+        this.Sorted_Dataset_alarmTimers = new SortedList<>(AlarmTimer.class, new SortedListAdapterCallback<AlarmTimer>(this) {
+            @Override
+            public int compare(AlarmTimer item1, AlarmTimer item2) {
+                return item1.AlarmTimerState.priority - item2.AlarmTimerState.priority;
+                /*
+                    0: if (x==y)
+                    -1: if (x < y)
+                    1: if (x > y)
+                */
+            }
+
+            @Override
+            public boolean areContentsTheSame(AlarmTimer oldItem, AlarmTimer newItem) {
+                return oldItem.equals(newItem);
+            }
+
+            @Override
+            public boolean areItemsTheSame(AlarmTimer item1, AlarmTimer item2) {
+                return item1 == item2;
+            }
+        });
     }
 
     public void SetData(ArrayList<AlarmTimer> alarmTimers) {
-        Dataset_alarmTimers = alarmTimers;
+        Sorted_Dataset_alarmTimers.addAll(alarmTimers);
     }
 
     // Create new views (invoked by the layout manager)
@@ -67,7 +100,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        final AlarmTimer alarmTimer = Dataset_alarmTimers.get(position);
+        final AlarmTimer alarmTimer = Sorted_Dataset_alarmTimers.get(position);
 
         // Bind model to view
         holder.binding.setVariable(BR.alarmTimer, alarmTimer);
@@ -123,7 +156,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return Dataset_alarmTimers.size();
+        return Sorted_Dataset_alarmTimers.size();
     }
 
     //#region Subject/Observer
