@@ -163,8 +163,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
     @Override
     public void OnAlarmTimerCompleted(int alarmTimerID) {
-
-        RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
     //#endregion
 }

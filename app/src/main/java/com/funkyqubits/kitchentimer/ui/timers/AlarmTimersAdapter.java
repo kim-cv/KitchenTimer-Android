@@ -81,6 +81,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     }
 
     public void SetData(ArrayList<AlarmTimer> alarmTimers) {
+        Sorted_Dataset_alarmTimers.clear();
         Sorted_Dataset_alarmTimers.addAll(alarmTimers);
     }
 
