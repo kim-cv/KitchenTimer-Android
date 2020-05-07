@@ -28,11 +28,17 @@ public class AlarmTimer implements IAlarmTimerSubject {
     public long ResumeSecondsOffset;
     private long StartedPause;
 
-    public enum ALARMTIMER_STATE {
-        RUNNING,
-        NOT_RUNNING,
-        PAUSED,
-        COMPLETED
+    public enum ALARMTIMER_STATE implements Comparable<ALARMTIMER_STATE> {
+        COMPLETED(1),
+        RUNNING(2),
+        PAUSED(3),
+        NOT_RUNNING(4);
+
+        public final int priority;
+
+        private ALARMTIMER_STATE(int priority) {
+            this.priority = priority;
+        }
     }
 
     public enum ALARMTIMER_SAVE_TYPE {
