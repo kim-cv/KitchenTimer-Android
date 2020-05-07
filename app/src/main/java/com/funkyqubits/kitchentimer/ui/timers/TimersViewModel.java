@@ -113,6 +113,13 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
         }, 0, 1000);//Update every second
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        Timer.cancel();
+        Timer = null;
+    }
+
     //#region Events for each alarm timer
     @Override
     public void OnAlarmTimerStarted(int alarmTimerID) {
