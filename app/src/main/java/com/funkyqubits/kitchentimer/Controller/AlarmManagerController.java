@@ -27,10 +27,8 @@ public class AlarmManagerController {
         Intent intent = new Intent(Context, TimerCompleteReceiver.class);
 
         String paramIdKey = Context.getString(R.string.notifications_parameter_id_key);
-        String paramTitleKey = Context.getString(R.string.notifications_parameter_title_key);
 
         intent.putExtra(paramIdKey, alarmTimer.ID);
-        intent.putExtra(paramTitleKey, alarmTimer.Title);
         intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(Context, alarmTimer.ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);

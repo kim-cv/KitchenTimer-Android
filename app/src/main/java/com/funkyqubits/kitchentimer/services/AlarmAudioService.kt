@@ -39,14 +39,12 @@ class AlarmAudioService : Service() {
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun timerComplete(context: Context, timerId: Int, timerTitle: String) {
+        fun timerComplete(context: Context, timerId: Int) {
             if (!isServiceRunning) return
 
             val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.TIMER_COMPLETE)
             val paramIdKey = context.getString(R.string.notifications_parameter_id_key)
-            val paramTitleKey = context.getString(R.string.notifications_parameter_title_key)
             intent.putExtra(paramIdKey, timerId)
-            intent.putExtra(paramTitleKey, timerTitle)
             ContextCompat.startForegroundService(context, intent)
         }
 
@@ -120,12 +118,8 @@ class AlarmAudioService : Service() {
 
     private fun timerComplete(intent: Intent) {
         val paramIdKey = getString(R.string.notifications_parameter_id_key)
-        val paramTitleKey = getString(R.string.notifications_parameter_title_key)
         val timerId = intent.getIntExtra(paramIdKey, 0)
-        val timerTitle = intent.getStringExtra(paramTitleKey) ?: ""
-        if (timerTitle.isNotEmpty()) {
-            timerController.SetTimerComplete(timerId)
-        }
+        timerController.SetTimerComplete(timerId)
         StartSound()
         updateNotificationDescription()
     }

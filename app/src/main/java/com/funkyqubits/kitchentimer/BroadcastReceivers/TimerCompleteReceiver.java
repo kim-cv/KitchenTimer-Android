@@ -15,11 +15,9 @@ public class TimerCompleteReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // Retrieve intent data
         String paramIdKey = context.getString(R.string.notifications_parameter_id_key);
-        String paramTitleKey = context.getString(R.string.notifications_parameter_title_key);
 
         int id = intent.getIntExtra(paramIdKey, 0);
-        String title = intent.getStringExtra(paramTitleKey);
 
-        AlarmAudioService.Companion.timerComplete(context, id, title);
+        AlarmAudioService.Companion.timerComplete(context, id);
     }
 }
