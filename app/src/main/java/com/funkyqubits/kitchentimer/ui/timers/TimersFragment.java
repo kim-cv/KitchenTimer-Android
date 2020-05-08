@@ -34,7 +34,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
     private RecyclerView RecyclerView;
     private AlarmTimersAdapter RecyclerViewAdapter;
-    private RecyclerView.LayoutManager LayoutManager;
 
 
     private TimersViewModel TimersViewModel;
@@ -46,7 +45,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
 
         // TODO: Figure out how to use dependency injection in Android MVVM
-        IFileSystemRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
+        IFileSystemRepository repository = new FileSystemRepository(requireContext(), getString(R.string.file_timers));
         ISharedPreferencesRepository timerOffsets = new SharedPreferencesRepository(getContext());
         AlarmManagerController alarmManagerController = new AlarmManagerController(getContext());
         TimerController timerController = TimerController.Instance(repository, timerOffsets);
@@ -58,7 +57,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
         // in content do not change the layout size of the RecyclerView
         RecyclerView.setHasFixedSize(true);
         // use a linear layout manager
-        LayoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager LayoutManager = new LinearLayoutManager(getContext());
         RecyclerView.setLayoutManager(LayoutManager);
 
         RecyclerViewAdapter = new AlarmTimersAdapter(this);
@@ -83,7 +82,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
         RecyclerViewAdapter.RegisterObserver(this);
         TimersViewModel.AddObserverToAlarmTimers(this);
 
-        AlarmAudioService.Companion.timersInFocus(getContext());
+        AlarmAudioService.Companion.timersInFocus(requireContext());
     }
 
     @Override
@@ -157,7 +156,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
     @Override
     public void OnAlarmTimerReset(int alarmTimerID) {
-        AlarmAudioService.Companion.timersInFocus(getContext());
+        AlarmAudioService.Companion.timersInFocus(requireContext());
         RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
 

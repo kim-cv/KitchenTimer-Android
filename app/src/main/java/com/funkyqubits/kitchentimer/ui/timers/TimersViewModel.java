@@ -7,7 +7,6 @@ import com.funkyqubits.kitchentimer.Controller.AlarmManagerController;
 import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerObserver;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
-import com.funkyqubits.kitchentimer.models.AlarmTimerOffset;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -20,7 +19,12 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
     private AlarmManagerController AlarmManagerController;
     private Timer Timer = new Timer();
 
-    public TimersViewModel() {
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        Log.d("DebugService", "TimersViewModel onCleared:");
+        Timer.cancel();
+        Timer = null;
     }
 
     // TODO: Figure out how to use dependency injection in Android MVVM
@@ -39,6 +43,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
         ObservableAlarmTimers.setValue(tmpAlarmTimers);
     }
 
+    //#region Observing
     public void AddObserverToAlarmTimers(IAlarmTimerObserver observer) {
         for (AlarmTimer alarmTimer : TimerController.AlarmTimers) {
             alarmTimer.RegisterObserver(observer);
@@ -50,14 +55,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
             alarmTimer.RemoveObserver(observer);
         }
     }
-
-    public void SaveAllTimersToStorage() {
-        TimerController.SaveAllTimersToStorage();
-    }
-
-    public AlarmTimer FindTimerOnId(int id) {
-        return TimerController.FindTimerOnId(id);
-    }
+    //#endregion
 
     public void StartTimer(int id) {
         TimerController.StartTimer(id);
@@ -87,6 +85,10 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
         ObservableAlarmTimers.setValue(TimerController.AlarmTimers);
     }
 
+    public void SaveAllTimersToStorage() {
+        TimerController.SaveAllTimersToStorage();
+    }
+
     private void InitTimer() {
         /*
         Very bad code!
@@ -113,12 +115,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
         }, 0, 1000);//Update every second
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        Timer.cancel();
-        Timer = null;
-    }
 
     //#region Events for each alarm timer
     @Override
@@ -163,10 +159,6 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
 
     @Override
     public void OnAlarmTimerCompleted(int alarmTimerID) {
-        AlarmTimer alarmTimer = TimerController.FindTimerOnId(alarmTimerID);
-        if (alarmTimer == null) {
-            return;
-        }
     }
     //#endregion
 }
