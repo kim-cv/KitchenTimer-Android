@@ -60,7 +60,15 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
         this.Sorted_Dataset_alarmTimers = new SortedList<>(AlarmTimer.class, new SortedListAdapterCallback<AlarmTimer>(this) {
             @Override
             public int compare(AlarmTimer item1, AlarmTimer item2) {
-                return item1.AlarmTimerState.priority - item2.AlarmTimerState.priority;
+                // Either sort by state priority or alphabetically
+                int result = item1.AlarmTimerState.priority - item2.AlarmTimerState.priority;
+
+                // If their priority is equal, sort by title
+                if (result == 0) {
+                    return item1.Title.compareToIgnoreCase(item2.Title);
+                }
+
+                return result;
                 /*
                     0: if (x==y)
                     -1: if (x < y)
