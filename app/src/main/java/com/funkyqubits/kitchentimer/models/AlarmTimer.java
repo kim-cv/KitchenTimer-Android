@@ -1,6 +1,7 @@
 package com.funkyqubits.kitchentimer.models;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -77,13 +78,16 @@ public class AlarmTimer implements IAlarmTimerSubject {
     }
 
     public void StartWithOffset(AlarmTimerOffset offset) {
+        Log.d("DebugService", "AlarmTimer: SetOffset 1");
         if (AlarmTimerState == ALARMTIMER_STATE.RUNNING || AlarmTimerState == ALARMTIMER_STATE.COMPLETED) {
             return;
         }
 
+        Log.d("DebugService", "AlarmTimer: SetOffset 2");
         WhenTimerStartedInSeconds = offset.SecondsStartOffset;
         ResumeSecondsOffset = offset.SecondsPauseOffset;
         if (!CalculateIfTimerComplete()) {
+            Log.d("DebugService", "AlarmTimer: SetOffset 3");
             StartTimer();
         }
         ConvertProgressToReadableTimer();
@@ -99,7 +103,9 @@ public class AlarmTimer implements IAlarmTimerSubject {
     }
 
     private void StartTimer() {
+        Log.d("DebugService", "AlarmTimer: StartTimer: 1");
         if (!CalculateIfTimerComplete()) {
+            Log.d("DebugService", "AlarmTimer: StartTimer: 2");
             ObservableAlarmTimerState.setValue(ALARMTIMER_STATE.RUNNING);
             AlarmTimerState = ALARMTIMER_STATE.RUNNING;
             NotifyAlarmTimerStarted(ID);

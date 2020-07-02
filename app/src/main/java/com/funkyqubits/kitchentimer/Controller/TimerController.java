@@ -1,5 +1,7 @@
 package com.funkyqubits.kitchentimer.Controller;
 
+import android.util.Log;
+
 import com.funkyqubits.kitchentimer.Repositories.ISharedPreferencesRepository;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.Repositories.IFileSystemRepository;
@@ -62,6 +64,7 @@ public final class TimerController {
 
     //#region Timer offsets
     private void SetTimerOffsets() {
+        Log.d("DebugService", "TimerController: SetTimerOffsets");
         ArrayList<AlarmTimerOffset> timerOffsets = this.RunningTimersDataRepository.GetOffsets();
         for (AlarmTimerOffset offset : timerOffsets) {
             SetTimerOffset(offset);
@@ -69,6 +72,7 @@ public final class TimerController {
     }
 
     private void SetTimerOffset(AlarmTimerOffset offset) {
+        Log.d("DebugService", "TimerController: SetTimerOffset");
         AlarmTimer alarmTimer = FindTimerOnId(offset.ID);
         if (alarmTimer == null) {
             return;

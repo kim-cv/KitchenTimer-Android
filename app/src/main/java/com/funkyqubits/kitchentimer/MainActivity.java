@@ -1,6 +1,7 @@
 package com.funkyqubits.kitchentimer;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.funkyqubits.kitchentimer.Controller.NotificationController;
 import com.funkyqubits.kitchentimer.services.AlarmAudioService;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (!isChangingConfigurations()) {
+            Log.d("DebugService", "MainActivity: onResume");
             AlarmAudioService.Companion.startService(this);
         }
     }
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (!isChangingConfigurations()) {
+            Log.d("DebugService", "MainActivity: onPause");
             AlarmAudioService.Companion.stopService(this);
         }
     }

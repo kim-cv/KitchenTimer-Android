@@ -7,6 +7,7 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.funkyqubits.kitchentimer.Controller.NotificationController
 import com.funkyqubits.kitchentimer.Controller.TimerController
@@ -33,6 +34,7 @@ class AlarmAudioService : Service() {
         private var isServiceRunning: Boolean = false
 
         fun startService(context: Context) {
+            Log.d("DebugService", "companion: startService, IsServiceRunning: $isServiceRunning")
             if (isServiceRunning) return
 
             val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.START)
@@ -40,6 +42,7 @@ class AlarmAudioService : Service() {
         }
 
         fun timerComplete(context: Context, timerId: Int) {
+            Log.d("DebugService", "companion: timerComplete, IsServiceRunning: $isServiceRunning")
             if (!isServiceRunning) return
 
             val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.TIMER_COMPLETE)
@@ -49,6 +52,7 @@ class AlarmAudioService : Service() {
         }
 
         fun timersInFocus(context: Context) {
+            Log.d("DebugService", "companion: timersInFocus, IsServiceRunning: $isServiceRunning")
             if (!isServiceRunning) return
 
             // This is called when we got the user attention, we can assume they know of completed timers and we can stop the alarm sound
@@ -57,6 +61,7 @@ class AlarmAudioService : Service() {
         }
 
         fun stopService(context: Context) {
+            Log.d("DebugService", "companion: stopService, IsServiceRunning: $isServiceRunning")
             if (!isServiceRunning) return
 
             val intent = createAlarmAudioServiceIntent(context, SERVICE_ACTION.STOP)
@@ -78,6 +83,7 @@ class AlarmAudioService : Service() {
 
         val action = intent.getSerializableExtra("action") as SERVICE_ACTION
 
+        Log.d("DebugService", "onStartCommand: Action: $action IsServiceRunning: $isServiceRunning ")
         when (action) {
             SERVICE_ACTION.START -> start()
             SERVICE_ACTION.TIMER_COMPLETE -> timerComplete(intent)

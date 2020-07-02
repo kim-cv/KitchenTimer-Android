@@ -2,6 +2,7 @@ package com.funkyqubits.kitchentimer.ui.timers;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +79,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("DebugService", "TimersFragment onResume:");
 
         RecyclerViewAdapter.RegisterObserver(this);
         TimersViewModel.AddObserverToAlarmTimers(this);
@@ -88,6 +90,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     @Override
     public void onPause() {
         super.onPause();
+        Log.d("DebugService", "TimersFragment onPause:");
 
         RecyclerViewAdapter.RemoveObserver(this);
         TimersViewModel.RemoveObserverFromAlarmTimers(this);
@@ -141,27 +144,32 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
     //#region Events for each alarm timer
     @Override
     public void OnAlarmTimerStarted(int alarmTimerID) {
+        Log.d("DebugService", "TimersFragment: OnAlarmTimerStarted");
         RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
 
     @Override
     public void OnAlarmTimerResumed(int alarmTimerID) {
+        Log.d("DebugService", "TimersFragment: OnAlarmTimerResumed");
         RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
 
     @Override
     public void OnAlarmTimerPaused(int alarmTimerID) {
+        Log.d("DebugService", "TimersFragment: OnAlarmTimerPaused");
         RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
 
     @Override
     public void OnAlarmTimerReset(int alarmTimerID) {
+        Log.d("DebugService", "TimersFragment: OnAlarmTimerReset");
         AlarmAudioService.Companion.timersInFocus(requireContext());
         RecyclerViewAdapter.UpdateItemPosition(alarmTimerID);
     }
 
     @Override
     public void OnAlarmTimerCompleted(int alarmTimerID) {
+        Log.d("DebugService", "TimersFragment: OnAlarmTimerCompleted");
     }
     //#endregion
 }
