@@ -102,6 +102,12 @@ public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpda
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        addTimerViewModel.RemoveObserver(this);
+    }
+
+    @Override
     public void OnAlarmTimerCreated(int alarmTimerID) {
         NavController navController = Navigation.findNavController(this.getView());
         navController.navigate(R.id.navigation_timers);
