@@ -36,11 +36,7 @@ public class AddTimerViewModel extends ViewModel implements IAlarmTimerCreatedUp
 
     private boolean useLiveValidation = false;
 
-    public AddTimerViewModel() {
-    }
-
-    // TODO: Figure out how to use dependency injection in Android MVVM
-    public void ProvideExtra(TimerController _timerController, int alarmTimerToEditId) {
+    public AddTimerViewModel(TimerController _timerController, int alarmTimerToEditId) {
         this.TimerController = _timerController;
         AlarmTimerToEdit = TimerController.FindTimerOnId(alarmTimerToEditId);
         if (AlarmTimerToEdit == null) {

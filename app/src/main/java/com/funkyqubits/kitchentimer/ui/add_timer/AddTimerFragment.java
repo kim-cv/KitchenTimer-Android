@@ -1,5 +1,6 @@
 package com.funkyqubits.kitchentimer.ui.add_timer;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerCreatedUpdatedObserver;
 import com.funkyqubits.kitchentimer.R;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
@@ -30,14 +30,19 @@ public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpda
 
     private AddTimerViewModel addTimerViewModel;
 
+    @Nullable
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Get parameter
         if (getArguments() != null && getArguments().getInt(getString(R.string.parameter_timerId)) > 0) {
             parameter_timerId = getArguments().getInt(getString(R.string.parameter_timerId));
         }
 
-        addTimerViewModel = new ViewModelProvider(this).get(AddTimerViewModel.class);
+        IFileSystemRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
+        ISharedPreferencesRepository timerOffsets = new SharedPreferencesRepository(getContext());
+        AddTimerViewModelFactory addTimerViewModelFactory = new AddTimerViewModelFactory(repository, timerOffsets, parameter_timerId);
+        addTimerViewModel = new ViewModelProvider(this, addTimerViewModelFactory).get(AddTimerViewModel.class);
 
         // Inflate view and obtain an instance of the binding class.
         FragmentAddTimerBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_timer, container, false);
@@ -47,11 +52,12 @@ public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpda
         binding.executePendingBindings();
         View root = binding.getRoot();
 
-        // TODO: Figure out how to use dependency injection in Android MVVM
-        IFileSystemRepository repository = new FileSystemRepository(getContext(), getString(R.string.file_timers));
-        ISharedPreferencesRepository timerOffsets = new SharedPreferencesRepository(getContext());
-        TimerController timerController = TimerController.Instance(repository, timerOffsets);
-        addTimerViewModel.ProvideExtra(timerController, parameter_timerId);
+        return root;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         // Title text change listener
         addTimerViewModel.Title.observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -90,13 +96,12 @@ public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpda
         });
 
         addTimerViewModel.RegisterObserver(this);
-
-        return root;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
         boolean result = addTimerViewModel.IsDataValid(false);
         addTimerViewModel.ToggleButtonEnabled(result);
     }
@@ -118,4 +123,5 @@ public class AddTimerFragment extends Fragment implements IAlarmTimerCreatedUpda
         NavController navController = Navigation.findNavController(this.getView());
         navController.navigate(R.id.navigation_timers);
     }
+
 }
