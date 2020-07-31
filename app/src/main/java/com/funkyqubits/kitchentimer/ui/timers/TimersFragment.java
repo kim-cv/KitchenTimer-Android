@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -63,6 +64,13 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
         RecyclerViewAdapter = new AlarmTimersAdapter(this);
 
+        return root;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         // Listen for when timers are ready and then give them to the adapter
         TimersViewModel.ObservableAlarmTimers.observe(getViewLifecycleOwner(), new Observer<ArrayList<AlarmTimer>>() {
                     @Override
@@ -72,8 +80,6 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
                     }
                 }
         );
-
-        return root;
     }
 
     @Override
