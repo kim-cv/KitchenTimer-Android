@@ -92,7 +92,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
     }
 
     private void InitTimer() {
-        Log.d("DebugService", "InitTimer");
+        Log.d("DebugService", "Init Timer Ticking");
         /*
         Very bad code!
         Problem: Timer was running on separate background thread even after viewmodel was destroyed, if viewmodel was recreated another background timer thread
