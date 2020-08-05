@@ -163,6 +163,7 @@ public class AlarmTimer implements IAlarmTimerSubject {
         ObservableAlarmTimerState.postValue(ALARMTIMER_STATE.COMPLETED);
         AlarmTimerState = ALARMTIMER_STATE.COMPLETED;
         NotifyAlarmTimerCompleted(ID);
+        ConvertProgressToReadableTimer();
     }
 
     public int GetNowSeconds() {
