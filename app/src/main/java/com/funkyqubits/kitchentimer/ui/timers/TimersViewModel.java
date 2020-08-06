@@ -29,8 +29,7 @@ public class TimersViewModel extends ViewModel implements IAlarmTimerObserver {
         Timer = null;
     }
 
-    // TODO: Figure out how to use dependency injection in Android MVVM
-    public void ProvideExtra(TimerController _timerController, AlarmManagerController alarmManagerController) {
+    public TimersViewModel(TimerController _timerController, AlarmManagerController alarmManagerController) {
         TimerController = _timerController;
         AlarmManagerController = alarmManagerController;
 

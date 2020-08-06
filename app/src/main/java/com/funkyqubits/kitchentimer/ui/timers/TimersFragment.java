@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.funkyqubits.kitchentimer.Controller.AlarmManagerController;
-import com.funkyqubits.kitchentimer.Controller.TimerController;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerObserver;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsObserver;
 import com.funkyqubits.kitchentimer.Repositories.FileSystemRepository;
@@ -40,20 +39,18 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
 
     private TimersViewModel TimersViewModel;
 
+    @Nullable
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        TimersViewModel = new ViewModelProvider(this).get(TimersViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_timers, container, false);
-
-
-        // TODO: Figure out how to use dependency injection in Android MVVM
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         IFileSystemRepository repository = new FileSystemRepository(requireContext(), getString(R.string.file_timers));
         ISharedPreferencesRepository timerOffsets = new SharedPreferencesRepository(getContext());
         AlarmManagerController alarmManagerController = new AlarmManagerController(getContext());
-        TimerController timerController = TimerController.Instance(repository, timerOffsets);
-        TimersViewModel.ProvideExtra(timerController, alarmManagerController);
+        TimersViewModelFactory timersViewModelFactory = new TimersViewModelFactory(repository, timerOffsets, alarmManagerController);
+        TimersViewModel = new ViewModelProvider(this, timersViewModelFactory).get(TimersViewModel.class);
 
 
+        View root = inflater.inflate(R.layout.fragment_timers, container, false);
         RecyclerView = root.findViewById(R.id.recyclerview_alarmTimers);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
