@@ -3,8 +3,8 @@ package com.funkyqubits.kitchentimer.ui.timers;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
@@ -132,6 +132,20 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
         txtView_title.setText(alarmTimer.Title);
 
         // Click listener
+        holder.View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Short Clicked ",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.View.setOnLongClickListener(new View.OnLongClickListener() {
+            public boolean onLongClick(View v) {
+                Toast.makeText(v.getContext(), "Long Clicked ",
+                        Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
         /*
         btn_timer_start.setOnClickListener(new Button.OnClickListener() {
             @Override
