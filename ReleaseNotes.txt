@@ -1,0 +1,27 @@
+- 28/07/2016:
+Release
+
+
+- 28/07/2016:
+Performance & Bugs
+Optimized performance for all devices.
+Fixed 3 bugs.
+
+
+- 30/07/2016:
+Fixed an error where some users were getting a notification when they should not.
+
+
+- 21/04/2017:
+Timer text sizes
+Moved timer buttons to make room for increased timer text sizes
+
+
+- 23/02/2020:
+Complete rewrite of whole app and new dark theme UI.
+
+
+- 11/08/2020:
+Added: Simple animation when starting / stopping timer.
+Fixed: Crash when editing a timer and changing orientation.
+Bug fixes to prevent crashes in certain situations.
