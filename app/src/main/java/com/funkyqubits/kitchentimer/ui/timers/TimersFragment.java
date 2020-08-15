@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,7 +57,7 @@ public class TimersFragment extends Fragment implements IAlarmTimerUIEventsObser
         // in content do not change the layout size of the RecyclerView
         RecyclerView.setHasFixedSize(true);
         // use a linear layout manager
-        RecyclerView.LayoutManager LayoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager LayoutManager = new GridLayoutManager(getContext(), 2);
         RecyclerView.setLayoutManager(LayoutManager);
 
         RecyclerViewAdapter = new AlarmTimersAdapter(this);

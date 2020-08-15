@@ -43,6 +43,7 @@ public class BindingAdapters {
     public static void timerStateButton(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         int colorResource;
 
+        /*
         switch (button.getId()) {
             case R.id.btn_timer_start: {
                 colorResource = btn_start_state(button, alarmtimerState);
@@ -68,6 +69,7 @@ public class BindingAdapters {
                 colorResource = R.color.colorInactive;
             }
         }
+         */
 
         // Set button NOT clickable if color is inactive
         button.setClickable(!(colorResource == R.color.colorInactive));

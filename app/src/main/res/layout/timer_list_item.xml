@@ -24,35 +24,27 @@
         app:timerStateLeftBorder="@{alarmTimer.ObservableAlarmTimerState}">
 
         <!-- Text -->
-        <LinearLayout
+        <TextView
+            android:id="@+id/timer_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".5"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_weight="0.5"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorMainText"
+            android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/timer_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.7"
-                android:gravity="center_vertical"
-                android:textColor="@color/colorMainText"
-                android:textSize="24dp" />
+        <TextView
+            android:id="@+id/timer_progress"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:gravity="center_horizontal"
+            android:text="@{alarmTimer.ReadableTimer}"
+            android:textColor="@color/colorMainText"
+            android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/timer_progress"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="right|center_vertical"
-                android:text="@{alarmTimer.ReadableTimer}"
-                android:textColor="@color/colorMainText"
-                android:textSize="20dp" />
 
-        </LinearLayout>
-
-        <!-- Buttons -->
+        <!-- Buttons
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -156,5 +148,6 @@
                 app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
 
         </LinearLayout>
+        -->
     </LinearLayout>
 </layout>

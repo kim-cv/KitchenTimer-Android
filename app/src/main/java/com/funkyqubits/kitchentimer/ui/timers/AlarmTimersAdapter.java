@@ -120,16 +120,19 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
 
         // Find views
         TextView txtView_title = holder.View.findViewById(R.id.timer_title);
+        /*
         Button btn_timer_start = holder.View.findViewById(R.id.btn_timer_start);
         Button btn_timer_pause = holder.View.findViewById(R.id.btn_timer_pause);
         Button btn_timer_reset = holder.View.findViewById(R.id.btn_timer_reset);
         Button btn_timer_edit = holder.View.findViewById(R.id.btn_timer_edit);
         Button btn_timer_delete = holder.View.findViewById(R.id.btn_timer_delete);
+         */
 
         // Set title value
         txtView_title.setText(alarmTimer.Title);
 
         // Click listener
+        /*
         btn_timer_start.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,6 +163,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
                 NotifyOfUIAlarmTimerDelete(alarmTimer.ID);
             }
         });
+        */
     }
 
     // Return the size of your dataset (invoked by the layout manager)
