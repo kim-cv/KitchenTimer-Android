@@ -9,11 +9,11 @@
 
     <!-- Add Timer -->
     <string name="addTimer_title">Title</string>
-    <string name="addTimer_timerLength_title">Timer length</string>
+    <string name="addTimer_timerLength_title">Duration</string>
     <string name="addTimer_timerLength_hours">Hours</string>
     <string name="addTimer_timerLength_minutes">Minutes</string>
     <string name="addTimer_timerLength_seconds">Seconds</string>
-    <string name="addTimer_saveType_title">Save timer or Single use timer</string>
+    <string name="addTimer_saveType_title">Type</string>
     <string name="addTimer_saveType_radioButton_save">Save</string>
     <string name="addTimer_saveType_radioButton_single">Single use timer</string>
     <string name="addTimer_btn_txt_create">Create</string>
