@@ -6,6 +6,13 @@
     android:layout_marginRight="@dimen/activity_horizontal_margin"
     android:layout_marginBottom="0px">
 
+    <data>
+
+        <variable
+            name="alarmTimer"
+            type="com.funkyqubits.kitchentimer.models.AlarmTimer" />
+    </data>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="50dp"
@@ -13,6 +20,7 @@
         android:orientation="horizontal"
         android:background="@drawable/shape_timer_list_item_options">
 
+        <!--
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_timer_start"
             style="@style/Widget.MaterialComponents.Button.Icon"
@@ -29,7 +37,8 @@
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:rippleColor="@android:color/transparent"
-            app:strokeWidth="0dp"/>
+            app:strokeWidth="0dp"
+            app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_timer_pause"
@@ -47,7 +56,66 @@
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:rippleColor="@android:color/transparent"
-            app:strokeWidth="0dp"/>
+            app:strokeWidth="0dp"
+            app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
+            -->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_timer_reset"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_weight=".3"
+            android:backgroundTint="#00FFFFFF"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_replay_white_24dp"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:rippleColor="@android:color/transparent"
+            app:strokeWidth="0dp"
+            app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_timer_edit"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_weight=".3"
+            android:backgroundTint="#00FFFFFF"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_edit_white_24dp"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:rippleColor="@android:color/transparent"
+            app:strokeWidth="0dp"
+            app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_timer_delete"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_weight=".3"
+            android:backgroundTint="#00FFFFFF"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_delete_white_24dp"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:rippleColor="@android:color/transparent"
+            app:strokeWidth="0dp"
+            app:timerStateButton="@{alarmTimer.ObservableAlarmTimerState}" />
 
     </LinearLayout>
 

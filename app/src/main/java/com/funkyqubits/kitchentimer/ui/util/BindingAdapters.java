@@ -43,8 +43,9 @@ public class BindingAdapters {
     public static void timerStateButton(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         int colorResource;
 
-        /*
+
         switch (button.getId()) {
+            /*
             case R.id.btn_timer_start: {
                 colorResource = btn_start_state(button, alarmtimerState);
                 break;
@@ -53,6 +54,7 @@ public class BindingAdapters {
                 colorResource = btn_pause_state(button, alarmtimerState);
                 break;
             }
+            */
             case R.id.btn_timer_reset: {
                 colorResource = btn_reset_state(button, alarmtimerState);
                 break;
@@ -78,7 +80,7 @@ public class BindingAdapters {
         int color = button.getResources().getColor(colorResource);
         ColorStateList colorState = ColorStateList.valueOf(color);
         button.setIconTint(colorState);
-        */
+
     }
 
     private static int btn_start_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {

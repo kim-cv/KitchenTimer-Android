@@ -1,16 +1,11 @@
 package com.funkyqubits.kitchentimer.ui.timers;
 
-import android.content.Context;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.view.Gravity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
@@ -24,7 +19,6 @@ import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsObserver;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsSubject;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.R;
-import com.funkyqubits.kitchentimer.util.UtilMethods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +44,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
         // each data item is just a string in this case
         public View View;
         public int AlarmTimerID;
+        public AlarmTimer AlarmTimer;
         public ViewDataBinding binding;
 
         public ViewHolder(View view, Fragment fragment) {
@@ -112,7 +107,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
@@ -122,8 +117,9 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
         holder.binding.setVariable(BR.alarmTimer, alarmTimer);
         holder.binding.executePendingBindings();
 
-        // Set AlarmTimerID onto the view
+        // Set variables onto the view holder
         holder.AlarmTimerID = alarmTimer.ID;
+        holder.AlarmTimer = alarmTimer;
 
         // Find views
         TextView txtView_title = holder.View.findViewById(R.id.timer_title);
@@ -142,34 +138,19 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
         holder.View.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Short Clicked ",
-                        Toast.LENGTH_SHORT).show();
+                if (alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.NOT_RUNNING || alarmTimer.AlarmTimerState == AlarmTimer.ALARMTIMER_STATE.PAUSED) {
+                    NotifyOfUIAlarmTimerStart(alarmTimer.ID);
+                } else {
+                    NotifyOfUIAlarmTimerPause(alarmTimer.ID);
+                }
             }
         });
         holder.View.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View v) {
-                Toast.makeText(v.getContext(), "Long Clicked ",
-                        Toast.LENGTH_SHORT).show();
 
-                // Inflate the popup layout
-                LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View layout = layoutInflater.inflate(R.layout.timer_list_item_options, null);
-
-                // Creating the PopupWindow
-                PopupWindow popupWindow = new PopupWindow(v.getContext());
-                popupWindow.setContentView(layout);
-                popupWindow.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-                popupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-                popupWindow.setFocusable(true);
-
-                // Get location of clicked view
-                Rect viewLocation = UtilMethods.locateView(v);
-
-                //Clear the default translucent background
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
-
-                // Displaying the popup at the specified location
-                popupWindow.showAtLocation(v, Gravity.NO_GRAVITY, viewLocation.left, viewLocation.bottom);
+                // Create options dialog
+                TimerOptionsDialog dialog = new TimerOptionsDialog(holder.AlarmTimer, ContainingFragment);
+                dialog.show(ContainingFragment.getParentFragmentManager(), Integer.toString(holder.AlarmTimerID));
 
                 return true;
             }
