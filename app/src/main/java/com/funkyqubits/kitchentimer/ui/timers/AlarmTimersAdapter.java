@@ -1,8 +1,14 @@
 package com.funkyqubits.kitchentimer.ui.timers;
 
+import android.content.Context;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +24,7 @@ import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsObserver;
 import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerUIEventsSubject;
 import com.funkyqubits.kitchentimer.models.AlarmTimer;
 import com.funkyqubits.kitchentimer.R;
+import com.funkyqubits.kitchentimer.util.UtilMethods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,9 +150,31 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
             public boolean onLongClick(View v) {
                 Toast.makeText(v.getContext(), "Long Clicked ",
                         Toast.LENGTH_SHORT).show();
+
+                // Inflate the popup layout
+                LayoutInflater layoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View layout = layoutInflater.inflate(R.layout.timer_list_item_options, null);
+
+                // Creating the PopupWindow
+                PopupWindow popupWindow = new PopupWindow(v.getContext());
+                popupWindow.setContentView(layout);
+                popupWindow.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+                popupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+                popupWindow.setFocusable(true);
+
+                // Get location of clicked view
+                Rect viewLocation = UtilMethods.locateView(v);
+
+                //Clear the default translucent background
+                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+
+                // Displaying the popup at the specified location
+                popupWindow.showAtLocation(v, Gravity.NO_GRAVITY, viewLocation.left, viewLocation.bottom);
+
                 return true;
             }
         });
+
         /*
         btn_timer_start.setOnClickListener(new Button.OnClickListener() {
             @Override

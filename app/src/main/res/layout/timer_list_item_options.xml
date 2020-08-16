@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginBottom="0px">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:background="@drawable/shape_timer_list_item_options">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_timer_start"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:backgroundTint="#00FFFFFF"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_play_circle_outline_white_24dp"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:rippleColor="@android:color/transparent"
+            app:strokeWidth="0dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_timer_pause"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:backgroundTint="#00FFFFFF"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_pause_circle_outline_white_24dp"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:rippleColor="@android:color/transparent"
+            app:strokeWidth="0dp"/>
+
+    </LinearLayout>
+
+</layout>
