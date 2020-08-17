@@ -1,9 +1,9 @@
 package com.funkyqubits.kitchentimer.Interfaces
 
 interface IAlarmTimerDialogSubject {
-    fun RegisterObserver(observer: IAlarmTimerDialogObserver?)
+    fun RegisterObserver(observer: IAlarmTimerDialogObserver)
 
-    fun RemoveObserver(observer: IAlarmTimerDialogObserver?)
+    fun RemoveObserver(observer: IAlarmTimerDialogObserver)
 
     fun NotifyOfDialogAlarmTimerReset(alarmTimerID: Int)
 
