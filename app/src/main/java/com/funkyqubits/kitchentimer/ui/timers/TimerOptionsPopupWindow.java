@@ -13,6 +13,7 @@ import android.widget.PopupWindow;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.Fragment;
 
 import com.funkyqubits.kitchentimer.BR;
 import com.funkyqubits.kitchentimer.R;
@@ -26,7 +27,7 @@ public class TimerOptionsPopupWindow extends PopupWindow {
         super(context);
     }
 
-    public TimerOptionsPopupWindow(View parent, AlarmTimer timer) {
+    public TimerOptionsPopupWindow(View parent, AlarmTimer timer, Fragment fragment) {
         //ViewDataBinding popUpBinding = DataBindingUtil.bind(parent);
         //popUpBinding.setLifecycleOwner(holder.Fragment); // Necessary for LiveData and MutableLiveData to work
 
@@ -36,6 +37,8 @@ public class TimerOptionsPopupWindow extends PopupWindow {
         //TimerListItemOptionsBinding layout = TimerListItemOptionsBinding.inflate(LayoutInflater.from(parent.getContext()), (ViewGroup) popUpBinding.getRoot(), false);
         TimerListItemOptionsBinding binding = DataBindingUtil
                 .inflate(LayoutInflater.from(parent.getContext()), R.layout.timer_list_item_options, null, false);
+
+        binding.setLifecycleOwner(fragment); // Necessary for LiveData and MutableLiveData to work
 
         // Creating the PopupWindow
         PopupWindow popupWindow = new PopupWindow(parent.getContext());
