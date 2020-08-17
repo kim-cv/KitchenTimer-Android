@@ -2,6 +2,8 @@ package com.funkyqubits.kitchentimer.ui.timers
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
@@ -22,8 +24,12 @@ class TimerOptionsDialog(val alarmTimer: AlarmTimer, val fragment : Fragment) : 
 
         binding.alarmTimer = alarmTimer
 
-        return AlertDialog.Builder(activity)
+        val dialog = AlertDialog.Builder(activity)
                 .setView(binding.root)
                 .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        return dialog
     }
 }

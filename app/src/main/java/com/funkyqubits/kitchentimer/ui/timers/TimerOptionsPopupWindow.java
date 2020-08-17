@@ -28,6 +28,7 @@ public class TimerOptionsPopupWindow extends PopupWindow {
     }
 
     public TimerOptionsPopupWindow(View parent, AlarmTimer timer, Fragment fragment) {
+        super();
         //ViewDataBinding popUpBinding = DataBindingUtil.bind(parent);
         //popUpBinding.setLifecycleOwner(holder.Fragment); // Necessary for LiveData and MutableLiveData to work
 
