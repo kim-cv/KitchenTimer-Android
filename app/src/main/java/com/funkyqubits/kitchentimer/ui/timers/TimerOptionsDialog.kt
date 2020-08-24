@@ -10,16 +10,16 @@ import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerDialogObserver
-import com.funkyqubits.kitchentimer.Interfaces.IAlarmTimerDialogSubject
 import com.funkyqubits.kitchentimer.R
 import com.funkyqubits.kitchentimer.databinding.TimerListItemOptionsBinding
 import com.funkyqubits.kitchentimer.models.AlarmTimer
 
 
-class TimerOptionsDialog(val alarmTimer: AlarmTimer, val fragment : Fragment) : DialogFragment(), IAlarmTimerDialogSubject {
+class TimerOptionsDialog(val alarmTimer: AlarmTimer, val fragment : Fragment) : DialogFragment() {
 
-    private val observers : MutableList<IAlarmTimerDialogObserver> = mutableListOf()
+    private lateinit var observer_reset : () -> Unit
+    private lateinit var observer_edit : () -> Unit
+    private lateinit var observer_delete : () -> Unit
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val binding: TimerListItemOptionsBinding = DataBindingUtil
@@ -40,47 +40,29 @@ class TimerOptionsDialog(val alarmTimer: AlarmTimer, val fragment : Fragment) : 
         val btn_timer_delete : Button = binding.root.findViewById(R.id.btn_timer_delete)
 
         btn_timer_reset.setOnClickListener {
-            NotifyOfDialogAlarmTimerReset(alarmTimer.ID)
+            observer_reset.invoke()
         }
 
         btn_timer_edit.setOnClickListener {
-            NotifyOfDialogAlarmTimerEdit(alarmTimer.ID)
+            observer_edit.invoke()
         }
 
         btn_timer_delete.setOnClickListener {
-            NotifyOfDialogAlarmTimerDelete(alarmTimer.ID)
+            observer_delete.invoke()
         }
 
         return dialog
     }
 
-    override fun RegisterObserver(observer: IAlarmTimerDialogObserver) {
-        if (!observers.contains(observer)) {
-            observers.add(observer)
-        }
+    fun OnReset(func: () -> Unit) {
+        observer_reset = func
     }
 
-    override fun RemoveObserver(observer: IAlarmTimerDialogObserver) {
-        if (observers.contains(observer)) {
-            observers.remove(observer)
-        }
+    fun OnEdit(func: () -> Unit) {
+        observer_edit = func
     }
 
-    override fun NotifyOfDialogAlarmTimerReset(alarmTimerID: Int) {
-        for (observer in observers) {
-            observer.OnDialogAlarmTimerReset(alarmTimerID)
-        }
-    }
-
-    override fun NotifyOfDialogAlarmTimerEdit(alarmTimerID: Int) {
-        for (observer in observers) {
-            observer.OnDialogAlarmTimerEdit(alarmTimerID)
-        }
-    }
-
-    override fun NotifyOfDialogAlarmTimerDelete(alarmTimerID: Int) {
-        for (observer in observers) {
-            observer.OnDialogAlarmTimerDelete(alarmTimerID)
-        }
+    fun OnDelete(func: () -> Unit) {
+        observer_delete = func
     }
 }

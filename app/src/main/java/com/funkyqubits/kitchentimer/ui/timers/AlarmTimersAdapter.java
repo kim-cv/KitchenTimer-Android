@@ -1,7 +1,5 @@
 package com.funkyqubits.kitchentimer.ui.timers;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,12 +144,27 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
             }
         });
         holder.View.setOnLongClickListener(new View.OnLongClickListener() {
-            public boolean onLongClick(View v) {
+            public boolean onLongClick(final View v) {
 
                 // Create options dialog
                 TimerOptionsDialog dialog = new TimerOptionsDialog(holder.AlarmTimer, ContainingFragment);
                 dialog.show(ContainingFragment.getParentFragmentManager(), Integer.toString(holder.AlarmTimerID));
-
+                dialog.OnReset(() -> {
+                    NotifyOfUIAlarmTimerReset(alarmTimer.ID);
+                    dialog.dismiss();
+                    return null;
+                });
+                dialog.OnEdit(() -> {
+                    NotifyOfUIAlarmTimerEdit(alarmTimer.ID);
+                    dialog.dismiss();
+                    return null;
+                });
+                dialog.OnDelete(() -> {
+                    NotifyOfUIAlarmTimerDelete(alarmTimer.ID);
+                    dialog.dismiss();
+                    return null;
+                });
+                
                 return true;
             }
         });
@@ -195,6 +208,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
     public int getItemCount() {
         return Sorted_Dataset_alarmTimers.size();
     }
+
 
     //#region Subject/Observer
     @Override

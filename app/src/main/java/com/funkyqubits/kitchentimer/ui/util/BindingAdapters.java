@@ -72,7 +72,6 @@ public class BindingAdapters {
             }
         }
 
-
         // Set button NOT clickable if color is inactive
         button.setClickable(!(colorResource == R.color.colorInactive));
 
