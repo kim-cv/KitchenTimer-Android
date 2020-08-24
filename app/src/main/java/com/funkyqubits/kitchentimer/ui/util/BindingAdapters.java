@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
@@ -40,9 +41,11 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("timerStateButton")
-    public static void timerStateButton(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
+    public static void timerStateButton(LinearLayout linearLayout, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         int colorResource;
 
+        MaterialButton button = linearLayout.findViewWithTag("btn");
+        TextView txt = linearLayout.findViewWithTag("txt");
 
         switch (button.getId()) {
             /*
@@ -56,15 +59,15 @@ public class BindingAdapters {
             }
             */
             case R.id.btn_timer_reset: {
-                colorResource = btn_reset_state(button, alarmtimerState);
+                colorResource = btn_reset_state(alarmtimerState);
                 break;
             }
             case R.id.btn_timer_edit: {
-                colorResource = btn_edit_state(button, alarmtimerState);
+                colorResource = btn_edit_state(alarmtimerState);
                 break;
             }
             case R.id.btn_timer_delete: {
-                colorResource = btn_delete_state(button, alarmtimerState);
+                colorResource = btn_delete_state(alarmtimerState);
                 break;
             }
             default: {
@@ -73,13 +76,15 @@ public class BindingAdapters {
         }
 
         // Set button NOT clickable if color is inactive
-        button.setClickable(!(colorResource == R.color.colorInactive));
+        boolean clickable = !(colorResource == R.color.colorInactive);
+        linearLayout.setClickable(clickable);
+        button.setClickable(clickable);
+        txt.setClickable(clickable);
 
         // Set color
         int color = button.getResources().getColor(colorResource);
         ColorStateList colorState = ColorStateList.valueOf(color);
         button.setIconTint(colorState);
-
     }
 
     private static int btn_start_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
@@ -140,7 +145,7 @@ public class BindingAdapters {
         return R.color.colorInactive;
     }
 
-    private static int btn_reset_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
+    private static int btn_reset_state(AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {
@@ -163,7 +168,7 @@ public class BindingAdapters {
         return R.color.colorInactive;
     }
 
-    private static int btn_edit_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
+    private static int btn_edit_state(AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {
@@ -186,7 +191,7 @@ public class BindingAdapters {
         return R.color.colorInactive;
     }
 
-    private static int btn_delete_state(MaterialButton button, AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
+    private static int btn_delete_state(AlarmTimer.ALARMTIMER_STATE alarmtimerState) {
         if (alarmtimerState != null) {
             switch (alarmtimerState) {
                 case NOT_RUNNING: {

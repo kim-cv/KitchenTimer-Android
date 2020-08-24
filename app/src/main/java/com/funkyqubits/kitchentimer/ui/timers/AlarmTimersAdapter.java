@@ -164,7 +164,7 @@ public class AlarmTimersAdapter extends RecyclerView.Adapter<AlarmTimersAdapter.
                     dialog.dismiss();
                     return null;
                 });
-                
+
                 return true;
             }
         });
