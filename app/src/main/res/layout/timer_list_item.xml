@@ -30,6 +30,7 @@
             android:layout_height="0dp"
             android:layout_weight="0.5"
             android:autoSizeTextType="uniform"
+            app:autoSizeStepGranularity="4sp"
             android:gravity="center_horizontal"
             android:textColor="@color/colorMainText"
             android:textSize="24sp" />
